@@ -1,0 +1,245 @@
+#
+"""
+Useful python tools for working with the MIRI MRS.
+
+This version of the tools uses the JWST pipeline implementation
+of the distortion solution to do the transformations,
+and hooks into offline versions of the CRDS reference
+files contained within this github repository.
+
+Convert JWST v2,v3 locations (in arcsec) to MIRI MRS SCA x,y pixel locations.
+Note that the pipeline uses a 0-indexed detector pixel (1032x1024) convention while
+SIAF uses a 1-indexed detector pixel convention.  The CDP files define
+the origin such that (0,0) is the middle of the lower-left light sensitive pixel
+(1024x1024),therefore also need to transform between this science frame and detector frame.
+
+Author: David R. Law (dlaw@stsci.edu)
+
+REVISION HISTORY:
+10-Oct-2018  Written by David Law (dlaw@stsci.edu)
+"""
+
+import os as os
+import numpy as np
+import pdb as pdb
+from astropy.modeling import models
+from asdf import AsdfFile
+from jwst import datamodels
+from jwst.assign_wcs import miri
+from numpy.testing import assert_allclose
+
+# We'll use the cdp6 version of the tools (tv=toolversion)
+import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
+
+#############################
+
+# Convenience function to turn '1A' type name into '12' and 'SHORT' type names
+def bandchan(channel):
+    # Channel should be of the form (e.g.) '1A', '3C', etc
+    if ((channel is '1A')or(channel is '2A')):
+       newband='SHORT'
+       newchannel='12'
+    elif ((channel is '3A')or(channel is '4A')):
+       newband='SHORT'
+       newchannel='34'
+    elif ((channel is '1B')or(channel is '2B')):
+       newband='MEDIUM'
+       newchannel='12'
+    elif ((channel is '3B')or(channel is '4B')):
+       newband='MEDIUM'
+       newchannel='34'
+    elif ((channel is '1C')or(channel is '2C')):
+       newband='LONG'
+       newchannel='12'
+    elif ((channel is '3C')or(channel is '4C')):
+       newband='LONG'
+       newchannel='34'
+    else:
+       newband='FAIL'
+       newchannel='FAIL'
+
+    return newband,newchannel
+
+#############################
+
+# Convenience function to turn '12A' type name into '1A' and '2A' type names
+def channel(detband):
+    if (detband == '12A'):
+       ch1='1A'
+       ch2='2A'
+    elif (detband == '12B'):
+       ch1='1B'
+       ch2='2B'
+    elif (detband == '12C'):
+       ch1='1C'
+       ch2='2C'
+    elif (detband == '34A'):
+       ch1='3A'
+       ch2='4A'
+    elif (detband == '34B'):
+       ch1='3B'
+       ch2='4B'
+    elif (detband == '34C'):
+       ch1='3C'
+       ch2='4C'
+    else:
+       ch1='FAIL'
+       ch2='FAIL'
+
+    return ch1,ch2
+
+#############################
+
+# Convenience function to return the rough middle wavelength of a given channel
+# Note that this ISNT exact, just some valid value
+def midwave(channel):
+    if (channel is '1A'):
+       thewave=5.32
+    elif (channel is '1B'):
+       thewave=6.145
+    elif (channel is '1C'):
+       thewave=7.09
+    elif (channel is '2A'):
+       thewave=8.135
+    elif (channel is '2B'):
+       thewave=9.395
+    elif (channel is '2C'):
+       thewave=10.85
+    elif (channel is '3A'):
+       thewave=12.505
+    elif (channel is '3B'):
+       thewave=14.5
+    elif (channel is '3C'):
+       thewave=16.745
+    elif (channel is '4A'):
+       thewave=19.29
+    elif (channel is '4B'):
+       thewave=22.47
+    elif (channel is '4C'):
+       thewave=26.2
+
+    return thewave
+
+#############################
+
+# Convenience function to return model distortion object
+# for the x,y to alpha,beta,lam transform
+def xytoablmodel(channel,**kwargs):
+    model=tv.xytoablmodel(channel,**kwargs)
+
+    return model
+
+#############################
+
+# Convert x,y pixel values to alpha,beta,lam for a given channel.
+# Channel must be a single string, e.g. '1A'
+# Return alpha,beta,lambda
+def xytoabl(x,y,channel,**kwargs):
+    model=xytoablmodel(channel,**kwargs)
+
+    alpha,beta,lam=model(x,y)
+
+    return alpha,beta,lam
+
+#############################
+
+# Convert alpha,beta,lam to x,y pixel values for a given channel.
+# Channel must be a single string, e.g. '1A'
+# Return x,y
+def abltoxy(alpha,beta,lam,channel,**kwargs):
+    model=xytoablmodel(channel,**kwargs)
+
+    x,y=model.inverse(alpha,beta,lam)
+
+    return x,y
+
+#############################
+
+# Convenience function to return model distortion object
+# for the alpha,beta to v2,v3 transform
+def abtov2v3model(channel,**kwargs):
+    model=tv.abtov2v3model(channel,**kwargs)
+
+    return model
+
+#############################
+
+# Convert from alpha,beta to JWST v2,v3 coordinates
+# all coordinates are in arcsec
+def abtov2v3(alpha,beta,channel,**kwargs):
+    model=abtov2v3model(channel,**kwargs)
+    
+    v2,v3=model(alpha,beta)
+
+    return v2,v3
+
+#############################
+
+# Convert from JWST v2,v3 coordinates to alpha,beta
+# all coordinates are in arcsec
+def v2v3toab(v2,v3,channel,**kwargs):
+    model=abtov2v3model(channel,**kwargs)
+
+    alpha,beta=model.inverse(v2,v3)
+
+    return alpha,beta
+
+#############################
+
+# Convert v2,v3 in arcsec to xan,yan in arcmin
+def v2v3_to_xanyan(v2,v3):
+    xan=v2/60.
+    yan=-(v3+7.8*60.)/60.
+    return xan,yan
+
+#############################
+
+# Convert xan,yan in arcmin to v2,v3 in arcsec
+def xanyan_to_v2v3(xan,yan):
+    v2=xan*60.
+    v3=(-yan-7.8)*60.
+    return v2,v3
+
+#############################
+
+# Test the transforms
+def testtransform(**kwargs):
+    # Get test data
+    refdata=tv.mrs_ref_data
+
+    # If passed input channels keyword, test only those channels
+    if ('testchannel' in kwargs):
+        channel=kwargs['testchannel']
+    # Otherwise test all channels
+    else:
+        channel=['1A','1B','1C','2A','2B','2C','3A','3B','3C','4A','4B','4C']
+
+    # Set up a loop over channels
+    nchan=len(channel)
+    for i in range(0,nchan):
+        print('Testing channel '+channel[i])
+        data=refdata[channel[i]]
+        thisx,thisy,thisal,thisbe,thislam=data['x'],data['y'],data['alpha'],data['beta'],data['lam']
+        thisxan,thisyan=data['xan'],data['yan']
+        thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
+        
+        # Forward transform
+        newal,newbe,newlam=xytoabl(thisx,thisy,channel[i],**kwargs)
+        newv2,newv3=abtov2v3(newal,newbe,channel[i],**kwargs)
+        # Test equality
+        assert_allclose(thisal,newal,atol=0.05)
+        assert_allclose(thisbe,newbe,atol=0.05)
+        assert_allclose(thislam,newlam,atol=0.05)
+        assert_allclose(thisv2,newv2,atol=0.05)
+        assert_allclose(thisv3,newv3,atol=0.05)
+
+        # Backward transform
+        newal2,newbe2=v2v3toab(newv2,newv3,channel[i],**kwargs)
+        newx,newy=abltoxy(newal2,newbe2,newlam,channel[i],**kwargs)
+        # Test equality
+        assert_allclose(thisal,newal2,atol=0.05)
+        assert_allclose(thisbe,newbe2,atol=0.05)
+        assert_allclose(thisx,newx,atol=0.05)
+        assert_allclose(thisy,newy,atol=0.05)
+
+    return
