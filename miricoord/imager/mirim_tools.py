@@ -23,6 +23,7 @@ import os as os
 import math
 import numpy as np
 from numpy.testing import assert_allclose
+import pdb
 
 # We'll use the cdp7beta3 version of the tools (tv=toolversion)
 import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
