@@ -46,7 +46,7 @@
 pro mmrs_siaf,channel,rootdir=rootdir,outdir=outdir
 
 if (~keyword_set(rootdir)) then $
-  rootdir=concat_dir(ml_getenv('MIRICOORD_DIR'),'cdp/cdp6/')
+  rootdir=concat_dir(ml_getenv('MIRICOORD_DIR'),'data/fits/cdp6/')
 
 ; Write to a /temp subdirectory to be sure we don't accidentally
 ; overwrite something in a dated subdirectory!
