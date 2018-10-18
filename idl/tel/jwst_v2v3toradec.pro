@@ -214,6 +214,7 @@ endif else begin
     ; Split the output vector into RA and DEC components and convert
     ; back to degrees
     ra[i]=atan(outvector[1],outvector[0])*180.d/!DPI
+
     ; Ensure 0-360 degrees
     if (ra[i] lt 0.d) then ra[i]=ra[i]+360.d
     dec[i]=asin(outvector[2])*180.d/!DPI

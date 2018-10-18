@@ -3,7 +3,7 @@
 ; Largely copied from Jane's code
 ; Tested that this gives identical results to my own code
 ; (to within needed accuracy)
-pro radec2xieta,crval1,crval2,ra,dec,xi,eta
+pro jwst_radec2xieta,crval1,crval2,ra,dec,xi,eta
 
     rad2arcsec = (180.0*3600.0)/!PI
 

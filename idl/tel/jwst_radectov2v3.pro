@@ -215,10 +215,10 @@ endif else begin
     ; by applying the inverse attitude matrix
     outvector=invattmat # invector
 
-    ; Split the output vector into RA and DEC components and convert
+    ; Split the output vector into v2 and v3 components and convert
     ; back to degrees
     v2[i]=atan(outvector[1],outvector[0])*180.d/!DPI
-
+    
     ; Convert to arcsec
     v2[i]=v2[i]*3600.
 

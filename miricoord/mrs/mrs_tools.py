@@ -24,7 +24,6 @@ import math
 import numpy as np
 from astropy.io import fits
 from numpy.testing import assert_allclose
-
 import pdb
 
 # We'll use the cdp6 version of the tools (tv=toolversion)
