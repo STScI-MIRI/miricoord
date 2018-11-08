@@ -31,6 +31,8 @@ import socket
 
 import pdb
 
+import miricoord.miricoord.mrs.mrs_fields as mf
+
 # Import offline MIRI MRS tools for CDP-6 specifically
 import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
 
@@ -85,12 +87,8 @@ def create_siaf_all():
         for j in range(0,nslice):
             print("{val1:>20}, {val2:>10}, {val3:>10}, {val4:>8}, {val5:>12}, {val6:>10}, {0:>10.4f}, {1:>10.4f}, {2:>10.4f}, {3:>10.4f}, {4:>10.4f}, {5:>10.4f}, {6:>10.4f}, {7:>10.4f}, {8:>10.4f}, {9:>10.4f}".format(values['slice_v2ref'][j],values['slice_v3ref'][j],values['slice_v2_corners'][j][0],values['slice_v2_corners'][j][1],values['slice_v2_corners'][j][2],values['slice_v2_corners'][j][3],values['slice_v3_corners'][j][0],values['slice_v3_corners'][j][1],values['slice_v3_corners'][j][2],values['slice_v3_corners'][j][3],val1=values['slice_apername'][j],val2='SLIT',val3=values['slice_name'][j],val4=values['slice_num'][j],val5='0.',val6='-1'),file=open(outfile,"a"))
 
-
-
-
-
-
-
+    # Print out what all of the field sizes in this file are
+    mf.getfov(file=outfile)
 
 
 #############################
