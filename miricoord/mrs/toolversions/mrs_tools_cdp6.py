@@ -108,14 +108,16 @@ def xytoabl(xin,yin,channel,**kwargs):
     # Define slice for these pixels
     slicenum=np.zeros(x.size, int)
     slicename=np.array(['JUNK' for i in range(0,x.size)])
+ 
     for i in range(0,x.size):
-        slicenum[i]=int(d2c_slice[int(y[i]),int(x[i])])-int(ch)*100
-        slicename[i]=str(int(d2c_slice[int(y[i]),int(x[i])]))+sband
+        # Note that since x,y here index into an array we need to subtract 1 again!
+        slicenum[i]=int(d2c_slice[int(round(y[i]))-1,int(round(x[i]))-1])-int(ch)*100
+        slicename[i]=str(int(d2c_slice[int(round(y[i]))-1,int(round(x[i]))-1]))+sband
 
     # Define index0 where the slice number is physical
     # (i.e., not between slices).  The [0] seems necessary to get
     # actual values rather than a single list object
-    index0=(np.where(np.logical_and(slicenum > 0, slicenum < 99)))[0]
+    index0=(np.where((slicenum > 0) & (slicenum < 99)))[0]
     nindex0=len(index0)
 
     # Initialize a,b,l to -999.
@@ -128,28 +130,22 @@ def xytoabl(xin,yin,channel,**kwargs):
     if (nindex0 > 0):
         be[index0]=beta0+(slicenum[index0]-1.)*dbeta
 
-
-    # Define alpha for these pixels
-    for k in range(0,nindex0):
-        # Get alpha coefficients for this slice
-        thiscoeff=d2c_alpha[slicenum[index0[k]]-1]
-        thisalpha=0.
-        for i in range(0,5):
-            for j in range(0,5):
-                coind=1+(i*5)+j
-                thisalpha += thiscoeff[coind]*(((x[index0[k]]-thiscoeff[0])**j) * (y[index0[k]]**i))
-        al[index0[k]]=thisalpha
-
-    # Define lambda for these pixels
-    for k in range(0,nindex0):
-        # Get alpha coefficients for this slice
-        thiscoeff=d2c_lambda[slicenum[index0[k]]-1]
-        thislambda=0.
-        for i in range(0,5):
-            for j in range(0,5):
-                coind=1+(i*5)+j
-                thislambda += thiscoeff[coind]*(((x[index0[k]]-thiscoeff[0])**j) * (y[index0[k]]**i))
-        lam[index0[k]]=thislambda
+    # Get the alpha,lambda coefficients for all of the valid pixels
+    alphacoeff=d2c_alpha[slicenum[index0]-1]
+    lamcoeff=d2c_lambda[slicenum[index0]-1]
+    # Build big matrices of the x,y inputs combined with the corresponding coefficients
+    thealphamatrix=np.zeros([nindex0,26])
+    thelammatrix=np.zeros([nindex0,26])
+    # Python hates loops, so instead of looping over individual entries
+    # loop over columns in the big matrices instead
+    for i in range(0,5):
+        for j in range(0,5):
+            coind=1+(i*5)+j
+            thealphamatrix[:,coind]=alphacoeff.field(coind)*(((x[index0]-alphacoeff.field(0))**j)*(y[index0]**i))
+            thelammatrix[:,coind]=lamcoeff.field(coind)*(((x[index0]-lamcoeff.field(0))**j)*(y[index0]**i))
+    # Sum the contributions from each column in the big matrices
+    al[index0]=np.sum(thealphamatrix,axis=1)    
+    lam[index0]=np.sum(thelammatrix,axis=1)   
     
     distfile.close()
     
@@ -250,45 +246,44 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
         slicenum[badval]=-999
         slicename[badval]='-999'
         slicefloat[badval]=-999.
-
+ 
     # Define index0 where the slice number is physical
     # (i.e., not between slices).  The [0] seems necessary to get
     # actual values rather than a single list object
-    index0=(np.where(np.logical_and(slicenum > 0, slicenum < 99)))[0]
+    index0=(np.where((slicenum > 0) & (slicenum < 99)))[0]
+    # Check for cases where the input alpha is beyond episilon of the field boundary for the slice
+    # and use this to modify index0
+    eps=0.02
+    goodalpha=(np.where(((trimal[index0]+eps) >= fovalpha[slicenum[index0]-1]['alpha_min']) & ((trimal[index0]-eps) <= fovalpha[slicenum[index0]-1]['alpha_max'])))[0]
+    index0=index0[goodalpha]
     nindex0=len(index0)
-
+    
     # Initialize x,y to -999.
     # (they will only be set to something else if the pixel
-    # lands on a valid slice)
+    # lands on a valid slice at valid alpha)
     x=np.zeros(trimal.size)-999.
     y=np.zeros(trimal.size)-999.
 
-    # Loop over all good points
-    eps=0.02
-    for k in range (0,nindex0):
-        # Get the coefficients for this slice
-        thisxcoeff=c2d_x[slicenum[index0[k]]-1]
-        thisycoeff=c2d_y[slicenum[index0[k]]-1]
-        thisx=0.
-        thisy=0.
-        # Check that the input alpha is within epsilon of the field boundary for this slice
-        inbound=np.logical_and((trimal[index0[k]]+eps) >= (fovalpha[slicenum[index0[k]]-1])['alpha_min'],(trimal[index0[k]]-eps) <= (fovalpha[slicenum[index0[k]]-1])['alpha_max'])
-        if inbound:
-           for i in range (0,5):
-               for j in range (0,5):
-                   coind=1+(i*5)+j
-                   term1=(trimlam[index0[k]]-thisxcoeff[0])**i
-                   term2=(trimal[index0[k]])**j
-                   termall=thisxcoeff[coind]*term1*term2
-                   thisx += thisxcoeff[coind]*(((trimlam[index0[k]]-thisxcoeff[0])**i) * (trimal[index0[k]]**j))
-                   thisy += thisycoeff[coind]*(((trimlam[index0[k]]-thisycoeff[0])**i) * (trimal[index0[k]]**j))
-           x[index0[k]]=thisx
-           y[index0[k]]=thisy
-        
+    # Get the x,y coefficients for all of the valid pixels
+    xcoeff=c2d_x[slicenum[index0]-1]
+    ycoeff=c2d_y[slicenum[index0]-1]
+    # Build big matrices of the alpha,lam inputs combined with the corresponding coefficients
+    thexmatrix=np.zeros([nindex0,26])
+    theymatrix=np.zeros([nindex0,26])
+    # Python hates loops, so instead of looping over individual entries
+    # loop over columns in the big matrices instead
+    for i in range(0,5):
+        for j in range(0,5):
+            coind=1+(i*5)+j
+            thexmatrix[:,coind]=xcoeff.field(coind)*(((trimlam[index0]-xcoeff.field(0))**i)*(trimal[index0]**j))
+            theymatrix[:,coind]=ycoeff.field(coind)*(((trimlam[index0]-ycoeff.field(0))**i)*(trimal[index0]**j))
+    # Sum the contributions from each column in the big matrices
+    x[index0]=np.sum(thexmatrix,axis=1)    
+    y[index0]=np.sum(theymatrix,axis=1) 
     # Look for wherever x,y != -999, those are our good cases
     index0=(np.where(np.logical_and(x > -999, y > -999)))[0]
     nindex0=len(index0)
-
+ 
     # Transform from 1-indexed to 0-indexed values
     x[index0]=x[index0]-1
     y[index0]=y[index0]-1
