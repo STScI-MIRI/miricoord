@@ -13,25 +13,57 @@ Convert JWST v2,v3 locations (in arcsec) to MIRI Imager SCA x,y pixel locations.
 Note that the pipeline uses a 0-indexed pixel convention
 while SIAF uses 1-indexed pixels.
 
+By default, calling a function in here will use the default version of the linked
+CDP-specific tools.  This can be overridden by calling set_toolversion(version).
+
 Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
+02-Dec-2018  Revise version handling using globals (D. Law)
 """
 
 import os as os
+import sys
 import math
 import numpy as np
 from numpy.testing import assert_allclose
 import pdb
 
-# We'll use the cdp7beta3 version of the tools (tv=toolversion)
-import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
+#############################
+
+# Set the tools version.  Default is CDP-7b3
+def set_toolversion(version):
+    # If the toolversion global was already set, delete it
+    try:
+        del globals()['tv']
+    except:
+        pass
+
+    # Define toolversion as global scope within mirim_tools
+    global tv
+    # Import appropriate version
+    if (version == 'default'):
+        import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
+    elif (version == 'cdp7b'):
+        import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
+    elif (version == 'cdp7'):
+        import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7 as tv
+    else:
+        print('Invalid tool version specified!')
+        
+    return
 
 #############################
 
-# Set the relevant FITS distortion file
+# Get the relevant FITS distortion file
 def get_fitsreffile():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
     reffile=tv.get_fitsreffile()
     return reffile
 
@@ -55,6 +87,12 @@ def xanyan_to_v2v3(xan,yan):
 
 # Convert 0-indexed detector pixels to v2,v3 in arcsec
 def xytov2v3(x,y,filter):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     v2,v3=tv.xytov2v3(x,y,filter)
 
     return v2,v3
@@ -63,6 +101,12 @@ def xytov2v3(x,y,filter):
 
 # Convert v2,v3 in arcsec to 0-indexed detector pixels
 def v2v3toxy(v2,v3,filter):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
     x,y=tv.v2v3toxy(v2,v3,filter)
 
     return x,y
@@ -119,6 +163,12 @@ def v2v3toIdeal(v2,v3,apername,**kwargs):
 
 # Test the forward and reverse transforms
 def testtransform():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     # Get test data from a generating function
     x,y,v2,v3,filter=tv.testdata()
 
