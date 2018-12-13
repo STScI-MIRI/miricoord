@@ -17,17 +17,52 @@ Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
+07-Dec-2018  Revise version handling using globals (D. Law)
 """
 
 import os as os
+import sys
 import math
 import numpy as np
 from astropy.io import fits
 from numpy.testing import assert_allclose
 import pdb
 
-# We'll use the cdp6 version of the tools (tv=toolversion)
-import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
+#############################
+
+# Set the tools version.  Default is CDP-6
+def set_toolversion(version):
+    # If the toolversion global was already set, delete it
+    try:
+        del globals()['tv']
+    except:
+        pass
+
+    # Define toolversion as global scope within mirim_tools
+    global tv
+    # Import appropriate version
+    if (version == 'default'):
+        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
+    elif (version == 'cdp6'):
+        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
+    elif (version == 'cdp7'):
+        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp7 as tv
+    else:
+        print('Invalid tool version specified!')
+        
+    return
+
+#############################
+
+# Return the tools version
+def version():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
+    return tv.version()
 
 #############################
 
@@ -39,6 +74,12 @@ import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
 # (Trimming is to only detector pixels corresponding to a slice)
 # E.g., values=xytoabl([30,40,50],[50,60,70],'1A',trim=1)
 def xytoabl(x,y,channel,**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     values=tv.xytoabl(x,y,channel,**kwargs)
 
     return values
@@ -53,6 +94,12 @@ def xytoabl(x,y,channel,**kwargs):
 # (Trimming is to only detector pixels corresponding to a slice)
 # E.g., values=xytoabl([30,40,50],[50,60,70],'1A',trim=1)
 def abltoxy(alpha,beta,lam,channel,**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
     values=tv.abltoxy(alpha,beta,lam,channel,**kwargs)
 
     return values
@@ -62,6 +109,12 @@ def abltoxy(alpha,beta,lam,channel,**kwargs):
 # Convert from alpha,beta to JWST v2,v3 coordinates
 # all coordinates are in arcsec
 def abtov2v3(alpha,beta,channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
     v2,v3=tv.abtov2v3(alpha,beta,channel)
 
     return v2,v3
@@ -71,6 +124,12 @@ def abtov2v3(alpha,beta,channel):
 # Convert from JWST v2,v3 coordinates to alpha,beta
 # all coordinates are in arcsec
 def v2v3toab(v2,v3,channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+    
     alpha,beta=tv.v2v3toab(v2,v3,channel)
 
     return alpha,beta
@@ -95,6 +154,12 @@ def xanyan_to_v2v3(xan,yan):
 
 # Test the transforms
 def testtransform():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     # Get test data
     refdata=tv.mrs_ref_data
 
@@ -128,5 +193,4 @@ def testtransform():
         assert_allclose(thisbe,newbe2,atol=0.05)
         assert_allclose(thisx,newx,atol=0.05)
         assert_allclose(thisy,newy,atol=0.05)
-
     return

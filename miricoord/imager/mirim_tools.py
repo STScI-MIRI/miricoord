@@ -56,6 +56,18 @@ def set_toolversion(version):
 
 #############################
 
+# Return the tools version
+def version():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
+    return tv.version()
+
+#############################
+
 # Get the relevant FITS distortion file
 def get_fitsreffile():
     # Determine whether the CDP toolversion has been set.  If not, set to default.

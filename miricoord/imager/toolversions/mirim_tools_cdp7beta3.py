@@ -27,6 +27,12 @@ from astropy.io import fits
 
 #############################
 
+# Return the tools version
+def version():
+    return 'cdp7beta3'
+
+#############################
+
 # Set the relevant FITS distortion file
 def get_fitsreffile():
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
