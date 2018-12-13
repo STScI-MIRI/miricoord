@@ -63,6 +63,18 @@ def set_toolversion(version):
 
 #############################
 
+# Return the tools version
+def version():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
+    return tv.version()
+
+#############################
+
 # Return a model for the detector pixel to v2,v3 distortion
 # Note that filter must be a single string
 def xytov2v3model(filter,**kwargs):

@@ -31,6 +31,12 @@ import pdb
 
 #############################
 
+# Return the tools version
+def version():
+    return 'cdp6'
+
+#############################
+
 # Set the relevant FITS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -83,10 +89,17 @@ def xytoabl(xin,yin,channel,**kwargs):
 
     trimx=np.array(xin)
     trimy=np.array(yin)
-
-    # Transform from 0-indexed to 1-indexed pixels and ensure we're not using integer inputs
-    x=np.array(xin)+1.
-    y=np.array(yin)+1.
+    
+    # Transform from 0-indexed to 1-indexed pixels CDP assumes and ensure we're not using integer inputs
+    # Also handle possible 1-element or multi-element input
+    try:
+        numpoints=len(xin)
+        x=np.array(xin)+1.
+        y=np.array(yin)+1.
+    except:
+        numpoints=1
+        x=np.array([xin])+1.
+        y=np.array([yin])+1.
 
     # Open relevant distortion file
     distfile=fits.open(get_fitsreffile(channel))
@@ -143,6 +156,7 @@ def xytoabl(xin,yin,channel,**kwargs):
             coind=1+(i*5)+j
             thealphamatrix[:,coind]=alphacoeff.field(coind)*(((x[index0]-alphacoeff.field(0))**j)*(y[index0]**i))
             thelammatrix[:,coind]=lamcoeff.field(coind)*(((x[index0]-lamcoeff.field(0))**j)*(y[index0]**i))
+
     # Sum the contributions from each column in the big matrices
     al[index0]=np.sum(thealphamatrix,axis=1)    
     lam[index0]=np.sum(thelammatrix,axis=1)   
@@ -186,11 +200,19 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
     # if channel='1A' then ch=1 and sband=A
     ch=channel[0]
     sband=channel[1]
-
-    trimal=np.array(alin)*1.
-    trimbe=np.array(bein)*1.
-    trimlam=np.array(lamin)*1.
-
+    
+    # Handle possible 1-element or multi-element input
+    try:
+        numpoints=len(np.array(alin))
+        trimal=np.array(alin)*1.
+        trimbe=np.array(bein)*1.
+        trimlam=np.array(lamin)*1.
+    except:
+        numpoints=1    
+        trimal=np.array([alin])*1.
+        trimbe=np.array([bein])*1.
+        trimlam=np.array([lamin])*1.
+    
     # Open relevant distortion file
     distfile=fits.open(get_fitsreffile(channel))
     

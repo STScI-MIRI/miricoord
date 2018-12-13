@@ -28,6 +28,12 @@ import pdb
 
 #############################
 
+# Return the tools version
+def version():
+    return 'cdp7'
+
+#############################
+
 # Set the relevant FITS distortion file
 def get_fitsreffile():
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
