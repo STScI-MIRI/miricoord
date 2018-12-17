@@ -1,7 +1,7 @@
 #
 """
 Code to create CRDS reference files for the distortion of the
-MIRI Imager using IDT reference files delivered with CDP-7beta:
+MIRI Imager using IDT reference files delivered with CDP-7:
 
 MIRI_FM_MIRIMAGE_DISTORTION_07.04.00.fits
 
@@ -143,7 +143,7 @@ def make_filter_offset(distfile, outname):
 def make_distortion(distfile, outname):
     """
     Create an asdf reference file with all distortion components for the MIRI imager.
-    The filter offsets are stored in a sepaate file.
+    The filter offsets are stored in a separate file.
 
     Note: The IDT supplied distortion file lists sky to pixel as the
     forward transform. Since "forward" in the JWST pipeline is from
@@ -267,7 +267,7 @@ def create_reffile_header(model):
     model.meta.useafter = "2000-01-01T00:00:00"
 
     entry = HistoryEntry({'description': "New version created from CDP-7", 'time': datetime.datetime.utcnow()})
-    software = Software({'name': 'coordinates', 'author': 'D.Law', 
+    software = Software({'name': 'miricoord', 'author': 'D.Law', 
                          'homepage': 'https://github.com/STScI-MIRI/miricoord', 'version': "master"})
     entry['software'] = software
     model.history = [entry]
