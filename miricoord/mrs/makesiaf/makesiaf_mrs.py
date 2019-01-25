@@ -15,6 +15,7 @@ REVISION HISTORY:
 17-Oct-2016  Input/output v2/v3 in arcsec (D. Law)
 14-Dec-2017  Adapt for new github/central store interaction (D. Law)
 15-Oct-2018  Adapt from IDL to python (D. Law)
+25-Jan-2019  Modify format to incorporate Imager/LRS/MRS in the same file (D. Law)
 """
 
 import matplotlib as mpl
@@ -44,17 +45,17 @@ import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
 def create_siaf_all():
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'siaf/mrs/temp/')
+    outdir=os.path.join(data_dir,'siaf/temp/')
     # Set the output csv filename
-    outfile=os.path.join(outdir,'miri_siaf_mrs.txt')
+    outfile=os.path.join(outdir,'miri_siaf_tempmrs.txt')
 
     now=datetime.datetime.now()
     thisfile=__file__
     _,thisfile=os.path.split(thisfile)
 
     # Write header information to the output text file
-    print('#',now.isoformat(),file=open(outfile,"w"))
-    print('# Created by user',getpass.getuser(),'at',socket.gethostname(),file=open(outfile,"a"))
+    #print('#',now.isoformat(),file=open(outfile,"w"))
+    print('# Created ',now.isoformat(),' by user',getpass.getuser(),'at',socket.gethostname(),file=open(outfile,"w"))
     print('# Using program',thisfile,file=open(outfile,"a"))
     print('# Using input files:',file=open(outfile,"a"))
 
@@ -68,7 +69,7 @@ def create_siaf_all():
 
     # Set up a loop over all channels to do the calculation
     # Column names
-    print("{:>20}, {:>10}, {:>10}, {:>8}, {:>12}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}, {:>10}".format('AperName','AperType','SliceName','SliceNum','V3IdlYAngle','VIdlParity','v2ref','v3ref','v2ll','v2ul','v2ur','v2lr','v3ll','v3ul','v3ur','v3lr'),file=open(outfile,"a"))
+    print("{:>21} ,{:>10} ,{:>12} ,{:>11} ,{:>9} ,{:>9} ,{:>10} ,{:>10} ,{:>8} ,{:>8} ,{:>8} ,{:>8} ,{:>17} ,{:>16} ,{:>12} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10} ,{:>10}".format('AperName','AperType','V3IdlYAngle','VIdlParity','XDetRef','YDetRef','XSciSize','YSciSize','XCorner','YCorner','XSciRef','YSciRef','parent_apertures','dependency_type','SliceName','SliceNum','v2ref','v3ref','v2ll','v2ul','v2ur','v2lr','v3ll','v3ul','v3ur','v3lr'),file=open(outfile,"a"))
     for i in range(0,nchan):
         # Create the values dictionary
         values=create_siaf_oneband(channel[i])
@@ -82,10 +83,11 @@ def create_siaf_all():
         makev2v3plot(values,channel[i],filename=plotfile,xlim=[-8.29*60.,-8.49*60.],ylim=[-5.43*60.,-5.23*60.])
 
         # Write information to a text file
-        print("{val1:>20}, {val2:>10}, {val3:>10}, {val4:>8}, {val5:>12}, {val6:>10}, {0:>10.4f}, {1:>10.4f}, {2:>10.4f}, {3:>10.4f}, {4:>10.4f}, {5:>10.4f}, {6:>10.4f}, {7:>10.4f}, {8:>10.4f}, {9:>10.4f}".format(values['inscr_v2ref'],values['inscr_v3ref'],values['inscr_v2_corners'][0],values['inscr_v2_corners'][1],values['inscr_v2_corners'][2],values['inscr_v2_corners'][3],values['inscr_v3_corners'][0],values['inscr_v3_corners'][1],values['inscr_v3_corners'][2],values['inscr_v3_corners'][3],val1=values['inscr_apername'],val2='COMPOUND',val3='-1',val4='-1',val5='0.',val6='-1'),file=open(outfile,"a"))
+        print("{val1:>21} ,{val2:>10} ,{val3:>12} ,{val4:>11} ,{val5:>9} ,{val5:>9} ,{val5:>10} ,{val5:>10} ,{val5:>8} ,{val5:>8} ,{val5:>8} ,{val5:>8} ,{val5:>17} ,{val5:>16} ,{val6:>12} ,{val7:>10} ,{0:>10.4f} ,{1:>10.4f} ,{2:>10.4f} ,{3:>10.4f} ,{4:>10.4f} ,{5:>10.4f} ,{6:>10.4f} ,{7:>10.4f} ,{8:>10.4f} ,{9:>10.4f}".format(values['inscr_v2ref'],values['inscr_v3ref'],values['inscr_v2_corners'][0],values['inscr_v2_corners'][1],values['inscr_v2_corners'][2],values['inscr_v2_corners'][3],values['inscr_v3_corners'][0],values['inscr_v3_corners'][1],values['inscr_v3_corners'][2],values['inscr_v3_corners'][3],val1=values['inscr_apername'],val2='COMPOUND',val3='0.',val4='-1',val5='None',val6='None', val7='None'),file=open(outfile,"a"))
         nslice=len(values['slice_num'])
         for j in range(0,nslice):
-            print("{val1:>20}, {val2:>10}, {val3:>10}, {val4:>8}, {val5:>12}, {val6:>10}, {0:>10.4f}, {1:>10.4f}, {2:>10.4f}, {3:>10.4f}, {4:>10.4f}, {5:>10.4f}, {6:>10.4f}, {7:>10.4f}, {8:>10.4f}, {9:>10.4f}".format(values['slice_v2ref'][j],values['slice_v3ref'][j],values['slice_v2_corners'][j][0],values['slice_v2_corners'][j][1],values['slice_v2_corners'][j][2],values['slice_v2_corners'][j][3],values['slice_v3_corners'][j][0],values['slice_v3_corners'][j][1],values['slice_v3_corners'][j][2],values['slice_v3_corners'][j][3],val1=values['slice_apername'][j],val2='SLIT',val3=values['slice_name'][j],val4=values['slice_num'][j],val5='0.',val6='-1'),file=open(outfile,"a"))
+            print("{val1:>21} ,{val2:>10} ,{val3:>12} ,{val4:>11} ,{val5:>9} ,{val5:>9} ,{val5:>10} ,{val5:>10} ,{val5:>8} ,{val5:>8} ,{val5:>8} ,{val5:>8} ,{val5:>17} ,{val5:>16} ,{val6:>12} ,{val7:>10} ,{0:>10.4f} ,{1:>10.4f} ,{2:>10.4f} ,{3:>10.4f} ,{4:>10.4f} ,{5:>10.4f} ,{6:>10.4f} ,{7:>10.4f} ,{8:>10.4f} ,{9:>10.4f}".format(values['slice_v2ref'][j],values['slice_v3ref'][j],values['slice_v2_corners'][j][0],values['slice_v2_corners'][j][1],values['slice_v2_corners'][j][2],values['slice_v2_corners'][j][3],values['slice_v3_corners'][j][0],values['slice_v3_corners'][j][1],values['slice_v3_corners'][j][2],values['slice_v3_corners'][j][3],val1=values['slice_apername'][j],val2='SLIT',val3='0.',val4='-1',val5='None',val6=values['slice_name'][j],val7=values['slice_num'][j]),file=open(outfile,"a"))
+
 
     # Print out what all of the field sizes in this file are
     mf.getfov(file=outfile)
