@@ -21,6 +21,7 @@ Author: David R. Law (dlaw@stsci.edu)
 REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
 02-Dec-2018  Revise version handling using globals (D. Law)
+06-Feb-2019  Set default to CDP-7 (D. Law)
 """
 
 import os as os
@@ -32,7 +33,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is CDP-7b3
+# Set the tools version.  Default is CDP-7
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -44,7 +45,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
+        import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7 as tv
     elif (version == 'cdp7b'):
         import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
     elif (version == 'cdp7'):

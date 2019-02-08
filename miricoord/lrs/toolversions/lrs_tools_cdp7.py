@@ -24,6 +24,7 @@ REVISION HISTORY:
 import os as os
 import math
 import numpy as np
+from numpy import matlib as mb
 from astropy.modeling import models
 from astropy.io import fits
 from scipy.interpolate import UnivariateSpline
@@ -43,7 +44,7 @@ def version():
 # Set the relevant FITS wavelengths file
 def get_fitsreffile():
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    reffile=os.path.join(rootdir,'data/fits/cdp7/MIRI_FM_MIRIMAGE_P750L_DISTORTION_07.02.00.fits')
+    reffile=os.path.join(rootdir,'data/fits/cdp7/MIRI_FM_MIRIMAGE_P750L_DISTORTION_07.03.00.fits')
    
     return reffile
 
@@ -97,8 +98,8 @@ def xytov2v3lam(xin,yin,stype):
     v2refrow,v3refrow=mt.xytov2v3(xrow+xsub0,yrow+ysub0,'F770W')
 
     # Now repeat the v2,v3, matrix from the central row so that it is copied to all of the other valid rows too
-    v2_full = np.matlib.repmat(v2refrow, np.int(bb[1][1]) + 1 - np.int(bb[1][0]), 1)
-    v3_full = np.matlib.repmat(v3refrow, np.int(bb[1][1]) + 1 - np.int(bb[1][0]), 1)
+    v2_full = mb.repmat(v2refrow, np.int(bb[1][1]) + 1 - np.int(bb[1][0]), 1)
+    v3_full = mb.repmat(v3refrow, np.int(bb[1][1]) + 1 - np.int(bb[1][0]), 1)
     # v2_full and v3_full now have shape (e.g. for slitless) 391x72
 
     # Now take these matrices and put them into tabular models that can be interpolated to find v2,v3 for arbitrary

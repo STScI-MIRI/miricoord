@@ -19,7 +19,7 @@ the origin such that (0,0) is the middle of the lower-left light sensitive pixel
 Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
-02-Dec-2018  Written by David Law (dlaw@stsci.edu) STILL HAVENT CHANGED STUFF
+02-Dec-2018  Written by David Law (dlaw@stsci.edu)
 """
 
 import os as os
@@ -41,7 +41,7 @@ def version():
 # Set the relevant FITS distortion file
 def get_fitsreffile():
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    distfile=os.path.join(rootdir,'data/crds/jwst_miri_distortion_cdp7.asdf')
+    distfile=os.path.join(rootdir,'data/crds/jwst_miri_imager_distortion_cdp7.asdf')
     offfile=os.path.join(rootdir,'data/crds/jwst_miri_filteroffset_cdp7.asdf')
 
     refs = {"distortion": distfile, "filteroffset": offfile}
@@ -76,8 +76,8 @@ def xytov2v3model(filter,**kwargs):
 # in a variety of filters
 def testdata():
     # F770W tests
-    v2v3_770=np.array([[-480.,-348.],[-450.,-348.],[-420.,-348.],[-390.,-348.],[-480.,-378.],[-450.,-378.],[-420,-378.],[-390.,-378.],[-480.,-408.],[-450.,-408.],[-420.,-408.],[-390.,-408.]])
-    xy_770=np.array([[948.18,724.94],[676.75,745.67],[404.81,767.77],[132.65,791.34],[923.52,455.40],[653.11,476.53],[382.37,498.57],[111.34,521.66],[899.64,184.81],[629.88,206.95],[360.00,229.12],[89.77,251.55]],dtype=np.float) + [4,0]
+    v2v3_770=np.array([[-415.069,-400.576],[-453.559,-373.814],[-434.083,-375.388],[-480.,-348.],[-450.,-348.],[-420.,-348.],[-390.,-348.],[-480.,-378.],[-450.,-378.],[-420,-378.],[-390.,-378.],[-480.,-408.],[-450.,-408.],[-420.,-408.],[-390.,-408.]])
+    xy_770=np.array([[321.13,299.7],[688.5,511.5],[511.5,511.5],[948.18,724.94],[676.75,745.67],[404.81,767.77],[132.65,791.34],[923.52,455.40],[653.11,476.53],[382.37,498.57],[111.34,521.66],[899.64,184.81],[629.88,206.95],[360.00,229.12],[89.77,251.55]],dtype=np.float) + [4,0]
     # Note that we had to add 4 to Alistair's x locations because he uses science pixels, not detector pixels
     filt_770=['F770W' for i in range(0,v2v3_770.shape[0])]
 

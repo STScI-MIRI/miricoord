@@ -60,12 +60,16 @@ def xytov2v3lam_model(stype,**kwargs):
         input_model.meta.subarray.name = 'FULL'
         input_model.meta.subarray.xstart = 1
         input_model.meta.subarray.ystart = 1
+        input_model.meta.subarray.xsize = 1032
+        input_model.meta.subarray.ysize = 1024
         input_model.data = np.zeros((1024,1032))
         input_model.meta.exposure.type = 'MIR_LRS-FIXEDSLIT'
     elif (stype.lower() == 'slitless'):
         input_model.meta.subarray.name = 'SUBPRISM'
         input_model.meta.subarray.xstart = 1
         input_model.meta.subarray.ystart = 529
+        input_model.meta.subarray.xsize = 72
+        input_model.meta.subarray.ysize = 416
         input_model.data = np.zeros((416,72))
         input_model.meta.exposure.type = 'MIR_LRS-SLITLESS'
     else:
@@ -80,6 +84,7 @@ def xytov2v3lam_model(stype,**kwargs):
 
     # Call the pipeline code to make a distortion object given these inputs
     distortion = miri.lrs_distortion(input_model, therefs)
+
     # Return the distortion object that can then be queried
     return distortion
 

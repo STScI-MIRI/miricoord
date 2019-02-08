@@ -4,21 +4,21 @@
 %TAG ! tag:stsci.edu:asdf/
 --- !core/asdf-1.1.0
 asdf_library: !core/software-1.0.0 {author: Space Telescope Science Institute, homepage: 'http://github.com/spacetelescope/asdf',
-  name: asdf, version: 2.3.0.dev1651}
+  name: asdf, version: 2.4.0.dev1705}
 history:
   entries:
   - !core/history_entry-1.0.0
     description: New version created from CDP-7
     software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
-      name: coordinates, version: master}
-    time: 2018-12-03 17:35:33.383483
+      name: miricoord, version: master}
+    time: 2019-02-08 20:11:41.287572
   extensions:
   - !core/extension_metadata-1.0.0
     extension_class: asdf.extension.BuiltinExtension
-    software: {name: asdf, version: 2.3.0.dev1651}
+    software: {name: asdf, version: 2.4.0.dev1705}
   - !core/extension_metadata-1.0.0
     extension_class: astropy.io.misc.asdf.extension.AstropyAsdfExtension
-    software: {name: astropy, version: 3.2.dev23444}
+    software: {name: astropy, version: 3.2.dev23785}
 filters:
 - {column_offset: -0.08, name: F560W, row_offset: -0.06}
 - {column_offset: -0.0, name: F770W, row_offset: -0.0}
@@ -33,11 +33,11 @@ filters:
 - {column_offset: -0.6, name: F1065C, row_offset: -2.15}
 - {column_offset: -0.42, name: F1140C, row_offset: -1.56}
 - {column_offset: -1.17, name: F1550C, row_offset: -1.47}
-- {column_offset: 1.35, name: F2330C, row_offset: -2.11}
+- {column_offset: 1.35, name: F2300C, row_offset: -2.11}
 - {column_offset: -0.07, name: FND, row_offset: -0.26}
 meta:
   author: Alistair Glasse, David R. Law
-  date: '2018-12-03T12:35:33.379'
+  date: '2019-02-08T15:11:41.283'
   description: CDP7 delivery
   exposure: {p_exptype: MIR_IMAGE|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|, type: MIR_IMAGE}
   instrument: {band: N/A, channel: N/A, detector: MIRIMAGE, name: MIRI}

@@ -3,7 +3,7 @@
 Code to create CRDS reference files for the distortion of the
 MIRI Imager using IDT reference files delivered with CDP-7:
 
-MIRI_FM_MIRIMAGE_DISTORTION_07.04.00.fits
+MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits
 
 MIRI Imager uses 2 reference files of type:
 
@@ -25,7 +25,7 @@ REVISION HISTORY:
 2015         Written by Nadia Dencheva
 2016         Adapted for new formats by David Law (dlaw@stsci.edu)
 11-Oct-2018  Adapted to new miricoord structure (D. Law)
-02-Dec-2018  Adapt to CDP-7 NOT DONE YET
+02-Dec-2018  Adapt to CDP-7
 """
 
 from __future__ import absolute_import, division, unicode_literals, print_function
@@ -117,7 +117,7 @@ def make_filter_offset(distfile, outname):
 
     Examples
     -------
-    >>> make_filter_offset('MIRI_FM_MIRIMAGE_DISTORTION_07.04.00.fits',
+    >>> make_filter_offset('MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits',
                                         'jwst_miri_filter_offset_0001.asdf')
     """
 
@@ -169,7 +169,7 @@ def make_distortion(distfile, outname):
 
     Examples
     --------
-    >>> make_distortion("MIRI_FM_MIRIMAGE_DISTORTION_07.04.00.fits", 'test.asdf')
+    >>> make_distortion("MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits", 'test.asdf')
     """
     # Transform from 0-indexed Detector frame (used by pipeline) to 0-indexed Science frame (used by CDP)
     det_to_sci = models.Shift(-4) & models.Identity(1)
@@ -227,18 +227,11 @@ def make_distortion(distfile, outname):
     map_t2_xanyan = models.Mapping((1, 0))
     map_t2_xanyan.inverse = models.Mapping((0, 1, 0, 1))
 
-    distortion_transform = det_to_sci | m_transform | mapping | poly | poly2t_mapping | t_transform | ident | models.Mapping([1,0])# | xanyan_to_v2v3
+    distortion_transform = det_to_sci | m_transform | mapping | poly | poly2t_mapping | t_transform | ident | models.Mapping([1,0])
 
     # Inverse transform created automatically, but if we needed to do it by hand
     # it would look like this
     #distortion_transform.inverse=models.Mapping([1,0]).inverse | ident.inverse | t_transform.inverse | poly2t_mapping.inverse | poly.inverse | mapping.inverse | m_transform.inverse | det_to_sci.inverse
-
-    # Define imager bounding boxes
-    shape=1032,1024 # columns,rows
-    # The python bounding box must have form ((ylow,yhigh),(xlow,xhigh))
-    # NB- at the moment this doesn't do anything here and must be implemented in
-    # pipeline code miri.py instead
-    distortion_transform.bounding_box = ((-0.5, shape[1] - 0.5), (3.5, shape[0] - 4.5))
 
     fdist.close()
 
@@ -282,7 +275,7 @@ def make_references(filename, ref):
     ----------
     filename : str
         The name of the IDT file with the distortion.
-        In CDP7 the file is called "MIRI_FM_MIRIMAGE_DISTORTION_07.04.00.fits"
+        In CDP7 the file is called "MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits"
     ref : dict
         A dictionary {reftype: refname}, e.g.
         {'DISTORTION': 'jwst_miri_distortion_0001.asdf',
@@ -291,7 +284,7 @@ def make_references(filename, ref):
 
     Examples
     --------
-    >>> make_references('MIRI_FM_MIRIMAGE_DISTORTION_07.04.00.fits',
+    >>> make_references('MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits',
         {'DISTORTION': 'jwst_miri_distortion_0001.asdf',
         'FILTEROFFSET': 'jwst_miri_filter_offset_0001.asdf'})
 

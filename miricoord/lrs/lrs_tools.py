@@ -20,6 +20,7 @@ Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 17-Dec-2018  Written by David Law (dlaw@stsci.edu)
+06-Feb-2019  Change default to CDP-7 (D. Law)
 """
 
 import os as os
@@ -31,7 +32,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is CDP-7beta3
+# Set the tools version.  Default is CDP-7
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -43,7 +44,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.lrs.toolversions.lrs_tools_cdp7beta3 as tv
+        import miricoord.miricoord.lrs.toolversions.lrs_tools_cdp7 as tv
     elif (version == 'cdp7'):
         import miricoord.miricoord.lrs.toolversions.lrs_tools_cdp7 as tv
     elif (version == 'cdp7beta3'):
