@@ -3,7 +3,7 @@
 Code to create CRDS reference files for the distortion of the
 MIRI Imager using IDT reference files delivered with CDP-7:
 
-MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits
+MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits
 
 MIRI Imager uses 2 reference files of type:
 
@@ -117,7 +117,7 @@ def make_filter_offset(distfile, outname):
 
     Examples
     -------
-    >>> make_filter_offset('MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits',
+    >>> make_filter_offset('MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits',
                                         'jwst_miri_filter_offset_0001.asdf')
     """
 
@@ -169,7 +169,7 @@ def make_distortion(distfile, outname):
 
     Examples
     --------
-    >>> make_distortion("MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits", 'test.asdf')
+    >>> make_distortion("MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits", 'test.asdf')
     """
     # Transform from 0-indexed Detector frame (used by pipeline) to 0-indexed Science frame (used by CDP)
     det_to_sci = models.Shift(-4) & models.Identity(1)
@@ -275,7 +275,7 @@ def make_references(filename, ref):
     ----------
     filename : str
         The name of the IDT file with the distortion.
-        In CDP7 the file is called "MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits"
+        In CDP7 the file is called "MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits"
     ref : dict
         A dictionary {reftype: refname}, e.g.
         {'DISTORTION': 'jwst_miri_distortion_0001.asdf',
@@ -284,7 +284,7 @@ def make_references(filename, ref):
 
     Examples
     --------
-    >>> make_references('MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits',
+    >>> make_references('MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits',
         {'DISTORTION': 'jwst_miri_distortion_0001.asdf',
         'FILTEROFFSET': 'jwst_miri_filter_offset_0001.asdf'})
 

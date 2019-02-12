@@ -37,7 +37,7 @@ def version():
 # Set the relevant FITS distortion file
 def get_fitsreffile():
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    reffile=os.path.join(rootdir,'data/fits/cdp7/MIRI_FM_MIRIMAGE_DISTORTION_07.05.00.fits')
+    reffile=os.path.join(rootdir,'data/fits/cdp7/MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits')
    
     return reffile
 
