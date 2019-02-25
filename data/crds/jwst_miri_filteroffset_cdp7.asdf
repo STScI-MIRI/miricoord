@@ -11,14 +11,14 @@ history:
     description: New version created from CDP-7
     software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
       name: miricoord, version: master}
-    time: 2019-02-21 16:27:47.221525
+    time: 2019-02-25 15:00:18.269249
   extensions:
-  - !core/extension_metadata-1.0.0
-    extension_class: astropy.io.misc.asdf.extension.AstropyAsdfExtension
-    software: {name: astropy, version: 3.2.dev23785}
   - !core/extension_metadata-1.0.0
     extension_class: asdf.extension.BuiltinExtension
     software: {name: asdf, version: 2.4.0.dev1705}
+  - !core/extension_metadata-1.0.0
+    extension_class: astropy.io.misc.asdf.extension.AstropyAsdfExtension
+    software: {name: astropy, version: 3.2.dev23785}
 filters:
 - {column_offset: -0.08, name: F560W, row_offset: -0.06}
 - {column_offset: -0.0, name: F770W, row_offset: -0.0}
@@ -37,10 +37,9 @@ filters:
 - {column_offset: -0.07, name: FND, row_offset: -0.26}
 meta:
   author: Alistair Glasse, David R. Law
-  date: '2019-02-21T11:27:47.217'
+  date: '2019-02-25T10:00:18.265'
   description: CDP7 delivery
-  exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|,
-    type: MIR_IMAGE}
+  exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|, type: MIR_IMAGE}
   instrument: {band: N/A, channel: N/A, detector: MIRIMAGE, name: MIRI}
   model_type: FilteroffsetModel
   pedigree: GROUND
