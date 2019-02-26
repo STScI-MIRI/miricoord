@@ -41,8 +41,8 @@ def version():
 # Set the relevant FITS distortion files
 def get_fitsreffile():
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    distfile=os.path.join(rootdir,'data/crds/jwst_miri_imager_distortion_cdp7.asdf')
-    specfile=os.path.join(rootdir,'data/crds/jwst_miri_specwcs_lrscdp7.fits')
+    distfile=os.path.join(rootdir,'data/crds/jwst_miri_distortion_0028.asdf')
+    specfile=os.path.join(rootdir,'data/crds/jwst_miri_specwcs_0003.fits')
 
     refs = {"distortion": distfile, "specwcs": specfile}
    
