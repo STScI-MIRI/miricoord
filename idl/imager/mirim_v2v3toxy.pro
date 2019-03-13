@@ -57,7 +57,7 @@
 pro mirim_v2v3toxy,v2,v3,xpixel,ypixel,filter,refdir=refdir,xan=xan
 
 if (~keyword_set(refdir)) then $
-  refdir=concat_dir(ml_getenv('MIRICOORD_DIR'),'data/fits/cdp7b/')
+  refdir=concat_dir(ml_getenv('MIRICOORD_DIR'),'data/fits/cdp7beta3/')
 
 reffile='MIRI_FM_MIRIMAGE_DISTORTION_7B.03.00.fits'
 reffile=concat_dir(refdir,reffile)

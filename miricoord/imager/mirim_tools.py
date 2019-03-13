@@ -126,6 +126,40 @@ def v2v3toxy(v2,v3,filter):
 
 #############################
 
+# Return the rotation angle V3IdlYAngle of the Imager coordinates with respect
+# to v2/v3 at a given detector x,y (pipeline 0-indexed convention)
+def v3imarot(x,y):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+    
+    v2,v3=tv.xytov2v3(x,y,'F770W')
+    v2a,v3a=tv.xytov2v3(x,y+1,'F770W')
+    angle=90.-np.arctan2([v3a-v3],[v2a-v2])*180./np.pi
+
+    return angle
+
+#############################
+
+# Return the rotation angle V2IdlXAngle of the Imager coordinates with respect
+# to v2/v3 at a given detector x,y (pipeline 0-indexed convention)
+def v2imarot(x,y):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+    
+    v2,v3=tv.xytov2v3(x,y,'F770W')
+    v2a,v3a=tv.xytov2v3(x-1,y,'F770W')
+    angle=np.arctan2([v3a-v3],[v2a-v2])*180./np.pi
+
+    return angle
+
+#############################
+
 # Convert from Ideal coordinates to v2,v3 coordinates in arcsec
 # for a given SIAF aperture using pysiaf
 def Idealtov2v3(XIdl,YIdl,apername):
