@@ -55,7 +55,7 @@ def create_siaf_all():
 
     # Write header information to the output text file
     #print('#',now.isoformat(),file=open(outfile,"w"))
-    print('# Created ',now.isoformat(),' by user',getpass.getuser(),'at',socket.gethostname(),file=open(outfile,"w"))
+    print('# Created ',now.isoformat(),file=open(outfile,"w"))
     print('# Using program',thisfile,file=open(outfile,"a"))
     print('# Using input files:',file=open(outfile,"a"))
 
