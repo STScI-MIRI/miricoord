@@ -72,6 +72,20 @@ def makepattern_generic(astart,along,ashort,bstart,blong,bshort):
 
 #############################
 
+# A routine to return rough maximum PSF FWHM in arcsec for a given channel
+
+def maxfwhm(channel):
+    # Maximum wavelength in microns for the channel
+    wave=0.
+    if (channel is 1): wave=8.0
+    if (channel is 2): wave=12.0
+    if (channel is 3): wave=18.0
+    if (channel is 4): wave=29.0
+
+    return 0.31*wave/8.0
+    
+#############################
+
 # Generate the CDP6 Ch1 point-source patterns
 
 def makepattern_cdp6_ch1():
@@ -95,7 +109,7 @@ def makepattern_cdp6_ch1():
     
 #############################
 
-# Generate the Ch2 point-source patterns
+# Generate the CDP6 Ch2 point-source patterns
 
 def makepattern_cdp6_ch2():
     pixsiz1=0.196
@@ -115,12 +129,267 @@ def makepattern_cdp6_ch2():
     pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
 
     return pat_v2,pat_v3
-    
+
 #############################
 
-# Ch3
+# Generate the CDP6 Ch3 point-source patterns
 
-# Ch4
+def makepattern_cdp6_ch3():
+    pixsiz1=0.196
+    pixsiz=0.244
+    slicesiz1=0.176
+    slicesiz=0.387
+
+    along=16.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=-12.5*pixsiz1
+    blong=16.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=12.6*slicesiz1
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
+
+    return pat_v2,pat_v3
+
+#############################
+
+# Generate the CDP6 Ch4 point-source patterns
+
+def makepattern_cdp6_ch4():
+    pixsiz1=0.196
+    pixsiz=0.273
+    slicesiz1=0.176
+    slicesiz=0.645
+
+    along=17.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=-10*pixsiz1
+    blong=27.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=18*slicesiz1
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
+
+    return pat_v2,pat_v3
+
+#############################
+
+# Generate the commissioning Ch1 point-source patterns
+
+def makepattern_ch1():
+    pixsiz1=0.196
+    pixsiz=0.196
+    slicesiz1=0.176
+    slicesiz=0.176
+
+    along=10.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=0
+    blong=5.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=0
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
+
+    # Get the Ch1 field boundaries
+    values1A=makesiaf.create_siaf_oneband('1A')
+    values1B=makesiaf.create_siaf_oneband('1B')
+    values1C=makesiaf.create_siaf_oneband('1C')
+    
+    # Recenter the pattern
+    v2_fieldmean=(values1A['inscr_v2ref']+values1B['inscr_v2ref']+values1C['inscr_v2ref'])/3.
+    v3_fieldmean=(values1A['inscr_v3ref']+values1B['inscr_v3ref']+values1C['inscr_v3ref'])/3.
+    v2_mean=np.mean(pat_v2)
+    v3_mean=np.mean(pat_v3)
+
+    pat_v2 = pat_v2 - v2_mean + v2_fieldmean
+    pat_v3 = pat_v3 - v3_mean + v3_fieldmean
+
+    return pat_v2,pat_v3
+
+#############################
+
+# Generate the commissioning Ch2 point-source patterns
+
+def makepattern_ch2():
+    pixsiz1=0.196
+    pixsiz=0.196
+    slicesiz1=0.176
+    slicesiz=0.277
+
+    along=10.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=0
+    blong=16.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=0
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
+
+    # Get the Ch2 field boundaries
+    values2A=makesiaf.create_siaf_oneband('2A')
+    values2B=makesiaf.create_siaf_oneband('2B')
+    values2C=makesiaf.create_siaf_oneband('2C')
+    
+    # Recenter the pattern
+    v2_fieldmean=(values2A['inscr_v2ref']+values2B['inscr_v2ref']+values2C['inscr_v2ref'])/3.
+    v3_fieldmean=(values2A['inscr_v3ref']+values2B['inscr_v3ref']+values2C['inscr_v3ref'])/3.
+    v2_mean=np.mean(pat_v2)
+    v3_mean=np.mean(pat_v3)
+
+    pat_v2 = pat_v2 - v2_mean + v2_fieldmean
+    pat_v3 = pat_v3 - v3_mean + v3_fieldmean
+    
+    return pat_v2,pat_v3
+
+
+def makepattern_ch2test():
+    pixsiz1=0.196
+    pixsiz=0.196
+    slicesiz1=0.176
+    slicesiz=0.277
+
+    along=10.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=0
+    blong=16.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=0
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'2A')
+
+    # Get the Ch2 field boundaries
+    values2A=makesiaf.create_siaf_oneband('2A')
+    values2B=makesiaf.create_siaf_oneband('2B')
+    values2C=makesiaf.create_siaf_oneband('2C')
+    
+    # Recenter the pattern
+    v2_fieldmean=(values2A['inscr_v2ref']+values2B['inscr_v2ref']+values2C['inscr_v2ref'])/3.
+    v3_fieldmean=(values2A['inscr_v3ref']+values2B['inscr_v3ref']+values2C['inscr_v3ref'])/3.
+    v2_mean=np.mean(pat_v2)
+    v3_mean=np.mean(pat_v3)
+
+    pat_v2 = pat_v2 - v2_mean + v2_fieldmean
+    pat_v3 = pat_v3 - v3_mean + v3_fieldmean
+    
+    return pat_v2,pat_v3
+
+#############################
+
+# Generate the commissioning Ch3 point-source patterns
+
+def makepattern_ch3():
+    pixsiz1=0.196
+    pixsiz=0.244
+    slicesiz1=0.176
+    slicesiz=0.387
+
+    along=16.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=0
+    blong=16.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=0
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
+
+    # Get the Ch3 field boundaries
+    values3A=makesiaf.create_siaf_oneband('3A')
+    values3B=makesiaf.create_siaf_oneband('3B')
+    values3C=makesiaf.create_siaf_oneband('3C')
+    
+    # Recenter the pattern
+    v2_fieldmean=(values3A['inscr_v2ref']+values3B['inscr_v2ref']+values3C['inscr_v2ref'])/3.
+    v3_fieldmean=(values3A['inscr_v3ref']+values3B['inscr_v3ref']+values3C['inscr_v3ref'])/3.
+    v2_mean=np.mean(pat_v2)
+    v3_mean=np.mean(pat_v3)
+
+    pat_v2 = pat_v2 - v2_mean + v2_fieldmean
+    pat_v3 = pat_v3 - v3_mean + v3_fieldmean
+    
+    return pat_v2,pat_v3
+
+def makepattern_ch3test():
+    pixsiz1=0.196
+    pixsiz=0.244
+    slicesiz1=0.176
+    slicesiz=0.387
+
+    along=16.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=0
+    blong=16.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=0
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'3A')
+
+    # Get the Ch3 field boundaries
+    values3A=makesiaf.create_siaf_oneband('3A')
+    values3B=makesiaf.create_siaf_oneband('3B')
+    values3C=makesiaf.create_siaf_oneband('3C')
+    
+    # Recenter the pattern
+    v2_fieldmean=(values3A['inscr_v2ref']+values3B['inscr_v2ref']+values3C['inscr_v2ref'])/3.
+    v3_fieldmean=(values3A['inscr_v3ref']+values3B['inscr_v3ref']+values3C['inscr_v3ref'])/3.
+    v2_mean=np.mean(pat_v2)
+    v3_mean=np.mean(pat_v3)
+
+    pat_v2 = pat_v2 - v2_mean + v2_fieldmean
+    pat_v3 = pat_v3 - v3_mean + v3_fieldmean
+    
+    return pat_v2,pat_v3
+
+#############################
+
+# Generate the commissioning Ch4 point-source patterns
+
+def makepattern_ch4():
+    pixsiz1=0.196
+    pixsiz=0.273
+    slicesiz1=0.176
+    slicesiz=0.645
+
+    along=17.5*pixsiz
+    ashort=0.5*pixsiz
+    astart=0
+    blong=27.5*slicesiz1
+    bshort=0.5*slicesiz
+    bstart=0
+
+    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
+    # Transform assuming input in Ch1A alpha-beta
+    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
+
+    # Get the Ch4 field boundaries
+    values4A=makesiaf.create_siaf_oneband('4A')
+    values4B=makesiaf.create_siaf_oneband('4B')
+    values4C=makesiaf.create_siaf_oneband('4C')
+    
+    # Recenter the pattern
+    v2_fieldmean=(values4A['inscr_v2ref']+values4B['inscr_v2ref']+values4C['inscr_v2ref'])/3.
+    v3_fieldmean=(values4A['inscr_v3ref']+values4B['inscr_v3ref']+values4C['inscr_v3ref'])/3.
+    v2_mean=np.mean(pat_v2)
+    v3_mean=np.mean(pat_v3)
+
+    pat_v2 = pat_v2 - v2_mean + v2_fieldmean
+    pat_v3 = pat_v3 - v3_mean + v3_fieldmean
+    
+    return pat_v2,pat_v3
 
 # Routine to generate the extended-source patterns
 
