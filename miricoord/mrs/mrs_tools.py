@@ -45,8 +45,8 @@ def set_toolversion(version):
         import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
     elif (version == 'cdp6'):
         import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
-    elif (version == 'cdp7'):
-        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp7 as tv
+    elif (version == 'cdp8b'):
+        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
     else:
         print('Invalid tool version specified!')
         

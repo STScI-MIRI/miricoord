@@ -1,0 +1,10 @@
+#
+"""
+Python tools for creating the MIRI MRS dither sequences for a given
+set of distortion files.
+
+Author: David R. Law (dlaw@stsci.edu)
+
+REVISION HISTORY:
+15-Apr-2019  Adapt from old IDL routines (D. Law; dlaw@stsci.edu)
+"""
