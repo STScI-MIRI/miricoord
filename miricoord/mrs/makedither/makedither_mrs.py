@@ -66,12 +66,6 @@ def makepattern_generic(astart,along,ashort,bstart,blong,bshort):
 
 #############################
 
-# A routine to get the average slice width
-
-# A routine to get the average pixel size
-
-#############################
-
 # A routine to return rough maximum PSF FWHM in arcsec for a given channel
 
 def maxfwhm(channel):

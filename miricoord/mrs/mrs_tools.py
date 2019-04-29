@@ -9,15 +9,14 @@ files contained within this github repository.
 
 Convert JWST v2,v3 locations (in arcsec) to MIRI MRS SCA x,y pixel locations.
 Note that the pipeline uses a 0-indexed detector pixel (1032x1024) convention while
-SIAF uses a 1-indexed detector pixel convention.  The CDP files define
-the origin such that (0,0) is the middle of the lower-left light sensitive pixel
-(1024x1024),therefore also need to transform between this science frame and detector frame.
+SIAF uses a 1-indexed detector pixel convention.
 
 Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
 07-Dec-2018  Revise version handling using globals (D. Law)
+18-Apr-2019  Add slice width and pixel size (D. Law)
 """
 
 import os as os
@@ -63,6 +62,37 @@ def version():
         set_toolversion('default')
         
     return tv.version()
+
+
+#############################
+
+# Return the average slice width (beta) for a given channel
+
+def slicewidth(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.slicewidth(channel)
+
+    return value
+
+#############################
+
+# Return the average pixel size (alpha) for a given channel
+
+def pixsize(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.pixsize(channel)
+
+    return value
 
 #############################
 
@@ -170,9 +200,12 @@ def testtransform():
         print('Testing channel '+channel[i])
         data=refdata[channel[i]]
         thisx,thisy,thisal,thisbe,thislam=data['x'],data['y'],data['alpha'],data['beta'],data['lam']
-        thisxan,thisyan=data['xan'],data['yan']
-        thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
-        
+        if (tv.version() is 'cdp6'):
+            thisxan,thisyan=data['xan'],data['yan']
+            thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
+        else:
+            thisv2,thisv3=data['v2'],data['v3']
+            
         # Forward transform
         values=xytoabl(thisx,thisy,channel[i])
         newal,newbe,newlam=values['alpha'],values['beta'],values['lam']
@@ -191,6 +224,6 @@ def testtransform():
         # Test equality
         assert_allclose(thisal,newal2,atol=0.05)
         assert_allclose(thisbe,newbe2,atol=0.05)
-        assert_allclose(thisx,newx,atol=0.05)
-        assert_allclose(thisy,newy,atol=0.05)
+        assert_allclose(thisx,newx,atol=0.08)
+        assert_allclose(thisy,newy,atol=0.08)
     return
