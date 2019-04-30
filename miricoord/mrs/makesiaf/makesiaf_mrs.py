@@ -31,11 +31,9 @@ import getpass
 import socket
 
 import pdb
-
 import miricoord.miricoord.mrs.mrs_fields as mf
+import miricoord.miricoord.mrs.mrs_tools as mt
 
-# Import offline MIRI MRS tools for CDP-6 specifically
-import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
 
 #############################
 
@@ -63,7 +61,7 @@ def create_siaf_all():
     channel=['1A','1B','1C','2A','2B','2C','3A','3B','3C','4A','4B','4C']
     nchan=len(channel)
     for i in range(0,nchan):
-        reffile=tv.get_fitsreffile(channel[i])
+        reffile=mt.get_fitsreffile(channel[i])
         reffile0,reffile1=os.path.split(reffile)
         print('# '+channel[i]+' : ' + reffile1,file=open(outfile,"a"))
 
@@ -175,7 +173,7 @@ def create_siaf_oneband(channel):
     inscr_apername='MIRIFU_CHANNEL'+channel
     
     # Open relevant distortion file
-    distfilename=tv.get_fitsreffile(channel)
+    distfilename=mt.get_fitsreffile(channel)
     distfile=fits.open(distfilename)
 
     # Read global header
@@ -249,12 +247,12 @@ def create_siaf_oneband(channel):
     alpha_ref=0.
 
     # Convert to v2,v3 reference points
-    v2_ref,v3_ref=tv.abtov2v3(alpha_ref,beta_ref,channel)
-    slice_v2_ref,slice_v3_ref=tv.abtov2v3(slice_alpha_ref,slice_beta_ref,channel)
+    v2_ref,v3_ref=mt.abtov2v3(alpha_ref,beta_ref,channel)
+    slice_v2_ref,slice_v3_ref=mt.abtov2v3(slice_alpha_ref,slice_beta_ref,channel)
     # Convert to v2,v3 corner coordinates
-    v2_corners,v3_corners=tv.abtov2v3(alpha_corners,beta_corners,channel)
+    v2_corners,v3_corners=mt.abtov2v3(alpha_corners,beta_corners,channel)
     # Convert to v2,v3 inscribed box
-    inscr_v2,inscr_v3=tv.abtov2v3(inscr_alpha,inscr_beta,channel)
+    inscr_v2,inscr_v3=mt.abtov2v3(inscr_alpha,inscr_beta,channel)
 
     # Create a dictionary to return
     values=dict();

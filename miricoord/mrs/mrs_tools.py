@@ -1,6 +1,7 @@
 #
 """
-Useful python tools for working with the MIRI MRS.
+Useful python tools for working with the MIRI MRS.  Note that this is the only code
+that should be calling thing in toolversions!
 
 This version of the tools uses a standalone implementation
 of the distortion solution to do the transformations,
@@ -26,6 +27,7 @@ import numpy as np
 from astropy.io import fits
 from numpy.testing import assert_allclose
 import pdb
+
 
 #############################
 
@@ -60,8 +62,22 @@ def version():
         sys.getrefcount(tv)
     except:
         set_toolversion('default')
-        
+ 
     return tv.version()
+
+#############################
+
+# Return the FITS reference file name
+def get_fitsreffile(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.get_fitsreffile(channel)
+
+    return value
 
 
 #############################

@@ -26,6 +26,7 @@ REVISION HISTORY:
 import os as os
 import math
 import numpy as np
+from numpy import matlib as mb
 from astropy.io import fits
 import pdb
 
