@@ -19,6 +19,7 @@ REVISION HISTORY:
 
 import os as os
 import numpy as np
+import sys
 import pdb as pdb
 from astropy.modeling import models
 from asdf import AsdfFile
@@ -36,7 +37,7 @@ def set_toolversion(version):
     except:
         pass
 
-    # Define toolversion as global scope within mirim_tools
+    # Define toolversion as global scope within mrs_pipetools
     global tv
     # Import appropriate version
     if (version == 'default'):
@@ -47,7 +48,7 @@ def set_toolversion(version):
         import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
     else:
         print('Invalid tool version specified!')
-        
+
     return
 
 #############################
@@ -156,6 +157,12 @@ def midwave(channel):
 # Convenience function to return model distortion object
 # for the x,y to alpha,beta,lam transform
 def xytoablmodel(channel,**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     model=tv.xytoablmodel(channel,**kwargs)
 
     return model
@@ -189,6 +196,12 @@ def abltoxy(alpha,beta,lam,channel,**kwargs):
 # Convenience function to return model distortion object
 # for the alpha,beta to v2,v3 transform
 def abtov2v3model(channel,**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+    
     model=tv.abtov2v3model(channel,**kwargs)
 
     return model
@@ -235,6 +248,12 @@ def xanyan_to_v2v3(xan,yan):
 
 # Test the transforms
 def testtransform(**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     # Get test data
     refdata=tv.mrs_ref_data
 

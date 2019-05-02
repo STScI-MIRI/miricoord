@@ -41,7 +41,7 @@ def set_toolversion(version):
     except:
         pass
 
-    # Define toolversion as global scope within mirim_tools
+    # Define toolversion as global scope within mrs_tools
     global tv
     # Import appropriate version
     if (version == 'default'):
