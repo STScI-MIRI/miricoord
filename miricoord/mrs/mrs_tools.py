@@ -231,7 +231,8 @@ def testtransform():
     for i in range(0,nchan):
         print('Testing channel '+channel[i])
         data=refdata[channel[i]]
-        thisx,thisy,thisal,thisbe,thislam=data['x'],data['y'],data['alpha'],data['beta'],data['lam']
+        thisx,thisy=data['x'],data['y']
+        thissl,thisal,thisbe,thislam=data['s'],data['alpha'],data['beta'],data['lam']
         if (tv.version() is 'cdp6'):
             thisxan,thisyan=data['xan'],data['yan']
             thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
@@ -240,9 +241,10 @@ def testtransform():
             
         # Forward transform
         values=xytoabl(thisx,thisy,channel[i])
-        newal,newbe,newlam=values['alpha'],values['beta'],values['lam']
+        newsl,newal,newbe,newlam=values['slicenum'],values['alpha'],values['beta'],values['lam']
         newv2,newv3=abtov2v3(newal,newbe,channel[i])
         # Test equality
+        assert_allclose(thissl,newsl,atol=0.05)
         assert_allclose(thisal,newal,atol=0.05)
         assert_allclose(thisbe,newbe,atol=0.05)
         assert_allclose(thislam,newlam,atol=0.05)
