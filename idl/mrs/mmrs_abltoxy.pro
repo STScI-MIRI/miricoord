@@ -178,7 +178,7 @@ phase=fltarr(n_elements(slicenum),2)
 phase[*,*]=-999
 phase[index0,0]=slicefloat[index0]-round(slicefloat[index0])
 phase[index0,1]=x[index0]-round(x[index0])
-stop
+
 ; Trim to only valid-slice pixels if so desired
 if (keyword_set(trim)) then begin
   x=x[index0]

@@ -9,9 +9,7 @@ files contained within this github repository.
 
 Convert JWST v2,v3 locations (in arcsec) to MIRI MRS SCA x,y pixel locations.
 Note that the pipeline uses a 0-indexed detector pixel (1032x1024) convention while
-SIAF uses a 1-indexed detector pixel convention.  The CDP files define
-the origin such that (0,0) is the middle of the lower-left light sensitive pixel
-(1024x1024),therefore also need to transform between this science frame and detector frame.
+SIAF uses a 1-indexed detector pixel convention.
 
 Author: David R. Law (dlaw@stsci.edu)
 
@@ -21,6 +19,7 @@ REVISION HISTORY:
 
 import os as os
 import numpy as np
+import sys
 import pdb as pdb
 from astropy.modeling import models
 from asdf import AsdfFile
@@ -28,8 +27,41 @@ from jwst import datamodels
 from jwst.assign_wcs import miri
 from numpy.testing import assert_allclose
 
-# We'll use the cdp6 version of the tools (tv=toolversion)
-import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
+#############################
+
+# Set the tools version.  Default is CDP-6
+def set_toolversion(version):
+    # If the toolversion global was already set, delete it
+    try:
+        del globals()['tv']
+    except:
+        pass
+
+    # Define toolversion as global scope within mrs_pipetools
+    global tv
+    # Import appropriate version
+    if (version == 'default'):
+        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
+    elif (version == 'cdp6'):
+        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
+    elif (version == 'cdp8b'):
+        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
+    else:
+        print('Invalid tool version specified!')
+
+    return
+
+#############################
+
+# Return the tools version
+def version():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+        
+    return tv.version()
 
 #############################
 
@@ -125,6 +157,12 @@ def midwave(channel):
 # Convenience function to return model distortion object
 # for the x,y to alpha,beta,lam transform
 def xytoablmodel(channel,**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     model=tv.xytoablmodel(channel,**kwargs)
 
     return model
@@ -158,6 +196,12 @@ def abltoxy(alpha,beta,lam,channel,**kwargs):
 # Convenience function to return model distortion object
 # for the alpha,beta to v2,v3 transform
 def abtov2v3model(channel,**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+    
     model=tv.abtov2v3model(channel,**kwargs)
 
     return model
@@ -204,6 +248,12 @@ def xanyan_to_v2v3(xan,yan):
 
 # Test the transforms
 def testtransform(**kwargs):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
     # Get test data
     refdata=tv.mrs_ref_data
 
@@ -220,8 +270,11 @@ def testtransform(**kwargs):
         print('Testing channel '+channel[i])
         data=refdata[channel[i]]
         thisx,thisy,thisal,thisbe,thislam=data['x'],data['y'],data['alpha'],data['beta'],data['lam']
-        thisxan,thisyan=data['xan'],data['yan']
-        thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
+        if (tv.version() is 'cdp6'):
+            thisxan,thisyan=data['xan'],data['yan']
+            thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
+        else:
+            thisv2,thisv3=data['v2'],data['v3']
         
         # Forward transform
         newal,newbe,newlam=xytoabl(thisx,thisy,channel[i],**kwargs)
@@ -239,7 +292,7 @@ def testtransform(**kwargs):
         # Test equality
         assert_allclose(thisal,newal2,atol=0.05)
         assert_allclose(thisbe,newbe2,atol=0.05)
-        assert_allclose(thisx,newx,atol=0.05)
-        assert_allclose(thisy,newy,atol=0.05)
+        assert_allclose(thisx,newx,atol=0.08)
+        assert_allclose(thisy,newy,atol=0.08)
 
     return

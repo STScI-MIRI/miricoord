@@ -1,6 +1,7 @@
 #
 """
-Useful python tools for working with the MIRI MRS.
+Useful python tools for working with the MIRI MRS.  Note that this is the only code
+that should be calling thing in toolversions!
 
 This version of the tools uses a standalone implementation
 of the distortion solution to do the transformations,
@@ -9,15 +10,14 @@ files contained within this github repository.
 
 Convert JWST v2,v3 locations (in arcsec) to MIRI MRS SCA x,y pixel locations.
 Note that the pipeline uses a 0-indexed detector pixel (1032x1024) convention while
-SIAF uses a 1-indexed detector pixel convention.  The CDP files define
-the origin such that (0,0) is the middle of the lower-left light sensitive pixel
-(1024x1024),therefore also need to transform between this science frame and detector frame.
+SIAF uses a 1-indexed detector pixel convention.
 
 Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
 07-Dec-2018  Revise version handling using globals (D. Law)
+18-Apr-2019  Add slice width and pixel size (D. Law)
 """
 
 import os as os
@@ -26,7 +26,10 @@ import math
 import numpy as np
 from astropy.io import fits
 from numpy.testing import assert_allclose
+import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+
 import pdb
+
 
 #############################
 
@@ -38,15 +41,15 @@ def set_toolversion(version):
     except:
         pass
 
-    # Define toolversion as global scope within mirim_tools
+    # Define toolversion as global scope within mrs_tools
     global tv
     # Import appropriate version
     if (version == 'default'):
         import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
     elif (version == 'cdp6'):
         import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
-    elif (version == 'cdp7'):
-        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp7 as tv
+    elif (version == 'cdp8b'):
+        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
     else:
         print('Invalid tool version specified!')
         
@@ -61,8 +64,53 @@ def version():
         sys.getrefcount(tv)
     except:
         set_toolversion('default')
-        
+ 
     return tv.version()
+
+#############################
+
+# Return the FITS reference file name
+def get_fitsreffile(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.get_fitsreffile(channel)
+
+    return value
+
+
+#############################
+
+# Return the average slice width (beta) for a given channel
+
+def slicewidth(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.slicewidth(channel)
+
+    return value
+
+#############################
+
+# Return the average pixel size (alpha) for a given channel
+
+def pixsize(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.pixsize(channel)
+
+    return value
 
 #############################
 
@@ -152,6 +200,20 @@ def xanyan_to_v2v3(xan,yan):
 
 #############################
 
+# Convert v2,v3 locations to xIdeal, yIdeal coordinates
+# Note that xIdeal, yIdeal are defined such that xIdeal=-v2 yIdeal=+V3
+# with origin at the Ch1A reference point.
+def v2v3_to_xyideal(v2,v3):
+    values=makesiaf.create_siaf_oneband('1A')
+    v2ref,v3ref=values['inscr_v2ref'],values['inscr_v3ref']
+
+    xidl = -(v2-v2ref)
+    yidl = v3-v3ref
+
+    return xidl,yidl
+
+#############################
+
 # Test the transforms
 def testtransform():
     # Determine whether the CDP toolversion has been set.  If not, set to default.
@@ -169,15 +231,20 @@ def testtransform():
     for i in range(0,nchan):
         print('Testing channel '+channel[i])
         data=refdata[channel[i]]
-        thisx,thisy,thisal,thisbe,thislam=data['x'],data['y'],data['alpha'],data['beta'],data['lam']
-        thisxan,thisyan=data['xan'],data['yan']
-        thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
-        
+        thisx,thisy=data['x'],data['y']
+        thissl,thisal,thisbe,thislam=data['s'],data['alpha'],data['beta'],data['lam']
+        if (tv.version() is 'cdp6'):
+            thisxan,thisyan=data['xan'],data['yan']
+            thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
+        else:
+            thisv2,thisv3=data['v2'],data['v3']
+            
         # Forward transform
         values=xytoabl(thisx,thisy,channel[i])
-        newal,newbe,newlam=values['alpha'],values['beta'],values['lam']
+        newsl,newal,newbe,newlam=values['slicenum'],values['alpha'],values['beta'],values['lam']
         newv2,newv3=abtov2v3(newal,newbe,channel[i])
         # Test equality
+        assert_allclose(thissl,newsl,atol=0.05)
         assert_allclose(thisal,newal,atol=0.05)
         assert_allclose(thisbe,newbe,atol=0.05)
         assert_allclose(thislam,newlam,atol=0.05)
@@ -191,6 +258,6 @@ def testtransform():
         # Test equality
         assert_allclose(thisal,newal2,atol=0.05)
         assert_allclose(thisbe,newbe2,atol=0.05)
-        assert_allclose(thisx,newx,atol=0.05)
-        assert_allclose(thisy,newy,atol=0.05)
+        assert_allclose(thisx,newx,atol=0.08)
+        assert_allclose(thisy,newy,atol=0.08)
     return

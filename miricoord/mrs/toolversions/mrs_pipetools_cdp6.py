@@ -11,8 +11,8 @@ files contained within this github repository.
 Convert JWST v2,v3 locations (in arcsec) to MIRI MRS SCA x,y pixel locations.
 Note that the pipeline uses a 0-indexed detector pixel (1032x1024) convention while
 SIAF uses a 1-indexed detector pixel convention.  The CDP files define
-the origin such that (0,0) is the middle of the lower-left light sensitive pixel
-(1024x1024),therefore also need to transform between this science frame and detector frame.
+the origin such that (1,1) is the middle of the lower-left detector pixel
+(1032x1024),therefore also need to transform between this science frame and detector frame.
 
 Author: David R. Law (dlaw@stsci.edu)
 
@@ -27,6 +27,12 @@ from astropy.modeling import models
 from asdf import AsdfFile
 from jwst import datamodels
 from jwst.assign_wcs import miri
+
+#############################
+
+# Return the tools version
+def version():
+    return 'cdp6'
 
 #############################
 

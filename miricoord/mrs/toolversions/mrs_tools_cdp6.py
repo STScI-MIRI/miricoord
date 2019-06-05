@@ -11,8 +11,8 @@ files contained within this github repository.
 Convert JWST v2,v3 locations (in arcsec) to MIRI MRS SCA x,y pixel locations.
 Note that the pipeline uses a 0-indexed detector pixel (1032x1024) convention while
 SIAF uses a 1-indexed detector pixel convention.  The CDP files define
-the origin such that (0,0) is the middle of the lower-left light sensitive pixel
-(1024x1024), therefore we also need to transform between this science frame and detector frame.
+the origin such that (1,1) is the middle of the lower-left pixel
+(1032x1024), therefore we also need to transform between this and the pipeline frame.
 
 Since not all detector pixels actually map to alpha-beta (since some pixels are between slices)
 these have alpha=beta=lambda=-999 and can be trimmed using 'trim=1'
@@ -21,11 +21,13 @@ Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
+18-Apr-2019  Add slice width and pixel size (D. Law)
 """
 
 import os as os
 import math
 import numpy as np
+from numpy import matlib as mb
 from astropy.io import fits
 import pdb
 
@@ -70,6 +72,69 @@ def get_fitsreffile(channel):
     reffile=os.path.join(rootdir,file)
    
     return reffile
+
+#############################
+
+# Return the average slice width (beta) for a given channel
+
+def slicewidth(channel):
+    # Open relevant distortion file
+    distfile=fits.open(get_fitsreffile(channel))
+    
+    # Read global header
+    hdr=distfile[0].header
+
+    if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+        value=hdr['B_DEL1']
+    if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+        value=hdr['B_DEL2']
+    if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+        value=hdr['B_DEL3']
+    if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+        value=hdr['B_DEL4']
+    
+    return value
+
+#############################
+
+# Return the average pixel size (alpha) for a given channel.  Do
+# this by computing dalpha for every pixel in the channel.
+
+def pixsize(channel):
+    # Define where this channel is on the detector
+    ymin,ymax=0,1024
+    if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+        xmin,xmax=0,512
+    if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+        xmin,xmax=513,1031
+    if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+        xmin,xmax=513,1031
+    if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+        xmin,xmax=0,492
+
+    xrow=np.mgrid[xmin:xmax]
+    yrow=np.mgrid[ymin:ymax]
+    xall=mb.repmat(xrow,yrow.size,1)*1.
+    yall=mb.repmat(yrow,xrow.size,1)*1.
+    yall=np.transpose(yall)
+    # Recast as 1d arrays
+    xall=xall.reshape(-1)
+    yall=yall.reshape(-1)
+
+    # Convert a list of all pixels, and a list of all pixels offset
+    # by one in x to alpha/beta.
+    values1=xytoabl(xall,yall,channel)
+    values2=xytoabl(xall+1,yall,channel)
+    # Look for where both pixel and offset pixels had defined alpha
+    indx=(np.where((values1['slicenum'] > 0) & (values2['slicenum'] > 0)))[0]
+    # Crop to these indices and look at the difference in alpha
+    alpha1=values1['alpha']
+    alpha2=values2['alpha']
+    alpha1=alpha1[indx]
+    alpha2=alpha2[indx]
+    da=np.abs(alpha1-alpha2)
+
+    return np.median(da)
 
 #############################
 
@@ -121,7 +186,7 @@ def xytoabl(xin,yin,channel,**kwargs):
     # Define slice for these pixels
     slicenum=np.zeros(x.size, int)
     slicename=np.array(['JUNK' for i in range(0,x.size)])
- 
+
     for i in range(0,x.size):
         # Note that since x,y here index into an array we need to subtract 1 again!
         slicenum[i]=int(d2c_slice[int(round(y[i]))-1,int(round(x[i]))-1])-int(ch)*100

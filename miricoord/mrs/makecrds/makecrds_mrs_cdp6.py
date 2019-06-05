@@ -18,7 +18,7 @@ SPECWCS
 WAVELENGTHRANGE
 
 In this version the CDP file goes from 1-indexed detector pixels
-(0,0) in the middle of the lower left detector pixel to XAN,YAN
+(1,1) in the middle of the lower left detector pixel to XAN,YAN
 
 We will need to add additional transforms so that the mapping goes
 from 0-indexed detector pixels (0,0) in the middle of the lower left
