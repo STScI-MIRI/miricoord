@@ -137,6 +137,85 @@ def pixsize(channel):
 
 #############################
 
+# Compute the alpha min/max values for all slices in a given band
+# Do this by computing alpha at left/right pixel edges
+
+def alphafov(channel):
+    # Define where this channel is on the detector
+    ymin,ymax=0,1024
+    if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+        xmin,xmax=0,512
+    if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+        xmin,xmax=513,1031
+    if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+        xmin,xmax=513,1031
+    if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+        xmin,xmax=0,492
+
+    xrow=np.mgrid[xmin:xmax]
+    yrow=np.mgrid[ymin:ymax]
+    xall=mb.repmat(xrow,yrow.size,1)*1.
+    yall=mb.repmat(yrow,xrow.size,1)*1.
+    yall=np.transpose(yall)
+    # Recast as 1d arrays
+    xall=xall.reshape(-1)
+    yall=yall.reshape(-1)
+
+    # Convert a list of all pixel left/right edges to alpha/beta.
+    values1=xytoabl(xall-0.4999,yall,channel)
+    values2=xytoabl(xall+0.4999,yall,channel)
+    # Look for where both had defined alpha
+    indx=(np.where((values1['slicenum'] > 0) & (values2['slicenum'] > 0)))[0]
+    # Crop to these indices and look at the difference in alpha
+    alpha1=values1['alpha']
+    alpha2=values2['alpha']
+    yvec=values1['y']
+    xvec=values1['x']
+    slice=values1['slicenum']
+    alpha1=alpha1[indx]
+    alpha2=alpha2[indx]
+    slice=slice[indx]
+    yvec=yvec[indx]
+    xvec=xvec[indx]
+    nslice=np.max(slice)# Number of slices
+
+    slice_out=np.zeros(nslice)
+    amin_out=np.zeros(nslice)
+    amax_out=np.zeros(nslice)
+    
+    # Loop over slices
+    for ii in range(1,nslice+1):
+        indx=(np.where(slice == ii))[0]
+        slice_out[ii-1]=ii
+        ytemp=yvec[indx]
+        # Keep in mind that sometimes alpha increase l->r, sometimes r->l depending on channel
+        # Therefore map from left-edge and right-edge alpha to max and min alpha in a pixel
+        if (alpha1[indx[0]] < alpha2[indx[0]]):
+            alow=alpha1[indx]
+            ahigh=alpha2[indx]
+        else:
+            alow=alpha2[indx]
+            ahigh=alpha1[indx]
+        amin,amax=np.zeros(ymax),np.zeros(ymax)
+        # Loop over rows
+        for jj in range(0,ymax):
+            indx=(np.where(ytemp == jj))[0]
+            amin[jj]=np.min(alow[indx])
+            amax[jj]=np.max(ahigh[indx])
+        amin_out[ii-1]=np.median(amin)
+        amax_out[ii-1]=np.median(amax)
+
+    # Dictionary for return values
+    values=dict();
+    values['slice']=slice_out
+    values['amin']=amin_out
+    values['amax']=amax_out
+    
+    return values
+
+
+#############################
+
 # Convert from detector x,y pixel (0-indexed detector pixels) to alpha,beta,lambda
 # Return is a dictionary with elements
 # x,y,alpha,beta,lam,slicenum,slicename
@@ -181,8 +260,8 @@ def xytoabl(xin,yin,channel,**kwargs):
     d2c_lambda=distfile['Lambda_CH'+ch].data
     # Slice map
     d2c_slice_all=distfile['Slice_Number'].data
-    # Use the 50% throughput slice map, based on OTIS data
-    d2c_slice=d2c_slice_all[4,:,:]
+    # Use the 80% throughput slice map, based on OTIS data
+    d2c_slice=d2c_slice_all[7,:,:]
 
     # Define slice for these pixels
     slicenum=np.zeros(x.size, int)
@@ -310,8 +389,8 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
 
     # Read the Slice Map
     c2d_slice_all=distfile['Slice_Number'].data
-    # Use the 50% throughput slice map based on OTIS data
-    c2d_slicefull=c2d_slice_all[4,:,:]
+    # Use the 80% throughput slice map based on OTIS data
+    c2d_slicefull=c2d_slice_all[7,:,:]
 
     # Crop to the correct half of the detector
     if (int(ch) == 1):

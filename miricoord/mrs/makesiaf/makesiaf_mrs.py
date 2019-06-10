@@ -16,6 +16,7 @@ REVISION HISTORY:
 14-Dec-2017  Adapt for new github/central store interaction (D. Law)
 15-Oct-2018  Adapt from IDL to python (D. Law)
 25-Jan-2019  Modify format to incorporate Imager/LRS/MRS in the same file (D. Law)
+10-Jun-2019  Calculate alpha limits instead of reading them from CDP (D. Law)
 """
 
 import matplotlib as mpl
@@ -184,10 +185,10 @@ def create_siaf_oneband(channel):
     dbeta=hdr['B_DEL'+ch]
 
     # Read FoV alpha boundaries
-    alphalimits=distfile['FoV_CH'+ch].data
+    alphalim=mt.alphafov(channel)
 
     # Determine number of slices
-    nslices=alphalimits.size
+    nslices=len(alphalim['slice'])
 
     # Create a 1-indexed vector of slice numbers and slice names
     # (the names will be of the form 112A for ch 1, slice 12, band A)
@@ -216,11 +217,11 @@ def create_siaf_oneband(channel):
     # be stripped out when we actually write the files
     # Populate values
     for i in range(0,nslices):
-        alpha_corners[i,0]=alphalimits[i][0]
-        alpha_corners[i,1]=alphalimits[i][0]
-        alpha_corners[i,2]=alphalimits[i][1]
-        alpha_corners[i,3]=alphalimits[i][1]
-        alpha_corners[i,4]=alphalimits[i][0]
+        alpha_corners[i,0]=alphalim['amin'][i]
+        alpha_corners[i,1]=alphalim['amin'][i]
+        alpha_corners[i,2]=alphalim['amax'][i]
+        alpha_corners[i,3]=alphalim['amax'][i]
+        alpha_corners[i,4]=alphalim['amin'][i]
         beta_corners[i,0]=beta1[i]
         beta_corners[i,1]=beta2[i]
         beta_corners[i,2]=beta2[i]

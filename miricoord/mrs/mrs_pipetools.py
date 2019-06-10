@@ -29,7 +29,7 @@ from numpy.testing import assert_allclose
 
 #############################
 
-# Set the tools version.  Default is CDP-6
+# Set the tools version.  Default is CDP-8b
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -41,7 +41,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
+        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
     elif (version == 'cdp6'):
         import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
     elif (version == 'cdp8b'):

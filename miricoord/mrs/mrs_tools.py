@@ -33,7 +33,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is CDP-6
+# Set the tools version.  Default is CDP-8b
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -45,7 +45,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
+        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
     elif (version == 'cdp6'):
         import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
     elif (version == 'cdp8b'):
@@ -109,6 +109,21 @@ def pixsize(channel):
         set_toolversion('default')
 
     value=tv.pixsize(channel)
+
+    return value
+
+#############################
+
+# Return the alpha min/max for all slices in given channel
+
+def alphafov(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    value=tv.alphafov(channel)
 
     return value
 
