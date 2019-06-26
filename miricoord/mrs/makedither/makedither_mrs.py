@@ -795,6 +795,67 @@ def qaplot_ext2all(v2,v3,dx,dy):
 
 #############################
 
+# Plot showing field coverage of a 4-pt ALL extended-source dither
+
+def qaplot_ext4all(v2,v3,dx,dy):
+    # Set the output data directory
+    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+    outdir=os.path.join(data_dir,'dithers/temp/')
+    # Set the output filename
+    filename=os.path.join(outdir,'dithers_ext4all.pdf')
+
+    # Field locations
+    values1A=makesiaf.create_siaf_oneband('1A')
+    values4A=makesiaf.create_siaf_oneband('4A')
+
+    # Recenter everything to be based around zero
+    v2ref,v3ref=values1A['inscr_v2ref'],values1A['inscr_v3ref']
+    v2corn_1A=values1A['inscr_v2_corners']-v2ref
+    v3corn_1A=values1A['inscr_v3_corners']-v3ref  
+    v2corn_4A=values4A['inscr_v2_corners']-v2ref
+    v3corn_4A=values4A['inscr_v3_corners']-v3ref
+
+    
+    # Plot thickness
+    mpl.rcParams['axes.linewidth'] = 1.5
+
+    plt.figure(figsize=(5,5),dpi=150)
+    ax = plt.gca()
+    plt.tick_params(axis='both',direction='in',which='both',top=True,right=True,width=2.)
+    plt.minorticks_on()
+    plt.xlim(6,-6)
+    plt.ylim(-6,6)
+
+    plt.plot(v2corn_1A+dx[32],v3corn_1A-dy[32],color='b',linewidth=1.2,label='Ch1')
+    plt.plot(v2corn_1A+dx[33],v3corn_1A-dy[33],color='b',linewidth=1.2)
+    plt.plot(v2corn_1A+dx[34],v3corn_1A-dy[34],color='b',linewidth=1.2)
+    plt.plot(v2corn_1A+dx[35],v3corn_1A-dy[35],color='b',linewidth=1.2)
+           
+    plt.plot(v2corn_4A+dx[32],v3corn_4A-dy[32],color='r',linewidth=1.2,label='Ch4')
+    plt.plot(v2corn_4A+dx[33],v3corn_4A-dy[33],color='r',linewidth=1.2)
+    plt.plot(v2corn_4A+dx[34],v3corn_4A-dy[34],color='r',linewidth=1.2)
+    plt.plot(v2corn_4A+dx[35],v3corn_4A-dy[35],color='r',linewidth=1.2)
+        
+    plt.plot(0,0,'x',linewidth=1.5,color='black')
+    circle1 = mpl.patches.Circle((0., 0.), maxfwhm(1),linewidth=1,edgecolor='b', facecolor=(0, 0, 0, .0125))
+    ax.add_artist(circle1)
+    circle1 = mpl.patches.Circle((0., 0.), maxfwhm(4),linewidth=1,edgecolor='r', facecolor=(0, 0, 0, .0125))
+    ax.add_artist(circle1)
+                                 
+    plt.plot(v2[32:36]-v2ref,v3[32:36]-v3ref,'+',color='b',linewidth=1.5)
+    
+    plt.xlabel('$\Delta$ R.A. (arcsec)')
+    plt.ylabel('$\Delta$ Decl. (arcsec)')
+    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.text(5,5,'ALL, 4-PT, extended source')
+    plt.legend()
+
+    plt.savefig(filename)
+    plt.show()
+    plt.close()
+    
+#############################
+
 # Plot showing field coverage of a 2-pt Ch3 extended-source dither
 
 def qaplot_ext2ch3(v2,v3,dx,dy):
@@ -856,6 +917,75 @@ def qaplot_ext2ch3(v2,v3,dx,dy):
     plt.show()
     plt.close()
         
+#############################
+
+# Plot showing field coverage of a 4-pt Ch3 extended-source dither
+
+def qaplot_ext4ch3(v2,v3,dx,dy):
+    # Set the output data directory
+    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+    outdir=os.path.join(data_dir,'dithers/temp/')
+    # Set the output filename
+    filename=os.path.join(outdir,'dithers_ext4all.pdf')
+
+    # Field locations
+    values1A=makesiaf.create_siaf_oneband('1A')
+    values3A=makesiaf.create_siaf_oneband('3A')
+    values4A=makesiaf.create_siaf_oneband('4A')
+
+    # Recenter everything to be based around zero
+    v2ref,v3ref=values3A['inscr_v2ref'],values3A['inscr_v3ref']
+    v2corn_1A=values1A['inscr_v2_corners']-v2ref
+    v3corn_1A=values1A['inscr_v3_corners']-v3ref
+    v2corn_3A=values3A['inscr_v2_corners']-v2ref
+    v3corn_3A=values3A['inscr_v3_corners']-v3ref 
+    v2corn_4A=values4A['inscr_v2_corners']-v2ref
+    v3corn_4A=values4A['inscr_v3_corners']-v3ref
+
+    
+    # Plot thickness
+    mpl.rcParams['axes.linewidth'] = 1.5
+
+    plt.figure(figsize=(5,5),dpi=150)
+    ax = plt.gca()
+    plt.tick_params(axis='both',direction='in',which='both',top=True,right=True,width=2.)
+    plt.minorticks_on()
+    plt.xlim(6,-6)
+    plt.ylim(-6,6)
+
+    plt.plot(v2corn_1A+dx[44],v3corn_1A-dy[44],color='b',linewidth=1.2,label='Ch1')
+    plt.plot(v2corn_1A+dx[45],v3corn_1A-dy[45],color='b',linewidth=1.2)
+    plt.plot(v2corn_1A+dx[46],v3corn_1A-dy[46],color='b',linewidth=1.2)
+    plt.plot(v2corn_1A+dx[47],v3corn_1A-dy[47],color='b',linewidth=1.2)
+        
+    plt.plot(v2corn_3A+dx[44],v3corn_3A-dy[44],color='gold',linewidth=1.2,label='Ch3')
+    plt.plot(v2corn_3A+dx[45],v3corn_3A-dy[45],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[46],v3corn_3A-dy[46],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[47],v3corn_3A-dy[47],color='gold',linewidth=1.2)
+           
+    plt.plot(v2corn_4A+dx[44],v3corn_4A-dy[44],color='r',linewidth=1.2,label='Ch4')
+    plt.plot(v2corn_4A+dx[45],v3corn_4A-dy[45],color='r',linewidth=1.2)
+    plt.plot(v2corn_4A+dx[46],v3corn_4A-dy[46],color='r',linewidth=1.2)
+    plt.plot(v2corn_4A+dx[47],v3corn_4A-dy[47],color='r',linewidth=1.2)
+        
+    plt.plot(0,0,'x',linewidth=1.5,color='black')
+    circle1 = mpl.patches.Circle((0., 0.), maxfwhm(1),linewidth=1,edgecolor='b', facecolor=(0, 0, 0, .0125))
+    ax.add_artist(circle1)
+    circle1 = mpl.patches.Circle((0., 0.), maxfwhm(4),linewidth=1,edgecolor='r', facecolor=(0, 0, 0, .0125))
+    ax.add_artist(circle1)
+                                 
+    plt.plot(v2[44:48]-v2ref,v3[44:48]-v3ref,'+',color='gold',linewidth=1.5)
+    
+    plt.xlabel('$\Delta$ R.A. (arcsec)')
+    plt.ylabel('$\Delta$ Decl. (arcsec)')
+    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.text(5,5,'Ch3, 4-PT, extended source')
+    plt.legend()
+
+    plt.savefig(filename)
+    plt.show()
+    plt.close()
+
 #############################
 
 
