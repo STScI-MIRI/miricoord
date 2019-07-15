@@ -43,29 +43,29 @@ def get_fitsreffile(channel):
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
     if (channel == '1A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits'
     elif (channel == '1B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits'
     elif (channel == '1C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits'
     elif (channel == '2A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits'
     elif (channel == '2B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits'
     elif (channel == '2C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits'
     elif (channel == '3A'):
-        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits'
     elif (channel == '3B'):
-        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits'
     elif (channel == '3C'):
-        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits'
     elif (channel == '4A'):
-        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits'
     elif (channel == '4B'):
-        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits'
     elif (channel == '4C'):
-        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.00.fits'
+        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits'
         
     rootdir=os.path.join(rootdir,'data/fits/cdp8b/')
     reffile=os.path.join(rootdir,file)

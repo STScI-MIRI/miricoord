@@ -3,12 +3,12 @@
 Code to create CRDS reference files for the distortion of the
 MIRI MRS using IDT reference files delivered with CDP-8b:
 
-MIRI_FM_MIRIFULONG_34LONG_DISTORTION_06.04.00.fits
-MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_06.04.00.fits
-MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_06.04.00.fits
-MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_06.04.00.fits
-MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_06.04.00.fits
-MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_06.04.00.fits
+MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits
+MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits
+MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits
+MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits
+MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits
+MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits
 
 MIRI MRS uses 4 reference files of type:
 
@@ -29,6 +29,7 @@ REVISION HISTORY:
 2016         Adapted for new formats by David Law (dlaw@stsci.edu)
 11-Oct-2018  Adapted to new miricoord structure (D. Law)
 26-Apr-2019  Updated for CDP-8b (D. Law)
+15-Jul-2019  Bugfix to slice mask in CDP version 8B.05.01 (D. Law)
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -75,17 +76,17 @@ def create_cdp8b_setfiles(detband,outdir):
     rootdir=os.path.join(rootdir,'data/fits/cdp8b/')
 
     if (detband == '12A'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.00.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
     elif (detband == '34A'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.00.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
     elif (detband == '12B'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.00.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
     elif (detband == '34B'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.00.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
     elif (detband == '12C'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.00.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
     elif (detband == '34C'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.00.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
 
     distfile=outdir+'jwst_miri_mrs'+detband+'_distortion_cdp8b.asdf'
     regfile=outdir+'jwst_miri_mrs'+detband+'_regions_cdp8b.asdf'
@@ -113,7 +114,7 @@ def create_cdp8b_onereference(fname, ref):
          'wavelengthrange': 'jwst_miri_wavelengthrange_0001.asdf'}
     Examples
     --------
-    >>> create_cdp8b_references('MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.00.fits', ref)
+    >>> create_cdp8b_references('MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits', ref)
     """
     with fits.open(fname) as f:
         channel = f[0].header['CHANNEL']
@@ -177,7 +178,7 @@ def create_cdp8b_onereference(fname, ref):
     bmodel1.update(bmodel2)
     useafter = "2000-01-01T00:00:00"
     author =  'David R. Law, Polychronis Patapis, Adrian M. Glauser'  #Author of the data
-    description = 'MIRI MRS CDP8b distortion reference data.'
+    description = 'MIRI MRS CDP8b (8B.05.01) distortion reference data.'
 
     create_distortion_file(reftype='distortion', detector=detector, band=band, channel=channel, channels=channels,
                            data=(amodel1, bmodel1, xmodel1, ymodel1, bzero, bdel, ab_v23, v23_ab), name=ref['distortion'],
@@ -214,8 +215,8 @@ def create_reffile_header(model, detector, band, channel, author, useafter,
     model.meta.instrument.band = band
     model.meta.exposure.type = "MIR_MRS"
 
-    entry = HistoryEntry({'description': "DOCUMENT: MIRI-TN-00001-ETH_Iss2-1_Calibrationproduct_MRS_d2c.  New files created from CDP-8b", 'time': datetime.datetime.utcnow()})
-    software = Software({'name': 'coordinates', 'author': 'D.Law', 
+    entry = HistoryEntry({'description': "DOCUMENT: MIRI-TN-00001-ETH_Iss2-1_Calibrationproduct_MRS_d2c.  Updated regions file from CDP-8B.05.01", 'time': datetime.datetime.utcnow()})
+    software = Software({'name': 'miricoord', 'author': 'D.Law', 
                          'homepage': 'https://github.com/STScI-MIRI/miricoord', 'version': "master"})
     entry['software'] = software
     model.history = [entry]
@@ -226,7 +227,7 @@ def create_reffile_header(model, detector, band, channel, author, useafter,
 def create_distortion_file(reftype, detector,  band, channel, channels, data, name, author,
                            useafter, description, outformat):
     dist = DistortionMRSModel()
-    description = 'MIRI MRS Distortion Maps - build 7.3'
+    description = 'MIRI MRS Distortion Maps'
     dist = create_reffile_header(dist, detector, band, channel, author, useafter,
                                  description)
 
