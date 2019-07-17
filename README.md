@@ -17,6 +17,8 @@ Python code is developed for a python 3.5 environment.  If installing via a git 
 
  export PYTHONPATH="/YourPathHere:$PYTHONPATH"
 
+Note that some functions rely upon having the pysiaf (https://github.com/spacetelescope/pysiaf) and JWST pipeline (https://github.com/spacetelescope/jwst) modules installed as well.
+
 IDL code is developed for IDL 8.0 and requires that the global system variable 
 $MIRICOORD_DIR
 be defined and pointing to the root directory of this product, and that it be included on the search path.  This is necessary so that the code can find the relevant reference files.
