@@ -26,7 +26,6 @@ import math
 import numpy as np
 from astropy.io import fits
 from numpy.testing import assert_allclose
-import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
 
 import pdb
 
@@ -219,6 +218,9 @@ def xanyan_to_v2v3(xan,yan):
 # Note that xIdeal, yIdeal are defined such that xIdeal=-v2 yIdeal=+V3
 # with origin at the Ch1A reference point.
 def v2v3_to_xyideal(v2,v3):
+    # Import locally to this function so that pysiaf isn't required for everything in mrs_tools
+    import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+    
     values=makesiaf.create_siaf_oneband('1A')
     v2ref,v3ref=values['inscr_v2ref'],values['inscr_v3ref']
 
