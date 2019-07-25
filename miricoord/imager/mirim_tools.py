@@ -162,10 +162,14 @@ def v2imarot(x,y):
 
 # Convert from Ideal coordinates to v2,v3 coordinates in arcsec
 # for a given SIAF aperture using pysiaf
-def Idealtov2v3(XIdl,YIdl,apername):
+def Idealtov2v3(XIdl,YIdl,apername,**kwargs):
     import pysiaf
 
-    siaf = pysiaf.Siaf('MIRI')
+    if ('basepath' in kwargs):
+        siaf = pysiaf.Siaf('MIRI',basepath=kwargs['basepath'])
+    else:
+        siaf = pysiaf.Siaf('MIRI')
+
     thisentry=siaf[apername]
 
     v2ref,v3ref=thisentry.V2Ref,thisentry.V3Ref
@@ -189,7 +193,11 @@ def Idealtov2v3(XIdl,YIdl,apername):
 def v2v3toIdeal(v2,v3,apername,**kwargs):
     import pysiaf
 
-    siaf = pysiaf.Siaf('MIRI')
+    if ('basepath' in kwargs):
+        siaf = pysiaf.Siaf('MIRI',basepath=kwargs['basepath'])
+    else:
+        siaf = pysiaf.Siaf('MIRI')
+    
     thisentry=siaf[apername]
 
     v2ref,v3ref=thisentry.V2Ref,thisentry.V3Ref
