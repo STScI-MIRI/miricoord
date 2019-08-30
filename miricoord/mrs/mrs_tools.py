@@ -27,6 +27,8 @@ import numpy as np
 from astropy.io import fits
 from numpy.testing import assert_allclose
 
+import spherical_geometry.polygon as poly
+
 import pdb
 
 
@@ -125,6 +127,126 @@ def alphafov(channel):
     value=tv.alphafov(channel)
 
     return value
+
+#############################
+
+# Create an image in a given channel where all pixels have
+# the value of their wavelength.  Specifying loc='top','cen', or 'bot'
+# gives values at top, center, or bottom of pixel
+
+def waveimage(channel,loc='cen'):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    # Define 0-indexed base x and y pixel number (1032x1024 grid)
+    basex,basey = np.meshgrid(np.arange(1032),np.arange(1024))
+
+    if (loc == 'cen'):
+        usey=basey
+    if (loc == 'bot'):
+        usey=basey-0.4999
+    if (loc == 'top'):
+        usey=basey+0.4999
+    
+    # Convert to 1d vectors
+    basex=basex.reshape(-1)
+    basey=basey.reshape(-1)
+    usey=usey.reshape(-1)
+    
+    # Convert to base alpha,beta,lambda at pixel center
+    values=xytoabl(basex,usey,channel)
+    basealpha,basebeta=values['alpha'],values['beta']
+    baselambda,slicenum=values['lam'],values['slicenum']
+
+    # Crop to only pixels on a real slice for this channel
+    index0=np.where(basealpha > -50)
+    basex,basey,usey=basex[index0],basey[index0],usey[index0]
+    basealpha,basebeta=basealpha[index0],basebeta[index0]
+    baselambda,slicenum=baselambda[index0],slicenum[index0]
+
+    mockimg=np.zeros([1024,1032])
+    npix=len(baselambda)
+    for jj in range(0,npix):
+        mockimg[basey[jj],basex[jj]]=baselambda[jj]
+        
+    return mockimg
+
+#############################
+
+# Create an image in a given channel of the pixel area in arcsec.
+# Either in alpha-beta or v2-v3 frame.
+
+def pixarea(band,frame='ab'):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    # Define 0-indexed base x and y pixel number (1032x1024 grid)
+    basex,basey = np.meshgrid(np.arange(1032),np.arange(1024))
+    
+    # Convert to 1d vectors
+    basex=basex.reshape(-1)
+    basey=basey.reshape(-1)
+    
+    # Convert to base alpha,beta,lambda at pixel center
+    values=xytoabl(basex,basey,band)
+    alpha,beta=values['alpha'],values['beta']
+    lam,slicenum=values['lam'],values['slicenum']
+
+    # Crop to only pixels on a real slice for this channel
+    index0=np.where(alpha > -50)
+    basex,basey=basex[index0],basey[index0]
+    alpha,beta=alpha[index0],beta[index0]
+    lam,slicenum=lam[index0],slicenum[index0]
+
+    # Define the slice width
+    swidth=slicewidth(band)
+    
+    # Convert to  alpha,beta,lambda at pixel lower-left
+    valuesll=xytoabl(basex-0.4999,basey-0.4999,band)
+    alphall,betall=valuesll['alpha'],valuesll['beta']-swidth/2.
+    # Convert to  alpha,beta,lambda at pixel upper-right
+    valuesur=xytoabl(basex+0.4999,basey+0.4999,band)
+    alphaur,betaur=valuesur['alpha'],valuesur['beta']+swidth/2.
+    # Convert to  alpha,beta,lambda at pixel upper-left
+    valuesul=xytoabl(basex-0.4999,basey+0.4999,band)
+    alphaul,betaul=valuesul['alpha'],valuesul['beta']+swidth/2.
+    # Convert to  alpha,beta,lambda at pixel lower-right
+    valueslr=xytoabl(basex+0.4999,basey-0.4999,band)
+    alphalr,betalr=valueslr['alpha'],valueslr['beta']-swidth/2.
+
+    # Convert to v2,v3 at pixel corners
+    v2ll,v3ll=abtov2v3(alphall,betall,band)
+    v2lr,v3lr=abtov2v3(alphalr,betalr,band)    
+    v2ur,v3ur=abtov2v3(alphaur,betaur,band)
+    v2ul,v3ul=abtov2v3(alphaul,betaul,band)
+     
+    npix=len(basex)
+    pixarea=np.zeros(npix)
+    arcsec_per_sterad=(180/np.pi)*(180/np.pi)*3600*3600
+    for ii in range(0,npix):
+        if (np.mod(ii,np.round(npix/20)) == 0):
+            print('Working: ',int(ii/npix*100),'% complete')
+        if (frame == 'ab'):
+            vector1=np.array([alphall[ii],alphalr[ii],alphaur[ii],alphaul[ii],alphall[ii]])/3600.
+            vector2=np.array([betall[ii],betalr[ii],betaur[ii],betaul[ii],betall[ii]])/3600.
+        if (frame == 'v2v3'):
+            vector1=np.array([v2ll[ii],v2lr[ii],v2ur[ii],v2ul[ii],v2ll[ii]])/3600.
+            vector2=np.array([v3ll[ii],v3lr[ii],v3ur[ii],v3ul[ii],v3ll[ii]])/3600.
+            
+        thepix=poly.SphericalPolygon.from_radec(vector1,vector2,degrees=True)
+        pixarea[ii]=thepix.area()*arcsec_per_sterad
+        
+    mockimg=np.zeros([1024,1032])
+    for jj in range(0,npix):
+        mockimg[basey[jj],basex[jj]]=pixarea[jj]
+        
+    return mockimg 
 
 #############################
 
