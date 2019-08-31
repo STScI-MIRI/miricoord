@@ -131,8 +131,8 @@ def alphafov(channel):
 #############################
 
 # Create an image in a given channel where all pixels have
-# the value of their wavelength.  Specifying loc='top','cen', or 'bot'
-# gives values at top, center, or bottom of pixel
+# the value of their wavelength.  Specifying loc='top','lo', or 'hi'
+# gives values at center, or low/high values for pixel
 
 def waveimage(channel,loc='cen'):
     # Determine whether the CDP toolversion has been set.  If not, set to default.
@@ -144,12 +144,27 @@ def waveimage(channel,loc='cen'):
     # Define 0-indexed base x and y pixel number (1032x1024 grid)
     basex,basey = np.meshgrid(np.arange(1032),np.arange(1024))
 
+    # Account for the fact that lambda increases up for Ch1/2, and down for Ch 3/4
     if (loc == 'cen'):
         usey=basey
-    if (loc == 'bot'):
-        usey=basey-0.4999
-    if (loc == 'top'):
-        usey=basey+0.4999
+    if (loc == 'lo'):
+        if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+            usey=basey-0.4999
+        if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+            usey=basey-0.4999
+        if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+            usey=basey+0.4999
+        if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+            usey=basey+0.4999
+    if (loc == 'hi'):
+        if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+            usey=basey+0.4999
+        if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+            usey=basey+0.4999
+        if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+            usey=basey-0.4999
+        if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+            usey=basey-0.4999
     
     # Convert to 1d vectors
     basex=basex.reshape(-1)
@@ -171,6 +186,106 @@ def waveimage(channel,loc='cen'):
     npix=len(baselambda)
     for jj in range(0,npix):
         mockimg[basey[jj],basex[jj]]=baselambda[jj]
+        
+    return mockimg
+
+#############################
+
+# Create an image in a given channel where all pixels have
+# the value of their alpha.  Specifying loc='cen','lo', or 'hi'
+# gives values at center, or low/high values for pixel
+
+def alphaimage(channel,loc='cen'):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    # Define 0-indexed base x and y pixel number (1032x1024 grid)
+    basex,basey = np.meshgrid(np.arange(1032),np.arange(1024))
+
+    # Account for the fact that alpha increases right for Ch1/4, and left for Ch 2/3
+    if (loc == 'cen'):
+        usex=basex
+    if (loc == 'lo'):
+        if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+            usex=basex-0.4999
+        if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+            usex=basex+0.4999
+        if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+            usex=basex+0.4999
+        if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+            usex=basex-0.4999
+    if (loc == 'hi'):
+        if ((channel == '1A')or(channel == '1B')or(channel == '1C')):
+            usex=basex+0.4999
+        if ((channel == '2A')or(channel == '2B')or(channel == '2C')):
+            usex=basex-0.4999
+        if ((channel == '3A')or(channel == '3B')or(channel == '3C')):
+            usex=basex-0.4999
+        if ((channel == '4A')or(channel == '4B')or(channel == '4C')):
+            usex=basex+0.4999
+
+    # Convert to 1d vectors
+    basex=basex.reshape(-1)
+    basey=basey.reshape(-1)
+    usex=usex.reshape(-1)
+    
+    # Convert to base alpha,beta,lambda at pixel center
+    values=xytoabl(usex,basey,channel)
+    basealpha,basebeta=values['alpha'],values['beta']
+    baselambda,slicenum=values['lam'],values['slicenum']
+
+    # Crop to only pixels on a real slice for this channel
+    index0=np.where(basealpha > -50)
+    basex,basey,usex=basex[index0],basey[index0],usex[index0]
+    basealpha,basebeta=basealpha[index0],basebeta[index0]
+    baselambda,slicenum=baselambda[index0],slicenum[index0]
+
+    mockimg=np.zeros([1024,1032])
+    mockimg[:,:]=-100
+    npix=len(baselambda)
+    for jj in range(0,npix):
+        mockimg[basey[jj],basex[jj]]=basealpha[jj]
+        
+    return mockimg
+
+#############################
+
+# Create an image in a given channel where all pixels have
+# the value of their beta.
+
+def betaimage(channel):
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    # Define 0-indexed base x and y pixel number (1032x1024 grid)
+    basex,basey = np.meshgrid(np.arange(1032),np.arange(1024))
+    
+    # Convert to 1d vectors
+    basex=basex.reshape(-1)
+    basey=basey.reshape(-1)
+    
+    # Convert to base alpha,beta,lambda at pixel center
+    values=xytoabl(basex,basey,channel)
+    basealpha,basebeta=values['alpha'],values['beta']
+    baselambda,slicenum=values['lam'],values['slicenum']
+
+    # Crop to only pixels on a real slice for this channel
+    index0=np.where(basealpha > -50)
+    basex,basey=basex[index0],basey[index0]
+    basealpha,basebeta=basealpha[index0],basebeta[index0]
+    baselambda,slicenum=baselambda[index0],slicenum[index0]
+
+    mockimg=np.zeros([1024,1032])
+    mockimg[:,:]=-100
+    npix=len(baselambda)
+    for jj in range(0,npix):
+        mockimg[basey[jj],basex[jj]]=basebeta[jj]
         
     return mockimg
 
