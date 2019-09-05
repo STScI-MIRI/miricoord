@@ -92,21 +92,12 @@ def maxfwhm(channel):
 #############################
 
 # A routine to recenter a given dither pattern within a particular channel FOV
+# Must be passed SIAF structures for all 3 bands within a channel
 
-def recenterFOV(pat_v2,pat_v3,channel):
-    if (channel is 1): bands=np.array(['1A','1B','1C'])
-    if (channel is 2): bands=np.array(['2A','2B','2C'])
-    if (channel is 3): bands=np.array(['3A','3B','3C'])
-    if (channel is 4): bands=np.array(['4A','4B','4C'])
-            
-    # Get the field boundaries for all three sub-bands
-    valuesA=makesiaf.create_siaf_oneband(bands[0])
-    valuesB=makesiaf.create_siaf_oneband(bands[1])
-    valuesC=makesiaf.create_siaf_oneband(bands[2])
-    
+def recenterFOV(pat_v2,pat_v3,siafA,siafB,siafC): 
     # Average the three mean field positions
-    v2_fieldmean=(valuesA['inscr_v2ref']+valuesB['inscr_v2ref']+valuesC['inscr_v2ref'])/3.
-    v3_fieldmean=(valuesA['inscr_v3ref']+valuesB['inscr_v3ref']+valuesC['inscr_v3ref'])/3.
+    v2_fieldmean=(siafA['inscr_v2ref']+siafB['inscr_v2ref']+siafC['inscr_v2ref'])/3.
+    v3_fieldmean=(siafA['inscr_v3ref']+siafB['inscr_v3ref']+siafC['inscr_v3ref'])/3.
     v2_mean=np.mean(pat_v2)
     v3_mean=np.mean(pat_v3)
 
@@ -119,15 +110,10 @@ def recenterFOV(pat_v2,pat_v3,channel):
 
 # A routine to recenter a given dither pattern with respect to a given channel reference point
 # (which is not quite the same thing as centering wrt the FOV)
+# Must be passed SIAF structure for a given band
 
-def recenterRP(pat_v2,pat_v3,channel):
-    if (channel is 1): band='1A'
-    if (channel is 2): band='2A'
-    if (channel is 3): band='3A'
-    if (channel is 4): band='4A'
-    
-    values=makesiaf.create_siaf_oneband(band)
-    v2ref,v3ref=values['inscr_v2ref'],values['inscr_v3ref']
+def recenterRP(pat_v2,pat_v3,siaf):
+    v2ref,v3ref=siaf['inscr_v2ref'],siaf['inscr_v3ref']
     
     v2_mean=np.mean(pat_v2)
     v3_mean=np.mean(pat_v3)
@@ -232,8 +218,9 @@ def makepattern_cdp6_ch4():
 #############################
 
 # Generate the commissioning Ch1 point-source patterns
+# SIAF structures for the 3 bands must be passed in
 
-def makepattern_ch1():
+def makepattern_ch1(siafA,siafB,siafC):
     # See if the pixel and slice sizes have already been calculated
     try:
         slicewidth
@@ -257,23 +244,25 @@ def makepattern_ch1():
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
     # Transform assuming input in Ch1A alpha-beta
     pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
-
-    # Recenter the pattern within the field
-    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,1)
     
+    # Recenter the pattern within the field
+    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,siafA,siafB,siafC)
+
     return pat_v2,pat_v3
 
 #############################
 
 # Generate the commissioning Ch2 point-source patterns
+# SIAF structures for the 3 bands must be passed in
 
-def makepattern_ch2():
+def makepattern_ch2(siafA,siafB,siafC):
     # See if the pixel and slice sizes have already been calculated
     try:
         slicewidth
         pixsize
     # If not, calculate them
     except:
+        print('Recalculating pixel/slice sizes')
         setsizes()
         
     pixsiz1=pixsize[0]# Ch1
@@ -293,15 +282,16 @@ def makepattern_ch2():
     pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'2A')
 
     # Recenter the pattern within the field
-    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,2)
+    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,siafA,siafB,siafC)
 
     return pat_v2,pat_v3
 
 #############################
 
 # Generate the commissioning Ch3 point-source patterns
+# SIAF structures for the 3 bands must be passed in
 
-def makepattern_ch3():
+def makepattern_ch3(siafA,siafB,siafC):
     # See if the pixel and slice sizes have already been calculated
     try:
         slicewidth
@@ -327,15 +317,16 @@ def makepattern_ch3():
     pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'3A')
 
     # Recenter the pattern within the field
-    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,3)
+    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,siafA,siafB,siafC)
     
     return pat_v2,pat_v3
 
 #############################
 
 # Generate the commissioning Ch4 point-source patterns
+# SIAF structures for the 3 bands must be passed in
 
-def makepattern_ch4():
+def makepattern_ch4(siafA,siafB,siafC):
     # See if the pixel and slice sizes have already been calculated
     try:
         slicewidth
@@ -359,17 +350,16 @@ def makepattern_ch4():
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
     # Transform assuming input in Ch4A alpha-beta
     pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'4A')
-
     # Recenter the pattern within the field
-    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,4)
-    
+    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,siafA,siafB,siafC)
+
     return pat_v2,pat_v3
 
 #############################
 
 # Routine to generate the extended-source pattern optimized for ALL channels
 
-def makepattern_ext_all():
+def makepattern_ext_all(siafA,siafB,siafC):
     # See if the pixel and slice sizes have already been calculated
     try:
         slicewidth
@@ -392,7 +382,7 @@ def makepattern_ext_all():
     pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
 
     # Recenter the pattern within the field
-    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,1)
+    pat_v2,pat_v3=recenterFOV(pat_v2,pat_v3,siafA,siafB,siafC)
     
     return pat_v2,pat_v3
 
@@ -400,23 +390,23 @@ def makepattern_ext_all():
 
 # Routine to generate the extended-source pattern optimized for a given channel
 
-def makepattern_ext_ChX(ptpat_v2,ptpat_v3,channel):
+def makepattern_ext_ChX(ptpat_v2,ptpat_v3,siaf):
     # First dither pair; pull out short-dithers with parity = 1
     temp1_v2=ptpat_v2[[0,2]]
     temp1_v3=ptpat_v3[[0,2]]
     # Recenter within field
-    temp1_v2,temp1_v3=recenterRP(temp1_v2,temp1_v3,channel)
+    temp1_v2,temp1_v3=recenterRP(temp1_v2,temp1_v3,siaf)
 
     # Second dither pair; pull out short-dithers with parity = -1
     temp2_v2=ptpat_v2[[4,6]]
     temp2_v3=ptpat_v3[[4,6]]
     # Recenter within field
-    temp2_v2,temp2_v3=recenterRP(temp2_v2,temp2_v3,channel)
+    temp2_v2,temp2_v3=recenterRP(temp2_v2,temp2_v3,siaf)
 
     # Combine the dither pairs
     pat_v2,pat_v3=np.append(temp1_v2,temp2_v2),np.append(temp1_v3,temp2_v3)
     # And recenter the combined dithers
-    pat_v2,pat_v3=recenterRP(pat_v2,pat_v3,channel)
+    pat_v2,pat_v3=recenterRP(pat_v2,pat_v3,siaf)
     
     return pat_v2,pat_v3
 
@@ -424,53 +414,193 @@ def makepattern_ext_ChX(ptpat_v2,ptpat_v3,channel):
 
 # Routine to convert fixed v2,v3 dither points into actual xideal,yideal offsets
 # relative to the fiducial reference point for a given channel
+# Must be passed the siafRP structure containing the reference point to be used,
+# and optionally the siaf1A structure used to define Ideal coordinates
 
-def compute_dxdyideal(pat_v2,pat_v3,channel):
-    # Reference point of this channel
-    if (channel is 1): band='1A'
-    if (channel is 2): band='2A'
-    if (channel is 3): band='3A'
-    if (channel is 4): band='4A'
-    values=makesiaf.create_siaf_oneband(band)
-    v2ref,v3ref=values['inscr_v2ref'],values['inscr_v3ref']
-
+def compute_dxdyideal(pat_v2,pat_v3,siaf,**kwargs):
+    v2ref,v3ref=siaf['inscr_v2ref'],siaf['inscr_v3ref']
     # Ideal coordinate of the dither position
-    x,y=mrst.v2v3_to_xyideal(pat_v2,pat_v3)
+    x,y=mrst.v2v3_to_xyideal(pat_v2,pat_v3,**kwargs)
     # Ideal coordinate of the fiducial (undithered) point
-    xref,yref=mrst.v2v3_to_xyideal(v2ref,v3ref)
-
+    xref,yref=mrst.v2v3_to_xyideal(v2ref,v3ref,**kwargs)
     # Delta offsets
     dxidl=x-xref
     dyidl=y-yref
 
     return dxidl,dyidl
-    
+
 #############################
 
-# Routine to write abbreviated results to a file (APT info only)
+# Routine to write results to a file formatted for the PRD
 
-def writeresults_apt(index,dxidl,dyidl):
+def writeresults_prd(dxidl,dyidl):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
-    outfile=os.path.join(outdir,'mrs_dithers_apt.txt')
+    outfile=os.path.join(outdir,'MiriMrsDithers.txt')
 
     now=datetime.datetime.now()
     thisfile=__file__
     _,thisfile=os.path.split(thisfile)
-    
-    # Write header information to the output text file
-    print('# Created ',now.isoformat(),file=open(outfile,"w"))
-    print('# Using program',thisfile,file=open(outfile,"a"))
-    
-    # Column names
-    print("{:<10} {:<15} {:<15}".format('PosnIndex','dXIdeal(arcsec)','dYIdeal(arcsec)'),file=open(outfile,"a"))
-    
-    for i in range(0,len(index)):
-        # Write information to a text file
-        print("{0:<10} {1:<15.5f} {2:<15.5f}".format(index[i],dxidl[i],dyidl[i]),file=open(outfile,"a"))
+
+    # No header information is allowed, and specific names must be given for each set of points
+    # which makes the file quite fragile
+
+    print('CHANNEL1-POINT_SOURCE-NEGATIVE',file=open(outfile,"w"))
+    for ii in range(0,4):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii+1,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL1-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
+    for ii in range(4,8):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-3,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL2-POINT_SOURCE-NEGATIVE',file=open(outfile,"a"))
+    for ii in range(8,12):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-7,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL2-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
+    for ii in range(12,16):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-11,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL3-POINT_SOURCE-NEGATIVE',file=open(outfile,"a"))
+    for ii in range(16,20):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-15,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL3-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
+    for ii in range(20,24):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-19,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL4-POINT_SOURCE-NEGATIVE',file=open(outfile,"a"))
+    for ii in range(24,28):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-23,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL4-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
+    for ii in range(28,32):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-27,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('ALL-EXTENDED_SOURCE',file=open(outfile,"a"))
+    for ii in range(32,36):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-31,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL1-EXTENDED_SOURCE',file=open(outfile,"a"))
+    for ii in range(36,40):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-35,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
    
+    print('CHANNEL2-EXTENDED_SOURCE',file=open(outfile,"a"))
+    for ii in range(40,44):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-39,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL3-EXTENDED_SOURCE',file=open(outfile,"a"))
+    for ii in range(44,48):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-43,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+
+    print('CHANNEL4-EXTENDED_SOURCE',file=open(outfile,"a"))
+    for ii in range(48,52):
+        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-47,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+    
+#############################
+
+# Routine to write results to a file formatted for mirisim
+
+def writeresults_mirisim(ch,v2,v3):
+    # Set the output data directory
+    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+    outdir=os.path.join(data_dir,'dithers/temp/')
+    # Set the output filename
+    outfile=os.path.join(outdir,'mrs_recommended_dither.dat')
+
+    now=datetime.datetime.now()
+    thisfile=__file__
+    _,thisfile=os.path.split(thisfile)
+
+    # Mirisim specifies dithers in alpha-beta, so we need to convert to that frame from v2-v3
+    ndither=len(v2)
+    dalpha,dbeta=np.zeros(ndither),np.zeros(ndither)
+    band=["" for ii in range(ndither)]
+    for ii in range(0,ndither):
+        thisch=ch[ii]
+        # Reference point of this channel
+        if (thisch == 1): band[ii]='1A'
+        if (thisch == 2): band[ii]='2A'
+        if (thisch == 3): band[ii]='3A'
+        if (thisch == 4): band[ii]='4A'
+        dalpha[ii],dbeta[ii]=mrst.v2v3toab(v2[ii],v3[ii],band[ii])
+
+    # Write header information to the output text file
+    print('# Default MIRISim dither pattern for MRS.',file=open(outfile,"w"))
+    print('#',file=open(outfile,"a"))
+    print('# Created ',now.isoformat(),file=open(outfile,"a"))
+    print('# Using program miricoord.',thisfile,file=open(outfile,"a"))
+    print('#',file=open(outfile,"a"))
+    print('# Offsets are defined in the MRS channel-band field-of-view,',file=open(outfile,"a"))
+    print('# and are tabulated as (alpha, beta) coordinates (in units of arcsec)',file=open(outfile,"a"))
+    print('# relative to initial pointing center at (0, 0).',file=open(outfile,"a"))
+    print('#',file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+    
+    # Mirisim doesn't use column names, they are taken as a given
+    # It also add comments before each set, so we'll need to break them up
+    # Note that this makes the code less robust against changes!
+
+    print('# Optimized for channel 1 point sources.',file=open(outfile,"a"))
+    for ii in range(0,8):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 2 point sources.',file=open(outfile,"a"))
+    for ii in range(8,16):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 3 point sources.',file=open(outfile,"a"))
+    for ii in range(16,24):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 4 point sources.',file=open(outfile,"a"))
+    for ii in range(24,32):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for ALL channel extended sources.',file=open(outfile,"a"))
+    for ii in range(32,36):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 1 extended sources.',file=open(outfile,"a"))
+    for ii in range(36,40):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 2 extended sources.',file=open(outfile,"a"))
+    for ii in range(40,44):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 3 extended sources.',file=open(outfile,"a"))
+    for ii in range(44,48):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
+    
+    print('# Optimized for channel 4 extended sources.',file=open(outfile,"a"))
+    for ii in range(48,52):
+        print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
+
+        
 #############################
 
 # Routine to write full results to a file
@@ -485,23 +615,36 @@ def writeresults_full(index,ch,v2,v3,dxidl,dyidl):
     now=datetime.datetime.now()
     thisfile=__file__
     _,thisfile=os.path.split(thisfile)
+
+    # Save info in alpha-beta too
+    ndither=len(v2)
+    dalpha,dbeta=np.zeros(ndither),np.zeros(ndither)
+    band=["" for ii in range(ndither)]
+    for ii in range(0,ndither):
+        thisch=ch[ii]
+        # Reference point of this channel
+        if (thisch == 1): band[ii]='1A'
+        if (thisch == 2): band[ii]='2A'
+        if (thisch == 3): band[ii]='3A'
+        if (thisch == 4): band[ii]='4A'
+        dalpha[ii],dbeta[ii]=mrst.v2v3toab(v2[ii],v3[ii],band[ii])
     
     # Write header information to the output text file
     print('# Created ',now.isoformat(),file=open(outfile,"w"))
     print('# Using program',thisfile,file=open(outfile,"a"))
     
     # Column names
-    print("{:<10} {:<8} {:<10} {:<10} {:<15} {:<15}".format('PosnIndex','Channel','V2(arcsec)','V3(arcsec)','dXIdeal(arcsec)','dYIdeal(arcsec)'),file=open(outfile,"a"))
+    print("{:<10} {:<8} {:<10} {:<10} {:<10} {:<10} {:<15} {:<15}".format('PosnIndex','Band','alpha','beta','V2','V3','dXIdeal','dYIdeal'),file=open(outfile,"a"))
     
     for i in range(0,len(index)):
         # Write information to a text file
-        print("{0:<10} {1:<8} {2:<10.5f} {3:<10.5f} {4:<15.5f} {5:<15.5f}".format(index[i],ch[i],v2[i],v3[i],dxidl[i],dyidl[i]),file=open(outfile,"a"))
+        print("{0:<10} {1:<8} {2:<10.5f} {3:<10.5f} {4:<10.5f} {5:<10.5f} {6:<15.5f} {7:<15.5f}".format(index[i],band[i],dalpha[i],dbeta[i],v2[i],v3[i],dxidl[i],dyidl[i]),file=open(outfile,"a"))
 
 #############################
 
 # Plot showing the location of the point-source dithers
 
-def qaplot_ptsourceloc(v2,v3):
+def qaplot_ptsourceloc(v2,v3,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -509,18 +652,18 @@ def qaplot_ptsourceloc(v2,v3):
     filename=os.path.join(outdir,'dithers_pt.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values2A=makesiaf.create_siaf_oneband('2A')
-    values3A=makesiaf.create_siaf_oneband('3A')
-    values4A=makesiaf.create_siaf_oneband('4A')
-    values1B=makesiaf.create_siaf_oneband('1B')
-    values2B=makesiaf.create_siaf_oneband('2B')
-    values3B=makesiaf.create_siaf_oneband('3B')
-    values4B=makesiaf.create_siaf_oneband('4B')
-    values1C=makesiaf.create_siaf_oneband('1C')
-    values2C=makesiaf.create_siaf_oneband('2C')
-    values3C=makesiaf.create_siaf_oneband('3C')
-    values4C=makesiaf.create_siaf_oneband('4C')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
     
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
@@ -531,18 +674,18 @@ def qaplot_ptsourceloc(v2,v3):
     plt.xlim(-497.4,-509.4)
     plt.ylim(-325.8,-313.8)
 
-    plt.plot(values1A['inscr_v2_corners'],values1A['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(values1B['inscr_v2_corners'],values1B['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(values1C['inscr_v2_corners'],values1C['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(values2A['inscr_v2_corners'],values2A['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(values2B['inscr_v2_corners'],values2B['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(values2C['inscr_v2_corners'],values2C['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(values3A['inscr_v2_corners'],values3A['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(values3B['inscr_v2_corners'],values3B['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(values3C['inscr_v2_corners'],values3C['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(values4A['inscr_v2_corners'],values4A['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(values4B['inscr_v2_corners'],values4B['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(values4C['inscr_v2_corners'],values4C['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf1A['inscr_v2_corners'],siaf1A['inscr_v3_corners'],color='b',linewidth=1.5)
+    plt.plot(siaf1B['inscr_v2_corners'],siaf1B['inscr_v3_corners'],color='b',linewidth=1.5)
+    plt.plot(siaf1C['inscr_v2_corners'],siaf1C['inscr_v3_corners'],color='b',linewidth=1.5)
+    plt.plot(siaf2A['inscr_v2_corners'],siaf2A['inscr_v3_corners'],color='g',linewidth=1.5)
+    plt.plot(siaf2B['inscr_v2_corners'],siaf2B['inscr_v3_corners'],color='g',linewidth=1.5)
+    plt.plot(siaf2C['inscr_v2_corners'],siaf2C['inscr_v3_corners'],color='g',linewidth=1.5)
+    plt.plot(siaf3A['inscr_v2_corners'],siaf3A['inscr_v3_corners'],color='gold',linewidth=1.5)
+    plt.plot(siaf3B['inscr_v2_corners'],siaf3B['inscr_v3_corners'],color='gold',linewidth=1.5)
+    plt.plot(siaf3C['inscr_v2_corners'],siaf3C['inscr_v3_corners'],color='gold',linewidth=1.5)
+    plt.plot(siaf4A['inscr_v2_corners'],siaf4A['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf4B['inscr_v2_corners'],siaf4B['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf4C['inscr_v2_corners'],siaf4C['inscr_v3_corners'],color='r',linewidth=1.5)
 
     plt.plot(v2[0:8],v3[0:8],'+',color='b',linewidth=1.5)
     plt.plot(v2[8:16],v3[8:16],'+',color='g')
@@ -561,7 +704,7 @@ def qaplot_ptsourceloc(v2,v3):
 
 # Plot showing the location of the extended-source dithers
 
-def qaplot_extsourceloc(v2,v3):
+def qaplot_extsourceloc(v2,v3,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -569,18 +712,18 @@ def qaplot_extsourceloc(v2,v3):
     filename=os.path.join(outdir,'dithers_ext.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values2A=makesiaf.create_siaf_oneband('2A')
-    values3A=makesiaf.create_siaf_oneband('3A')
-    values4A=makesiaf.create_siaf_oneband('4A')
-    values1B=makesiaf.create_siaf_oneband('1B')
-    values2B=makesiaf.create_siaf_oneband('2B')
-    values3B=makesiaf.create_siaf_oneband('3B')
-    values4B=makesiaf.create_siaf_oneband('4B')
-    values1C=makesiaf.create_siaf_oneband('1C')
-    values2C=makesiaf.create_siaf_oneband('2C')
-    values3C=makesiaf.create_siaf_oneband('3C')
-    values4C=makesiaf.create_siaf_oneband('4C')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
     
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
@@ -591,18 +734,18 @@ def qaplot_extsourceloc(v2,v3):
     plt.xlim(-497.4,-509.4)
     plt.ylim(-325.8,-313.8)
 
-    plt.plot(values1A['inscr_v2_corners'],values1A['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(values1B['inscr_v2_corners'],values1B['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(values1C['inscr_v2_corners'],values1C['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(values2A['inscr_v2_corners'],values2A['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(values2B['inscr_v2_corners'],values2B['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(values2C['inscr_v2_corners'],values2C['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(values3A['inscr_v2_corners'],values3A['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(values3B['inscr_v2_corners'],values3B['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(values3C['inscr_v2_corners'],values3C['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(values4A['inscr_v2_corners'],values4A['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(values4B['inscr_v2_corners'],values4B['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(values4C['inscr_v2_corners'],values4C['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf1A['inscr_v2_corners'],siaf1A['inscr_v3_corners'],color='b',linewidth=1.5)
+    plt.plot(siaf1B['inscr_v2_corners'],siaf1B['inscr_v3_corners'],color='b',linewidth=1.5)
+    plt.plot(siaf1C['inscr_v2_corners'],siaf1C['inscr_v3_corners'],color='b',linewidth=1.5)
+    plt.plot(siaf2A['inscr_v2_corners'],siaf2A['inscr_v3_corners'],color='g',linewidth=1.5)
+    plt.plot(siaf2B['inscr_v2_corners'],siaf2B['inscr_v3_corners'],color='g',linewidth=1.5)
+    plt.plot(siaf2C['inscr_v2_corners'],siaf2C['inscr_v3_corners'],color='g',linewidth=1.5)
+    plt.plot(siaf3A['inscr_v2_corners'],siaf3A['inscr_v3_corners'],color='gold',linewidth=1.5)
+    plt.plot(siaf3B['inscr_v2_corners'],siaf3B['inscr_v3_corners'],color='gold',linewidth=1.5)
+    plt.plot(siaf3C['inscr_v2_corners'],siaf3C['inscr_v3_corners'],color='gold',linewidth=1.5)
+    plt.plot(siaf4A['inscr_v2_corners'],siaf4A['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf4B['inscr_v2_corners'],siaf4B['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf4C['inscr_v2_corners'],siaf4C['inscr_v3_corners'],color='r',linewidth=1.5)
 
     plt.plot(v2[32:36],v3[32:36],'+',color='black',linewidth=1.5)
     plt.plot(v2[36:40],v3[36:40],'+',color='b',linewidth=1.5)
@@ -622,7 +765,7 @@ def qaplot_extsourceloc(v2,v3):
 
 # Plot showing field coverage of a 4-pt ALL point-source dither
 
-def qaplot_ps4all(v2,v3,dx,dy):
+def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -630,17 +773,26 @@ def qaplot_ps4all(v2,v3,dx,dy):
     filename=os.path.join(outdir,'dithers_ps4ALL.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values4A=makesiaf.create_siaf_oneband('4A')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
 
     # Recenter everything to be based around zero
-    v2ref,v3ref=values1A['inscr_v2ref'],values1A['inscr_v3ref']
-    v2corn_1A=values1A['inscr_v2_corners']-v2ref
-    v3corn_1A=values1A['inscr_v3_corners']-v3ref  
-    v2corn_4A=values4A['inscr_v2_corners']-v2ref
-    v3corn_4A=values4A['inscr_v3_corners']-v3ref
+    v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
 
-    
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
 
@@ -683,7 +835,7 @@ def qaplot_ps4all(v2,v3,dx,dy):
 
 # Plot showing field coverage of a 2-pt Ch4 point-source dither
 
-def qaplot_ps2ch4(v2,v3,dx,dy):
+def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -691,17 +843,26 @@ def qaplot_ps2ch4(v2,v3,dx,dy):
     filename=os.path.join(outdir,'dithers_ps2ch4.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values4A=makesiaf.create_siaf_oneband('4A')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
 
     # Recenter everything to be based around zero
-    v2ref,v3ref=values4A['inscr_v2ref'],values4A['inscr_v3ref']
-    v2corn_1A=values1A['inscr_v2_corners']-v2ref
-    v3corn_1A=values1A['inscr_v3_corners']-v3ref  
-    v2corn_4A=values4A['inscr_v2_corners']-v2ref
-    v3corn_4A=values4A['inscr_v3_corners']-v3ref
+    v2ref,v3ref=siaf4A['inscr_v2ref'],siaf4A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
 
-    
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
 
@@ -740,7 +901,7 @@ def qaplot_ps2ch4(v2,v3,dx,dy):
 
 # Plot showing field coverage of a 2-pt ALL extended-source dither
 
-def qaplot_ext2all(v2,v3,dx,dy):
+def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -748,16 +909,25 @@ def qaplot_ext2all(v2,v3,dx,dy):
     filename=os.path.join(outdir,'dithers_ext2all.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values4A=makesiaf.create_siaf_oneband('4A')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
 
     # Recenter everything to be based around zero
-    v2ref,v3ref=values1A['inscr_v2ref'],values1A['inscr_v3ref']
-    v2corn_1A=values1A['inscr_v2_corners']-v2ref
-    v3corn_1A=values1A['inscr_v3_corners']-v3ref  
-    v2corn_4A=values4A['inscr_v2_corners']-v2ref
-    v3corn_4A=values4A['inscr_v3_corners']-v3ref
-
+    v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
     
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
@@ -797,7 +967,7 @@ def qaplot_ext2all(v2,v3,dx,dy):
 
 # Plot showing field coverage of a 4-pt ALL extended-source dither
 
-def qaplot_ext4all(v2,v3,dx,dy):
+def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -805,16 +975,25 @@ def qaplot_ext4all(v2,v3,dx,dy):
     filename=os.path.join(outdir,'dithers_ext4all.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values4A=makesiaf.create_siaf_oneband('4A')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
 
     # Recenter everything to be based around zero
-    v2ref,v3ref=values1A['inscr_v2ref'],values1A['inscr_v3ref']
-    v2corn_1A=values1A['inscr_v2_corners']-v2ref
-    v3corn_1A=values1A['inscr_v3_corners']-v3ref  
-    v2corn_4A=values4A['inscr_v2_corners']-v2ref
-    v3corn_4A=values4A['inscr_v3_corners']-v3ref
-
+    v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
     
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
@@ -858,7 +1037,7 @@ def qaplot_ext4all(v2,v3,dx,dy):
 
 # Plot showing field coverage of a 2-pt Ch3 extended-source dither
 
-def qaplot_ext2ch3(v2,v3,dx,dy):
+def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -866,20 +1045,28 @@ def qaplot_ext2ch3(v2,v3,dx,dy):
     filename=os.path.join(outdir,'dithers_ext2all.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values3A=makesiaf.create_siaf_oneband('3A')
-    values4A=makesiaf.create_siaf_oneband('4A')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
 
     # Recenter everything to be based around zero
-    v2ref,v3ref=values3A['inscr_v2ref'],values3A['inscr_v3ref']
-    v2corn_1A=values1A['inscr_v2_corners']-v2ref
-    v3corn_1A=values1A['inscr_v3_corners']-v3ref
-    v2corn_3A=values3A['inscr_v2_corners']-v2ref
-    v3corn_3A=values3A['inscr_v3_corners']-v3ref 
-    v2corn_4A=values4A['inscr_v2_corners']-v2ref
-    v3corn_4A=values4A['inscr_v3_corners']-v3ref
+    v2ref,v3ref=siaf3A['inscr_v2ref'],siaf3A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref 
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
 
-    
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
 
@@ -921,7 +1108,7 @@ def qaplot_ext2ch3(v2,v3,dx,dy):
 
 # Plot showing field coverage of a 4-pt Ch3 extended-source dither
 
-def qaplot_ext4ch3(v2,v3,dx,dy):
+def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf):
     # Set the output data directory
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
@@ -929,20 +1116,28 @@ def qaplot_ext4ch3(v2,v3,dx,dy):
     filename=os.path.join(outdir,'dithers_ext4all.pdf')
 
     # Field locations
-    values1A=makesiaf.create_siaf_oneband('1A')
-    values3A=makesiaf.create_siaf_oneband('3A')
-    values4A=makesiaf.create_siaf_oneband('4A')
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
 
     # Recenter everything to be based around zero
-    v2ref,v3ref=values3A['inscr_v2ref'],values3A['inscr_v3ref']
-    v2corn_1A=values1A['inscr_v2_corners']-v2ref
-    v3corn_1A=values1A['inscr_v3_corners']-v3ref
-    v2corn_3A=values3A['inscr_v2_corners']-v2ref
-    v3corn_3A=values3A['inscr_v3_corners']-v3ref 
-    v2corn_4A=values4A['inscr_v2_corners']-v2ref
-    v3corn_4A=values4A['inscr_v3_corners']-v3ref
+    v2ref,v3ref=siaf3A['inscr_v2ref'],siaf3A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref 
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
 
-    
     # Plot thickness
     mpl.rcParams['axes.linewidth'] = 1.5
 

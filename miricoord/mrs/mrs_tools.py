@@ -454,12 +454,20 @@ def xanyan_to_v2v3(xan,yan):
 # Convert v2,v3 locations to xIdeal, yIdeal coordinates
 # Note that xIdeal, yIdeal are defined such that xIdeal=-v2 yIdeal=+V3
 # with origin at the Ch1A reference point.
-def v2v3_to_xyideal(v2,v3):
-    # Import locally to this function so that pysiaf isn't required for everything in mrs_tools
-    import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
-    
-    values=makesiaf.create_siaf_oneband('1A')
-    v2ref,v3ref=values['inscr_v2ref'],values['inscr_v3ref']
+#
+# Allow a forced override of a given SIAF structure.  This saves a ton
+# of time if making many calls to this code.  It should ALWAYS be
+# passed the 1A structure though!
+
+def v2v3_to_xyideal(v2,v3,**kwargs):
+    if ('siaf1A' in kwargs):
+        siaf1A=kwargs['siaf1A']
+    else:
+        # Import locally to this function so that pysiaf isn't required for everything in mrs_tools
+        import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+        siaf1A=makesiaf.create_siaf_oneband('1A')
+        
+    v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
 
     xidl = -(v2-v2ref)
     yidl = v3-v3ref
