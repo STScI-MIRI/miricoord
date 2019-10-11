@@ -1,0 +1,22 @@
+# APT Output Product
+# 
+# APT Version: Version 27.2  JWST PRD: PRDOPSSOC-L-023 
+# Date: Tue Oct 08 14:17:42 GMT 2019
+
+JWST Pointing Report for JWST Draft Proposal (Untitled.aptx)
+
+========================================
+* Observation 1
+** Visit 1:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  1    1   1    1 MIRIM_ILLUM               1 M-31      +10.68471  +41.26875   +0.000   +0.000   +1.320   -1.595 -454.803 -375.556   +1.320   -1.595 TARGET     SCIENCE       48    144  0.000 (base)
+  1    1   1    2 MIRIM_ILLUM               1 M-31      +10.68471  +41.26875   +0.000   +0.000   -1.375   +1.595 -451.869 -372.585   -1.375   +1.595 DITHER     SCIENCE       48      0  4.176          
+
+========================================
+* Observation 2
+** Visit 2:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  1    1   1    1 MIRIM_SUB128              1 M-31      +10.68471  +41.26875   +0.000   +0.000   +1.320   -1.595 -382.141 -332.186   +1.320   -1.595 TARGET     SCIENCE       34    116  0.000 (base)
+  1    1   1    2 MIRIM_SUB128              1 M-31      +10.68471  +41.26875   +0.000   +0.000   -1.375   +1.595 -379.206 -329.215   -1.375   +1.595 DITHER     SCIENCE       34      0  4.176          
+
+
