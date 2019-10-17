@@ -528,6 +528,8 @@ def writeresults_mirisim(ch,v2,v3):
     _,thisfile=os.path.split(thisfile)
 
     # Mirisim specifies dithers in alpha-beta, so we need to convert to that frame from v2-v3
+    # It looks like we should always use the 1A reference point and coordinate system,
+    # even though this is strictly ill-defed outside 1A footprint
     ndither=len(v2)
     dalpha,dbeta=np.zeros(ndither),np.zeros(ndither)
     band=["" for ii in range(ndither)]
@@ -535,18 +537,23 @@ def writeresults_mirisim(ch,v2,v3):
         thisch=ch[ii]
         # Reference point of this channel
         if (thisch == 1): band[ii]='1A'
-        if (thisch == 2): band[ii]='2A'
-        if (thisch == 3): band[ii]='3A'
-        if (thisch == 4): band[ii]='4A'
+        if (thisch == 2): band[ii]='1A'
+        if (thisch == 3): band[ii]='1A'
+        if (thisch == 4): band[ii]='1A'
         dalpha[ii],dbeta[ii]=mrst.v2v3toab(v2[ii],v3[ii],band[ii])
 
+    # TEST-  flip all alpha,beta offsets
+    dalpha=-dalpha
+    dbeta=-dbeta
+
+        
     # Write header information to the output text file
     print('# Default MIRISim dither pattern for MRS.',file=open(outfile,"w"))
     print('#',file=open(outfile,"a"))
     print('# Created ',now.isoformat(),file=open(outfile,"a"))
     print('# Using program miricoord.',thisfile,file=open(outfile,"a"))
     print('#',file=open(outfile,"a"))
-    print('# Offsets are defined in the MRS channel-band field-of-view,',file=open(outfile,"a"))
+    print('# Offsets are defined in the MRS 1A channel-band field-of-view,',file=open(outfile,"a"))
     print('# and are tabulated as (alpha, beta) coordinates (in units of arcsec)',file=open(outfile,"a"))
     print('# relative to initial pointing center at (0, 0).',file=open(outfile,"a"))
     print('#',file=open(outfile,"a"))
@@ -1133,6 +1140,8 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf):
     v2ref,v3ref=siaf3A['inscr_v2ref'],siaf3A['inscr_v3ref']
     v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
     v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
     v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
     v3corn_3A=siaf3A['inscr_v3_corners']-v3ref 
     v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
@@ -1152,7 +1161,12 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf):
     plt.plot(v2corn_1A+dx[45],v3corn_1A-dy[45],color='b',linewidth=1.2)
     plt.plot(v2corn_1A+dx[46],v3corn_1A-dy[46],color='b',linewidth=1.2)
     plt.plot(v2corn_1A+dx[47],v3corn_1A-dy[47],color='b',linewidth=1.2)
-        
+
+    plt.plot(v2corn_2A+dx[44],v3corn_2A-dy[44],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[45],v3corn_2A-dy[45],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[46],v3corn_2A-dy[46],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[47],v3corn_2A-dy[47],color='g',linewidth=1.2)
+    
     plt.plot(v2corn_3A+dx[44],v3corn_3A-dy[44],color='gold',linewidth=1.2,label='Ch3')
     plt.plot(v2corn_3A+dx[45],v3corn_3A-dy[45],color='gold',linewidth=1.2)
     plt.plot(v2corn_3A+dx[46],v3corn_3A-dy[46],color='gold',linewidth=1.2)
