@@ -658,6 +658,10 @@ def qaplot_ptsourceloc(v2,v3,allsiaf):
     # Set the output filename
     filename=os.path.join(outdir,'dithers_pt.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -681,18 +685,18 @@ def qaplot_ptsourceloc(v2,v3,allsiaf):
     plt.xlim(-497.4,-509.4)
     plt.ylim(-325.8,-313.8)
 
-    plt.plot(siaf1A['inscr_v2_corners'],siaf1A['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(siaf1B['inscr_v2_corners'],siaf1B['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(siaf1C['inscr_v2_corners'],siaf1C['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(siaf2A['inscr_v2_corners'],siaf2A['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(siaf2B['inscr_v2_corners'],siaf2B['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(siaf2C['inscr_v2_corners'],siaf2C['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(siaf3A['inscr_v2_corners'],siaf3A['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(siaf3B['inscr_v2_corners'],siaf3B['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(siaf3C['inscr_v2_corners'],siaf3C['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(siaf4A['inscr_v2_corners'],siaf4A['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(siaf4B['inscr_v2_corners'],siaf4B['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(siaf4C['inscr_v2_corners'],siaf4C['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf1A['inscr_v2_corners'],siaf1A['inscr_v3_corners'],color='b',linewidth=1.5,label='Ch1')
+    plt.plot(siaf1B['inscr_v2_corners'],siaf1B['inscr_v3_corners'],color='b',linewidth=1.5,linestyle='--')
+    plt.plot(siaf1C['inscr_v2_corners'],siaf1C['inscr_v3_corners'],color='b',linewidth=1.5,linestyle=':')
+    plt.plot(siaf2A['inscr_v2_corners'],siaf2A['inscr_v3_corners'],color='g',linewidth=1.5,label='Ch2')
+    plt.plot(siaf2B['inscr_v2_corners'],siaf2B['inscr_v3_corners'],color='g',linewidth=1.5,linestyle='--')
+    plt.plot(siaf2C['inscr_v2_corners'],siaf2C['inscr_v3_corners'],color='g',linewidth=1.5,linestyle=':')
+    plt.plot(siaf3A['inscr_v2_corners'],siaf3A['inscr_v3_corners'],color='gold',linewidth=1.5,label='Ch3')
+    plt.plot(siaf3B['inscr_v2_corners'],siaf3B['inscr_v3_corners'],color='gold',linewidth=1.5,linestyle='--')
+    plt.plot(siaf3C['inscr_v2_corners'],siaf3C['inscr_v3_corners'],color='gold',linewidth=1.5,linestyle=':')
+    plt.plot(siaf4A['inscr_v2_corners'],siaf4A['inscr_v3_corners'],color='r',linewidth=1.5,label='Ch4')
+    plt.plot(siaf4B['inscr_v2_corners'],siaf4B['inscr_v3_corners'],color='r',linewidth=1.5,linestyle='--')
+    plt.plot(siaf4C['inscr_v2_corners'],siaf4C['inscr_v3_corners'],color='r',linewidth=1.5,linestyle=':')
 
     plt.plot(v2[0:8],v3[0:8],'+',color='b',linewidth=1.5)
     plt.plot(v2[8:16],v3[8:16],'+',color='g')
@@ -701,8 +705,9 @@ def qaplot_ptsourceloc(v2,v3,allsiaf):
             
     plt.xlabel('V2 (arcsec)')
     plt.ylabel('V3 (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
-
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.legend()
+    
     plt.savefig(filename)
     plt.show()
     plt.close()
@@ -718,6 +723,10 @@ def qaplot_extsourceloc(v2,v3,allsiaf):
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -741,18 +750,18 @@ def qaplot_extsourceloc(v2,v3,allsiaf):
     plt.xlim(-497.4,-509.4)
     plt.ylim(-325.8,-313.8)
 
-    plt.plot(siaf1A['inscr_v2_corners'],siaf1A['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(siaf1B['inscr_v2_corners'],siaf1B['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(siaf1C['inscr_v2_corners'],siaf1C['inscr_v3_corners'],color='b',linewidth=1.5)
-    plt.plot(siaf2A['inscr_v2_corners'],siaf2A['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(siaf2B['inscr_v2_corners'],siaf2B['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(siaf2C['inscr_v2_corners'],siaf2C['inscr_v3_corners'],color='g',linewidth=1.5)
-    plt.plot(siaf3A['inscr_v2_corners'],siaf3A['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(siaf3B['inscr_v2_corners'],siaf3B['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(siaf3C['inscr_v2_corners'],siaf3C['inscr_v3_corners'],color='gold',linewidth=1.5)
-    plt.plot(siaf4A['inscr_v2_corners'],siaf4A['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(siaf4B['inscr_v2_corners'],siaf4B['inscr_v3_corners'],color='r',linewidth=1.5)
-    plt.plot(siaf4C['inscr_v2_corners'],siaf4C['inscr_v3_corners'],color='r',linewidth=1.5)
+    plt.plot(siaf1A['inscr_v2_corners'],siaf1A['inscr_v3_corners'],color='b',linewidth=1.5,label='Ch1')
+    plt.plot(siaf1B['inscr_v2_corners'],siaf1B['inscr_v3_corners'],color='b',linewidth=1.5,linestyle='--')
+    plt.plot(siaf1C['inscr_v2_corners'],siaf1C['inscr_v3_corners'],color='b',linewidth=1.5,linestyle=':')
+    plt.plot(siaf2A['inscr_v2_corners'],siaf2A['inscr_v3_corners'],color='g',linewidth=1.5,label='Ch2')
+    plt.plot(siaf2B['inscr_v2_corners'],siaf2B['inscr_v3_corners'],color='g',linewidth=1.5,linestyle='--')
+    plt.plot(siaf2C['inscr_v2_corners'],siaf2C['inscr_v3_corners'],color='g',linewidth=1.5,linestyle=':')
+    plt.plot(siaf3A['inscr_v2_corners'],siaf3A['inscr_v3_corners'],color='gold',linewidth=1.5,label='Ch3')
+    plt.plot(siaf3B['inscr_v2_corners'],siaf3B['inscr_v3_corners'],color='gold',linewidth=1.5,linestyle='--')
+    plt.plot(siaf3C['inscr_v2_corners'],siaf3C['inscr_v3_corners'],color='gold',linewidth=1.5,linestyle=':')
+    plt.plot(siaf4A['inscr_v2_corners'],siaf4A['inscr_v3_corners'],color='r',linewidth=1.5,label='Ch4')
+    plt.plot(siaf4B['inscr_v2_corners'],siaf4B['inscr_v3_corners'],color='r',linewidth=1.5,linestyle='--')
+    plt.plot(siaf4C['inscr_v2_corners'],siaf4C['inscr_v3_corners'],color='r',linewidth=1.5,linestyle=':')
 
     plt.plot(v2[32:36],v3[32:36],'+',color='black',linewidth=1.5)
     plt.plot(v2[36:40],v3[36:40],'+',color='b',linewidth=1.5)
@@ -762,8 +771,9 @@ def qaplot_extsourceloc(v2,v3,allsiaf):
             
     plt.xlabel('V2 (arcsec)')
     plt.ylabel('V3 (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
-
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.legend()
+    
     plt.savefig(filename)
     plt.show()
     plt.close()
@@ -779,6 +789,10 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ps4ALL.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -796,7 +810,11 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
     # Recenter everything to be based around zero
     v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
     v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
-    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref 
     v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
     v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
 
@@ -814,6 +832,16 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
     plt.plot(v2corn_1A+dx[1],v3corn_1A-dy[1],color='b',linewidth=1.2)
     plt.plot(v2corn_1A+dx[2],v3corn_1A-dy[2],color='b',linewidth=1.2)
     plt.plot(v2corn_1A+dx[3],v3corn_1A-dy[3],color='b',linewidth=1.2)
+
+    plt.plot(v2corn_2A+dx[0],v3corn_2A-dy[0],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[1],v3corn_2A-dy[1],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[2],v3corn_2A-dy[2],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[3],v3corn_2A-dy[3],color='g',linewidth=1.2)
+
+    plt.plot(v2corn_3A+dx[0],v3corn_3A-dy[0],color='gold',linewidth=1.2,label='Ch3')
+    plt.plot(v2corn_3A+dx[1],v3corn_3A-dy[1],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[2],v3corn_3A-dy[2],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[3],v3corn_3A-dy[3],color='gold',linewidth=1.2)
     
     plt.plot(v2corn_4A+dx[0],v3corn_4A-dy[0],color='r',linewidth=1.2,label='Ch4')
     plt.plot(v2corn_4A+dx[1],v3corn_4A-dy[1],color='r',linewidth=1.2)
@@ -830,8 +858,8 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
-    plt.text(5,5,'ALL, 4-PT, point source')
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.text(1,5,'ALL, 4-PT, point source')
     plt.legend()
 
     plt.savefig(filename)
@@ -849,6 +877,10 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ps2ch4.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -866,7 +898,11 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
     # Recenter everything to be based around zero
     v2ref,v3ref=siaf4A['inscr_v2ref'],siaf4A['inscr_v3ref']
     v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
-    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref  
     v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
     v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
 
@@ -882,6 +918,12 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
 
     plt.plot(v2corn_1A+dx[24],v3corn_1A-dy[24],color='b',linewidth=1.2,label='Ch1')
     plt.plot(v2corn_1A+dx[25],v3corn_1A-dy[25],color='b',linewidth=1.2)
+
+    plt.plot(v2corn_2A+dx[24],v3corn_2A-dy[24],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[25],v3corn_2A-dy[25],color='g',linewidth=1.2)
+
+    plt.plot(v2corn_3A+dx[24],v3corn_3A-dy[24],color='gold',linewidth=1.2,label='Ch3')
+    plt.plot(v2corn_3A+dx[25],v3corn_3A-dy[25],color='gold',linewidth=1.2)
     
     plt.plot(v2corn_4A+dx[24],v3corn_4A-dy[24],color='r',linewidth=1.2,label='Ch4')
     plt.plot(v2corn_4A+dx[25],v3corn_4A-dy[25],color='r',linewidth=1.2)
@@ -896,7 +938,7 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
     plt.text(7,7,'Ch4, 2-PT, point source')
     plt.legend()
 
@@ -915,6 +957,10 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext2all.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -932,7 +978,11 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
     # Recenter everything to be based around zero
     v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
     v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
-    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref  
     v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
     v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
     
@@ -948,6 +998,12 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
 
     plt.plot(v2corn_1A+dx[32],v3corn_1A-dy[32],color='b',linewidth=1.2,label='Ch1')
     plt.plot(v2corn_1A+dx[33],v3corn_1A-dy[33],color='b',linewidth=1.2)
+
+    plt.plot(v2corn_2A+dx[32],v3corn_2A-dy[32],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[33],v3corn_2A-dy[33],color='g',linewidth=1.2)
+
+    plt.plot(v2corn_3A+dx[32],v3corn_3A-dy[32],color='gold',linewidth=1.2,label='Ch3')
+    plt.plot(v2corn_3A+dx[33],v3corn_3A-dy[33],color='gold',linewidth=1.2)
     
     plt.plot(v2corn_4A+dx[32],v3corn_4A-dy[32],color='r',linewidth=1.2,label='Ch4')
     plt.plot(v2corn_4A+dx[33],v3corn_4A-dy[33],color='r',linewidth=1.2)
@@ -962,7 +1018,7 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
     plt.text(5,5,'ALL, 2-PT, extended source')
     plt.legend()
 
@@ -981,6 +1037,10 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext4all.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -998,7 +1058,11 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
     # Recenter everything to be based around zero
     v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
     v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
-    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref  
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref  
     v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
     v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
     
@@ -1016,7 +1080,17 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
     plt.plot(v2corn_1A+dx[33],v3corn_1A-dy[33],color='b',linewidth=1.2)
     plt.plot(v2corn_1A+dx[34],v3corn_1A-dy[34],color='b',linewidth=1.2)
     plt.plot(v2corn_1A+dx[35],v3corn_1A-dy[35],color='b',linewidth=1.2)
-           
+
+    plt.plot(v2corn_2A+dx[32],v3corn_2A-dy[32],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[33],v3corn_2A-dy[33],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[34],v3corn_2A-dy[34],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[35],v3corn_2A-dy[35],color='g',linewidth=1.2)
+
+    plt.plot(v2corn_3A+dx[32],v3corn_3A-dy[32],color='gold',linewidth=1.2,label='Ch3')
+    plt.plot(v2corn_3A+dx[33],v3corn_3A-dy[33],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[34],v3corn_3A-dy[34],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[35],v3corn_3A-dy[35],color='gold',linewidth=1.2)
+    
     plt.plot(v2corn_4A+dx[32],v3corn_4A-dy[32],color='r',linewidth=1.2,label='Ch4')
     plt.plot(v2corn_4A+dx[33],v3corn_4A-dy[33],color='r',linewidth=1.2)
     plt.plot(v2corn_4A+dx[34],v3corn_4A-dy[34],color='r',linewidth=1.2)
@@ -1032,7 +1106,7 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
     plt.text(5,5,'ALL, 4-PT, extended source')
     plt.legend()
 
@@ -1049,8 +1123,12 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
-    filename=os.path.join(outdir,'dithers_ext2all.pdf')
+    filename=os.path.join(outdir,'dithers_ext2ch3.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -1069,6 +1147,8 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
     v2ref,v3ref=siaf3A['inscr_v2ref'],siaf3A['inscr_v3ref']
     v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
     v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
     v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
     v3corn_3A=siaf3A['inscr_v3_corners']-v3ref 
     v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
@@ -1087,6 +1167,9 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
     plt.plot(v2corn_1A+dx[44],v3corn_1A-dy[44],color='b',linewidth=1.2,label='Ch1')
     plt.plot(v2corn_1A+dx[45],v3corn_1A-dy[45],color='b',linewidth=1.2)
 
+    plt.plot(v2corn_2A+dx[44],v3corn_2A-dy[44],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[45],v3corn_2A-dy[45],color='g',linewidth=1.2)
+    
     plt.plot(v2corn_3A+dx[44],v3corn_3A-dy[44],color='gold',linewidth=1.2,label='Ch3')
     plt.plot(v2corn_3A+dx[45],v3corn_3A-dy[45],color='gold',linewidth=1.2)
     
@@ -1103,7 +1186,7 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
     plt.text(5,5,'Ch3, 2-PT, extended source')
     plt.legend()
 
@@ -1120,8 +1203,12 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf):
     data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
     outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
-    filename=os.path.join(outdir,'dithers_ext4all.pdf')
+    filename=os.path.join(outdir,'dithers_ext4ch3.pdf')
 
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
     # Field locations
     siaf1A=allsiaf[0]
     siaf1B=allsiaf[1]
@@ -1187,7 +1274,7 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight (May 2019)')
+    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
     plt.text(5,5,'Ch3, 4-PT, extended source')
     plt.legend()
 
