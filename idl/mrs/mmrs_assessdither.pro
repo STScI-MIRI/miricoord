@@ -13,11 +13,11 @@ pro mmrs_assessdither,channel,dith,wave=wave,da=da,db=db,outfile=outfile,rootdir
 
 ; This is where the dither input file from the EC lives
 if (~keyword_set(rootdir)) then $
-  rootdir=concat_dir(ml_getenv('MIRICOORD_DATA_DIR'),'dithers/mirimrs/feb2017/')
+  rootdir=concat_dir(ml_getenv('COORDINATES_DATA_DIR'),'dithers/mrs/20171215/')
 
 ; This is where the SIAF parameter files created from mmrs_siaf live
 if (~keyword_set(siafdir)) then $
-  siafdir=concat_dir(ml_getenv('MIRICOORD_DATA_DIR'),'siaf/mrs/feb2017/')
+  siafdir=concat_dir(ml_getenv('COORDINATES_DATA_DIR'),'siaf/mrs/20171214/')
 
 ; This is where the results will go
 if (~keyword_set(outdir)) then $
@@ -49,10 +49,10 @@ ddec=dithers[dith-1].dyidl/3600.d
 
 ; Figure out dither in xyidl from override if specified
 if ((keyword_set(da))and(keyword_set(db))) then begin
-  mmrs_abtov2v3,da,db,tempv2,tempv3,'1A'
+  mmrs_abtov2v3_cdp8b,da,db,tempv2,tempv3,'1A'
   ; Figure out the zeropoint location of this band
   ; (local alpha=beta=0 for 1A,2A,3A,or 4A) in v2,v3 coordinates
-  mmrs_abtov2v3,0.,0.,zpv2,zpv3,'1A'
+  mmrs_abtov2v3_cdp8b,0.,0.,zpv2,zpv3,'1A'
   ; Convert both the dither locations and the zeropoint locations
   ; to the XIdl, YIdl reference frame
   mmrs_v2v3toideal,zpv2,zpv3,zpx,zpy
@@ -100,11 +100,11 @@ for i=0,ndith-1 do begin
   v2=reform(v2all,[nra,ndec])
   v3=reform(v3all,[nra,ndec])
   ; Tranform to a,b locations
-  mmrs_v2v3toab,v2all,v3all,aall,ball,channel
+  mmrs_v2v3toab_cdp8b,v2all,v3all,aall,ball,channel
   a=reform(aall,[nra,ndec])
   b=reform(ball,[nra,ndec])
   ; Transform to 1-indexed pixel locations
-  mmrs_abltoxy,aall,ball,lam,xall,yall,channel,phase=phase
+  mmrs_abltoxy_cdp8b,aall,ball,lam,xall,yall,channel,phase=phase
   x=reform(xall,[nra,ndec])
   y=reform(yall,[nra,ndec])
   ; Construct phase images; they go from -0.5 to 0.5 originally, convert to 0-1
