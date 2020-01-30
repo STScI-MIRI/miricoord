@@ -170,6 +170,8 @@ def Idealtov2v3(XIdl,YIdl,apername,**kwargs):
     else:
         siaf = pysiaf.Siaf('MIRI')
 
+    print('SIAF version: ',pysiaf.JWST_PRD_VERSION)
+        
     thisentry=siaf[apername]
 
     v2ref,v3ref=thisentry.V2Ref,thisentry.V3Ref
@@ -197,7 +199,9 @@ def v2v3toIdeal(v2,v3,apername,**kwargs):
         siaf = pysiaf.Siaf('MIRI',basepath=kwargs['basepath'])
     else:
         siaf = pysiaf.Siaf('MIRI')
-    
+
+    print('SIAF version: ',pysiaf.JWST_PRD_VERSION)
+        
     thisentry=siaf[apername]
 
     v2ref,v3ref=thisentry.V2Ref,thisentry.V3Ref
