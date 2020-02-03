@@ -366,10 +366,11 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
     # Get wavelength ranges from header
     wmin=hdr['L_MIN'+ch]
     wmax=hdr['L_MAX'+ch]
-    # If the input lambda was a single negative value, replace it with the midpoint wavelength
+    # Replace any negative wavelengths with the midpoint wavelength
     # (this lets us use this code to compute a typical midpoint location)
-    if ((len(trimlam) == 1)and(trimlam[0] < 0)):
-        trimlam[:]=(wmin+wmax)/2.
+    negval=(np.where(trimlam < 0))[0]
+    if (len(negval) > 0):
+        trimlam[negval]=(wmin+wmax)/2.
 
     # Get beta zeropoint and spacing from header
     beta0=hdr['B_ZERO'+ch]
