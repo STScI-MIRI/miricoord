@@ -134,6 +134,7 @@ def make_filter_offset(distfile, outname):
     # Add file-specific metadata
     model.meta.title = "MIRI imager filter offset - CDP7"
     model.meta.description = "CDP7 delivery"
+    model.meta.input_units = "pixels"
 
     for item in data:
         model.filters = d
