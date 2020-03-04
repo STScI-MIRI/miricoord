@@ -44,11 +44,11 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.lrs.toolversions.lrs_tools_cdp7 as tv
+        import miricoord.lrs.toolversions.lrs_tools_cdp7 as tv
     elif (version == 'cdp7'):
-        import miricoord.miricoord.lrs.toolversions.lrs_tools_cdp7 as tv
+        import miricoord.lrs.toolversions.lrs_tools_cdp7 as tv
     elif (version == 'cdp7beta3'):
-        import miricoord.miricoord.lrs.toolversions.lrs_tools_cdp7beta3 as tv
+        import miricoord.lrs.toolversions.lrs_tools_cdp7beta3 as tv
     else:
         print('Invalid tool version specified!')
         

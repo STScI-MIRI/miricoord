@@ -40,8 +40,8 @@ from asdf import AsdfFile
 from jwst import datamodels
 from jwst.assign_wcs import miri
 
-import miricoord.miricoord.imager.mirim_tools as mt
-import miricoord.miricoord.imager.mirim_pipetools as mpt
+import miricoord.imager.mirim_tools as mt
+import miricoord.imager.mirim_pipetools as mpt
 
 from jwst.datamodels import DistortionModel, FilteroffsetModel
 from asdf.tags.core import Software, HistoryEntry

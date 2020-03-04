@@ -32,8 +32,8 @@ import getpass
 import socket
 
 import pdb
-import miricoord.miricoord.mrs.mrs_fields as mf
-import miricoord.miricoord.mrs.mrs_tools as mt
+import miricoord.mrs.mrs_fields as mf
+import miricoord.mrs.mrs_tools as mt
 
 
 #############################

@@ -44,8 +44,8 @@ import socket
 
 import pdb
 
-import miricoord.miricoord.mrs.mrs_tools as mrst
-import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+import miricoord.mrs.mrs_tools as mrst
+import miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
 
 #############################
 

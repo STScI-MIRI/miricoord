@@ -31,7 +31,7 @@ from scipy.interpolate import UnivariateSpline
 import pdb
 
 # Import the corresponding CDP-7 Imager distortion code
-import miricoord.miricoord.imager.toolversions.mirim_tools_cdp7 as mt
+import miricoord.imager.toolversions.mirim_tools_cdp7 as mt
 
 #############################
 

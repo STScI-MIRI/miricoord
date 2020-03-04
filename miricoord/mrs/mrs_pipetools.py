@@ -41,11 +41,11 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
+        import miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
     elif (version == 'cdp6'):
-        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
+        import miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
     elif (version == 'cdp8b'):
-        import miricoord.miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
+        import miricoord.mrs.toolversions.mrs_pipetools_cdp8b as tv
     else:
         print('Invalid tool version specified!')
 
