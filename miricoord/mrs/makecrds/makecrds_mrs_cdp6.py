@@ -47,10 +47,10 @@ from jwst import datamodels
 from jwst.assign_wcs import miri
 from numpy.testing import utils
 
-import miricoord.miricoord.mrs.mrs_tools as mrst
-import miricoord.miricoord.mrs.mrs_pipetools as mrspt
+import miricoord.mrs.mrs_tools as mrst
+import miricoord.mrs.mrs_pipetools as mrspt
 
-import miricoord.miricoord.general.drltimer as drltimer
+import miricoord.general.drltimer as drltimer
 
 from asdf.tags.core import Software, HistoryEntry
 import datetime

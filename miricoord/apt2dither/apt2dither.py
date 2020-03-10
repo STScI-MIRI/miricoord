@@ -2,9 +2,9 @@
 
 import re
 import os
-import miricoord.miricoord.imager.mirim_tools as mt
-import miricoord.miricoord.lrs.lrs_tools as lrst
-import miricoord.miricoord.mrs.mrs_tools as mrst
+import miricoord.imager.mirim_tools as mt
+import miricoord.lrs.lrs_tools as lrst
+import miricoord.mrs.mrs_tools as mrst
 dist_ver = mrst.version()
 print('Distortion solution: ', dist_ver)
 

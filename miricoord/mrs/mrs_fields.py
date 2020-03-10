@@ -17,9 +17,9 @@ REVISION HISTORY:
 """
 
 # We will need both the mrs_tools code
-import miricoord.miricoord.mrs.mrs_tools as mrst
+import miricoord.mrs.mrs_tools as mrst
 # the imager tools code
-import miricoord.miricoord.imager.mirim_tools as mt
+import miricoord.imager.mirim_tools as mt
 # and the pysiaf code
 import pysiaf
 

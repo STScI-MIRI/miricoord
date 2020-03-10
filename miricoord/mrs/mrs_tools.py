@@ -46,11 +46,11 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
+        import miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
     elif (version == 'cdp6'):
-        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
+        import miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
     elif (version == 'cdp8b'):
-        import miricoord.miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
+        import miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
     else:
         print('Invalid tool version specified!')
         
@@ -464,7 +464,7 @@ def v2v3_to_xyideal(v2,v3,**kwargs):
         siaf1A=kwargs['siaf1A']
     else:
         # Import locally to this function so that pysiaf isn't required for everything in mrs_tools
-        import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+        import miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
         siaf1A=makesiaf.create_siaf_oneband('1A')
         
     v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
