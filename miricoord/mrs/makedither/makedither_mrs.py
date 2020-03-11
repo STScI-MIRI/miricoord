@@ -433,10 +433,11 @@ def compute_dxdyideal(pat_v2,pat_v3,siaf,**kwargs):
 
 # Routine to write results to a file formatted for the PRD
 
-def writeresults_prd(dxidl,dyidl):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def writeresults_prd(dxidl,dyidl,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     outfile=os.path.join(outdir,'MiriMrsDithers.txt')
 
@@ -516,10 +517,11 @@ def writeresults_prd(dxidl,dyidl):
 
 # Routine to write results to a file formatted for mirisim
 
-def writeresults_mirisim(ch,v2,v3):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def writeresults_mirisim(ch,v2,v3,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     outfile=os.path.join(outdir,'mrs_recommended_dither.dat')
 
@@ -612,10 +614,11 @@ def writeresults_mirisim(ch,v2,v3):
 
 # Routine to write full results to a file
 
-def writeresults_full(index,ch,v2,v3,dxidl,dyidl):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def writeresults_full(index,ch,v2,v3,dxidl,dyidl,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     outfile=os.path.join(outdir,'mrs_dithers.txt')
 
@@ -651,10 +654,11 @@ def writeresults_full(index,ch,v2,v3,dxidl,dyidl):
 
 # Plot showing the location of the point-source dithers
 
-def qaplot_ptsourceloc(v2,v3,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ptsourceloc(v2,v3,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_pt.pdf')
 
@@ -716,10 +720,11 @@ def qaplot_ptsourceloc(v2,v3,allsiaf):
 
 # Plot showing the location of the extended-source dithers
 
-def qaplot_extsourceloc(v2,v3,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_extsourceloc(v2,v3,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext.pdf')
 
@@ -782,10 +787,11 @@ def qaplot_extsourceloc(v2,v3,allsiaf):
 
 # Plot showing field coverage of a 4-pt ALL point-source dither
 
-def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ps4all(v2,v3,dx,dy,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ps4ALL.pdf')
 
@@ -870,10 +876,11 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf):
 
 # Plot showing field coverage of a 2-pt Ch4 point-source dither
 
-def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ps2ch4.pdf')
 
@@ -950,10 +957,11 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf):
 
 # Plot showing field coverage of a 2-pt ALL extended-source dither
 
-def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ext2all(v2,v3,dx,dy,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext2all.pdf')
 
@@ -1030,10 +1038,11 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf):
 
 # Plot showing field coverage of a 4-pt ALL extended-source dither
 
-def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ext4all(v2,v3,dx,dy,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext4all.pdf')
 
@@ -1118,10 +1127,11 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf):
 
 # Plot showing field coverage of a 2-pt Ch3 extended-source dither
 
-def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext2ch3.pdf')
 
@@ -1198,10 +1208,11 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf):
 
 # Plot showing field coverage of a 4-pt Ch3 extended-source dither
 
-def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf):
-    # Set the output data directory
-    data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-    outdir=os.path.join(data_dir,'dithers/temp/')
+def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
     # Set the output filename
     filename=os.path.join(outdir,'dithers_ext4ch3.pdf')
 
