@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
    name='miricoord',
@@ -6,6 +6,6 @@ setup(
    description='MIRI coordinate transforms',
    author='David R. Law',
    author_email='dlaw@stsci.edu',
-   packages=['miricoord'],
+   packages=find_packages(),
    install_requires=['jwst', 'pysiaf', 'jupyter', 'matplotlib'],
 )
