@@ -21,6 +21,7 @@ Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 26-Apr-2019  Written by David Law (dlaw@stsci.edu)
+26-Mar-2020  Add computation of wavelength pixel phase (D. Law)
 """
 
 import os as os
@@ -471,13 +472,15 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
     index0=(np.where(np.logical_and(x > -999, y > -999)))[0]
     nindex0=len(index0)
 
-    # Determine slice and pixel phase
+    # Determine slice, pixel, and wavelength phases
     # 0 is in the middle of a sample, -0.5 at the bottom edge, 0.5 at the
     # top edge
-    slicephase=np.zeros(trimal.size)-999.
-    pixelphase=np.zeros(trimal.size)-999.
-    slicephase[index0]=slicefloat[index0]-np.round(slicefloat[index0])
-    pixelphase[index0]=x[index0]-np.round(x[index0])
+    slicephase = np.zeros(trimal.size) - 999.
+    pixelphase = np.zeros(trimal.size) - 999.
+    wavephase = np.zeros(trimal.size) - 999.
+    slicephase[index0] = slicefloat[index0] - np.round(slicefloat[index0])
+    pixelphase[index0] = x[index0] - np.round(x[index0])
+    wavephase[index0] = y[index0] - np.round(y[index0])
 
     distfile.close()
     
@@ -492,6 +495,7 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
         slicename=slicename[index0]
         slicephase=slicephase[index0]
         pixelphase=pixelphase[index0]
+        wavephase = wavephase[index0]
 
     # Return a dictionary of results
     values=dict();
@@ -504,6 +508,7 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
     values['slicename']=slicename
     values['slicephase']=slicephase
     values['pixelphase']=pixelphase
+    values['wavephase'] = wavephase
 
     return values
 

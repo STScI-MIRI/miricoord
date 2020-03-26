@@ -131,7 +131,7 @@ def alphafov(channel):
 #############################
 
 # Create an image in a given channel where all pixels have
-# the value of their wavelength.  Specifying loc='top','lo', or 'hi'
+# the value of their wavelength.  Specifying loc='cen','lo', or 'hi'
 # gives values at center, or low/high values for pixel
 
 def waveimage(channel,loc='cen'):

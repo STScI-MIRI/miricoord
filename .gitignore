@@ -13,3 +13,6 @@ build
 dist
 *.egg-info
 *.egg
+
+# Pycharm stuff
+.idea
