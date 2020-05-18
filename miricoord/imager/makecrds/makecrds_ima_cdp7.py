@@ -26,6 +26,7 @@ REVISION HISTORY:
 2016         Adapted for new formats by David Law (dlaw@stsci.edu)
 11-Oct-2018  Adapted to new miricoord structure (D. Law)
 02-Dec-2018  Adapt to CDP-7
+18-May-2020  Change filter offset reference file format, added MIR_TACONFIRM (D. Law)
 """
 
 from __future__ import absolute_import, division, unicode_literals, print_function
@@ -126,7 +127,7 @@ def make_filter_offset(distfile, outname):
 
     d = []
     for i in data:
-        d.append({'name':i[0],'column_offset': -i[1], 'row_offset': -i[2]} )
+        d.append({'filter':i[0],'pupil': 'N/A','column_offset': -i[1], 'row_offset': -i[2]} )
 
     model = FilteroffsetModel()
     # Add general metadata
@@ -258,14 +259,15 @@ def create_reffile_header(model):
     model.meta.author = "Alistair Glasse, David R. Law"
     model.meta.pedigree = "GROUND"
     model.meta.useafter = "2000-01-01T00:00:00"
+    model.meta.reftype = "filteroffset"
 
     if (model.meta.model_type is 'DistortionModel'):
-        model.meta.exposure.p_exptype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|"
+        model.meta.exposure.p_exptype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|MIR_TACONFIRM|"
         
     if (model.meta.model_type is 'FilteroffsetModel'):
-        model.meta.exposure.p_exptype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|"
+        model.meta.exposure.p_exptype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|"
     
-    entry = HistoryEntry({'description': "New version created from CDP-7", 'time': datetime.datetime.utcnow()})
+    entry = HistoryEntry({'description': "New version created from CDP-7 with updated filter offset format", 'time': datetime.datetime.utcnow()})
     software = Software({'name': 'miricoord', 'author': 'D.Law', 
                          'homepage': 'https://github.com/STScI-MIRI/miricoord', 'version': "master"})
     entry['software'] = software
