@@ -17,13 +17,17 @@ Includes scripts for generating pipeline CRDS distortion reference files from FI
 
 Python:
 
-Python code is developed for a python 3.7 environment.  If installing via a git clone command make sure to install this in your conda environment by using:
+Python code is developed for a python 3.7 environment.  Clone this git repository to your local machine, and then install for your active conda environment by using:
 
 python setup.py install
 
 or
 
 python setup.py develop
+
+Using the 'install' option will copy the code over into your python library for the environment, while the 'develop' option
+will use the cloned code directory as the source.  The 'develop' method is thus potentially easier to maintain if you might
+be updating or contributing to miricoord frequently.
 
 Note that some functions rely upon having the pysiaf (https://github.com/spacetelescope/pysiaf) and JWST pipeline (https://github.com/spacetelescope/jwst) modules installed as well.
 
