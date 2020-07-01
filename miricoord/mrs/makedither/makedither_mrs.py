@@ -450,67 +450,67 @@ def writeresults_prd(dxidl,dyidl,outdir=''):
 
     print('CHANNEL1-POINT_SOURCE-NEGATIVE',file=open(outfile,"w"))
     for ii in range(0,4):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii+1,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii+1,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL1-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
     for ii in range(4,8):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-3,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-3,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL2-POINT_SOURCE-NEGATIVE',file=open(outfile,"a"))
     for ii in range(8,12):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-7,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-7,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL2-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
     for ii in range(12,16):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-11,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-11,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL3-POINT_SOURCE-NEGATIVE',file=open(outfile,"a"))
     for ii in range(16,20):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-15,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-15,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL3-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
     for ii in range(20,24):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-19,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-19,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL4-POINT_SOURCE-NEGATIVE',file=open(outfile,"a"))
     for ii in range(24,28):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-23,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-23,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL4-POINT_SOURCE-POSITIVE',file=open(outfile,"a"))
     for ii in range(28,32):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-27,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-27,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('ALL-EXTENDED_SOURCE',file=open(outfile,"a"))
     for ii in range(32,36):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-31,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-31,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL1-EXTENDED_SOURCE',file=open(outfile,"a"))
     for ii in range(36,40):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-35,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-35,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
    
     print('CHANNEL2-EXTENDED_SOURCE',file=open(outfile,"a"))
     for ii in range(40,44):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-39,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-39,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL3-EXTENDED_SOURCE',file=open(outfile,"a"))
     for ii in range(44,48):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-43,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-43,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
     print('CHANNEL4-EXTENDED_SOURCE',file=open(outfile,"a"))
     for ii in range(48,52):
-        print("{0:<3}{1:>8.6f}       {2:>8.6f}".format(ii-47,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-47,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
     
 #############################
