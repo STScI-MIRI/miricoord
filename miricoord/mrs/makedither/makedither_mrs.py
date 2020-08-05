@@ -28,6 +28,7 @@ Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 15-Apr-2019  Adapt from old IDL routines (D. Law; dlaw@stsci.edu)
+05-Aug-2020  Remove dither flips for mirisim per ticket MIRI-677 (D. Law)
 """
 
 import matplotlib as mpl
@@ -544,10 +545,8 @@ def writeresults_mirisim(ch,v2,v3,outdir=''):
         if (thisch == 4): band[ii]='1A'
         dalpha[ii],dbeta[ii]=mrst.v2v3toab(v2[ii],v3[ii],band[ii])
 
-    # TEST-  flip all alpha,beta offsets
-    dalpha=-dalpha
-    dbeta=-dbeta
-
+    # As of mirisim 2.3.0 (ticket MIRI-677) we no longer need to invert dithers
+    # to work properly with mirisim
         
     # Write header information to the output text file
     print('# Default MIRISim dither pattern for MRS.',file=open(outfile,"w"))
