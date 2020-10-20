@@ -41,6 +41,7 @@ import math
 import numpy as np
 from numpy.testing import assert_allclose
 import pdb
+from astropy.io import fits
 
 #############################
 
@@ -332,3 +333,45 @@ def testtransform():
     allmax=(np.array([maxra,maxdec,maxv2,maxv3])).max()
     print('Maximum difference from pipeline:',allmax,'arcsec')
  
+#############################
+
+# Test for consistency in a FITS header
+
+def testhdr(file):
+    hdu=fits.open(file)
+    hdr0=hdu[0].header
+    hdr1=hdu['SCI'].header
+
+    # Target location
+    targra=hdr0['TARG_RA']
+    targdec=hdr0['TARG_DEC']
+
+    # Boresight info
+    rav1=hdr1['RA_V1']
+    decv1=hdr1['DEC_V1']
+    pav3=hdr1['PA_V3']
+
+    # Pointing info
+    v2ref=hdr1['V2_REF']
+    v3ref=hdr1['V3_REF']
+    raref=hdr1['RA_REF']
+    decref=hdr1['DEC_REF']
+    rollref=hdr1['ROLL_REF']
+
+    print('Nominal source RA/DEC = ',targra,targdec)
+    print('Reference point V2/V3 = ',v2ref,v3ref)
+    print('')
+    
+    # Figure out where source is in V2/V3 according to pointing info
+    v2,v3,_=jwst_radectov2v3([targra],[targdec],v2ref=v2ref,v3ref=v3ref,raref=raref,decref=decref,rollref=rollref)
+    print('Pointing keywords think target is at V2/V3 = ',v2,v3)
+    dv2,dv3=v2ref-v2,v3ref-v3
+    print('Which is ',dv2,dv3,' arcsec away from nominal location')
+    print('')
+
+    # Figure out where source is in V2/V3 according to boresight info
+    v2,v3,_=jwst_radectov2v3([targra],[targdec],v2ref=0.,v3ref=0.,raref=rav1,decref=decv1,rollref=pav3)
+    print('Boresight keywords think target is at V2/V3 = ',v2,v3)
+    dv2,dv3=v2ref-v2,v3ref-v3
+    print('Which is ',dv2,dv3,' arcsec away from nominal location')
+    
