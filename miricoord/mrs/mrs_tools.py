@@ -18,6 +18,7 @@ REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
 07-Dec-2018  Revise version handling using globals (D. Law)
 18-Apr-2019  Add slice width and pixel size (D. Law)
+04-Dec-2020  Add reverse transform from ideal to v2v3 (D. Law)
 """
 
 import os as os
@@ -473,6 +474,31 @@ def v2v3_to_xyideal(v2,v3,**kwargs):
     yidl = v3-v3ref
 
     return xidl,yidl
+
+#############################
+
+# Convert xIdeal, yIdeal coordinates to v2,v3
+# Note that xIdeal, yIdeal are defined such that xIdeal=-v2 yIdeal=+V3
+# with origin at the Ch1A reference point.
+#
+# Allow a forced override of a given SIAF structure.  This saves a ton
+# of time if making many calls to this code.  It should ALWAYS be
+# passed the 1A structure though!
+
+def xyideal_to_v2v3(xi,yi,**kwargs):
+    if ('siaf1A' in kwargs):
+        siaf1A=kwargs['siaf1A']
+    else:
+        # Import locally to this function so that pysiaf isn't required for everything in mrs_tools
+        import miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+        siaf1A=makesiaf.create_siaf_oneband('1A')
+        
+    v2ref,v3ref=siaf1A['inscr_v2ref'],siaf1A['inscr_v3ref']
+
+    v2 = -(xi - v2ref)
+    v3 = yi + v3ref
+    
+    return v2,v3
 
 #############################
 
