@@ -22,6 +22,12 @@ In this version the CDP file goes from 0-indexed detector pixels
 
 make_references() creates all reference files.
 
+In addition to making the usual configurations where the DGAA
+and DGAB wheels are in the same configuration (e.g., A-A) this
+also created crossed-configuration reference files (e.g., A-B).
+This mixes multiple input FITS files since the DGAA wheel sets
+the grating for Channels 1/4 and the DGAB wheel for Channels 2/3.
+
 Author: David R. Law (dlaw@stsci.edu), Nadia Dencheva
 
 REVISION HISTORY:
@@ -30,6 +36,7 @@ REVISION HISTORY:
 11-Oct-2018  Adapted to new miricoord structure (D. Law)
 26-Apr-2019  Updated for CDP-8b (D. Law)
 15-Jul-2019  Bugfix to slice mask in CDP version 8B.05.01 (D. Law)
+07-Dec-2020  Add cross-dichroic configurations (D. Law)
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -59,18 +66,26 @@ from jwst.datamodels import *
 
 # Function to loop over all 6 MIRI MRS distortion files
 # making reference files for all of them
-# create_cdp8b_all('./')
-#@drltimer.fn_timer
+
 def create_cdp8b_all(outdir):
+    # Regular grating wheel configurations
     detbands='12A','12B','12C','34A','34B','34C'
     nbands=len(detbands)
     for i in range(nbands):
         create_cdp8b_setfiles(detbands[i],outdir)
 
+    print('Creating cross-dichroic reference files')
+    # Cross-dichroic grating wheel configurations
+    xbands='12AB','12AC','12BA','12BC','12CA','12CB','34AB','34AC','34BA','34BC','34CA','34CB'
+    nxbands=len(xbands)
+    for i in range(nxbands):
+        create_cdp8b_setxfiles(xbands[i],outdir)
+        
+#############################
+
 # Function to automatically figure out the input/output required to make
 # a CDP-8b reference file for a particular detector band (e.g., 12A)
-# create_cdp8b_setfiles('12A','./')
-#@drltimer.fn_timer
+
 def create_cdp8b_setfiles(detband,outdir):
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     rootdir=os.path.join(rootdir,'data/fits/cdp8b/')
@@ -99,6 +114,68 @@ def create_cdp8b_setfiles(detband,outdir):
     test_cdp8b_onereference(detband,refs)
     print('Done testing: '+detband)
 
+#############################
+
+# Function to automatically figure out the input/output required to make
+# a CDP-8b reference file for crossed DGA configurations (e.g., 12AB)
+
+def create_cdp8b_setxfiles(detxband,outdir):
+    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir=os.path.join(rootdir,'data/fits/cdp8b/')
+
+    if (detxband == '12AB'):
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+    elif (detxband == '12AC'):
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+    elif (detxband == '12BA'):
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+    elif (detxband == '12BC'):
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+    elif (detxband == '12CA'):
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+    elif (detxband == '12CB'):
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+
+    # Note that we are going to SWAP fname1 and fname2 for Ch34; this is because later code will
+    # assume that we have things in the order of Ch3-Ch4 and fname1-fname2 whereas the name
+    # '34AB' means 3B+4A
+    elif (detxband == '34AB'):
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+    elif (detxband == '34AC'):
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+    elif (detxband == '34BA'):
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+    elif (detxband == '34BC'):
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+    elif (detxband == '34CA'):
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+    elif (detxband == '34CB'):
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+
+    distfile=outdir+'jwst_miri_mrs'+detxband+'_distortion_cdp8b.asdf'
+    regfile=outdir+'jwst_miri_mrs'+detxband+'_regions_cdp8b.asdf'
+    specfile=outdir+'jwst_miri_mrs'+detxband+'_specwcs_cdp8b.asdf'
+    wavefile=outdir+'jwst_miri_mrs_wavelengthrange_cdp8b.asdf'
+    refs={'distortion': distfile, 'regions':regfile, 'specwcs':specfile, 'wavelengthrange':wavefile}
+    print('Working on: '+detxband)
+    create_cdp8b_onexreference(fname1,fname2,refs)
+    print('Created: '+detxband)
+
+    
+#############################
+    
 def create_cdp8b_onereference(fname, ref):
     """
     Create ASDF WCS reference files for MIRI MRS data from a single CDP-8b reference file.
@@ -193,6 +270,126 @@ def create_cdp8b_onereference(fname, ref):
     create_wavelengthrange_file(ref['wavelengthrange'], detector, author, useafter,
                                 description, outformat)
 
+#############################
+    
+def create_cdp8b_onexreference(fname1, fname2, ref):
+    """
+    Create ASDF WCS reference files for MIRI MRS data from a cross-dichroic.
+    Parameters
+    ----------
+    fname1 : str
+        name of reference file for Ch1/4
+    fname2 : str
+        name of reference file for Ch2/3
+    ref : dict
+        A dictionary {reftype: refname}, e.g.
+        {'distortion': 'jwst_miri_distortion_0001.asdf',
+         'regions': 'jwst_miri_regions_0001.asdf',
+         'specwcs': 'jwst_miri_specwcs_0001.asdf',
+         'wavelengthrange': 'jwst_miri_wavelengthrange_0001.asdf'}
+    """
+    with fits.open(fname1) as f:
+        channel = f[0].header['CHANNEL']
+        band1 = f[0].header['BAND']
+        detector = f[0].header['DETECTOR']
+        ch1 = 'CH{0}'.format(channel[0])
+        slices1 = f[1].data
+        alpha1 = f[('Alpha_'+ch1, 1)].data
+        lam1 = f[('Lambda_'+ch1, 1)].data
+        x1 = f[('X_'+ch1, 1)].data
+        y1 = f[('Y_'+ch1, 1)].data
+        ab_v23_1 = f[('albe_to_V2V3', 1)].data.copy()
+        v23_ab_1 = f[('V2V3_to_albe', 1)].data.copy()
+        b0_ch1 = f[0].header['B_ZERO'+ch1[2]]
+        bdel_ch1 = f[0].header['B_DEL'+ch1[2]]
+
+    with fits.open(fname2) as f:
+        channel = f[0].header['CHANNEL']
+        band2 = f[0].header['BAND']
+        detector = f[0].header['DETECTOR']
+        ch2 = 'CH{0}'.format(channel[1])
+        slices2 = f[1].data
+        alpha2 = f[('Alpha_'+ch2, 1)].data
+        lam2 = f[('Lambda_'+ch2, 1)].data
+        x2 = f[('X_'+ch2, 1)].data
+        y2 = f[('Y_'+ch2, 1)].data
+        ab_v23_2 = f[('albe_to_V2V3', 1)].data.copy()
+        v23_ab_2 = f[('V2V3_to_albe', 1)].data.copy()
+        b0_ch2 = f[0].header['B_ZERO'+ch2[2]]
+        bdel_ch2 = f[0].header['B_DEL'+ch2[2]]
+
+    # Stich together the different reference files across middle of the detector
+    slices = slices1.copy()
+    if (channel == '12'):
+        band=band1+'-'+band2
+        slices[:,:,509:]=slices2[:,:,509:] # Paste in Ch2
+    if (channel == '34'):
+        band=band2+'-'+band1
+        slices[:,:,0:509]=slices2[:,:,0:509] # Paste in Ch4
+
+    ab_v23 = ab_v23_1.copy()
+    ab_v23[2] = ab_v23_2[2]
+    ab_v23[3] = ab_v23_2[3]
+    v23_ab = v23_ab_1.copy()
+    v23_ab[2] = v23_ab_2[2]
+    v23_ab[3] = v23_ab_2[3]
+
+    # Get channel names, e.g. 1LONG, 2LONG
+    channels=channel[0]+band,channel[1]+band
+    # Note that now 'channel' is (e.g.) 12, while 'channels' is (e.g.) '1SHORT-MEDIUM'
+    # This naming is awkward, but necessary for pipeline to deal with the names passed
+    # from individual data file headers
+
+    bzero = {}
+    bdel = {}
+    for c in channel:
+        cb = c+band
+        bzero[cb] = f[0].header['B_ZERO' + c]
+        bdel[cb] = f[0].header['B_DEL' + c]
+
+    # MRS reference files are long enough that keeping tables as inline
+    # text is impractical
+    outformat='inline'
+
+    coeff_names = build_coeff_names(alpha1.names)
+    amodel1 = create_poly_models(alpha1, int(channel[0]), coeff_names, name='det2local')
+    lmodel1 = create_poly_models(lam1, int(channel[0]), coeff_names, name='det2local')
+    amodel2 = create_poly_models(alpha2, int(channel[1]), coeff_names, name='det2local')
+    lmodel2 = create_poly_models(lam2, int(channel[1]), coeff_names, name='det2local')
+    # reverse models
+
+    # 'x' in the report corresponds to y in python and 'y' to x,
+    # The x/y models take (lam, alpha)
+    xmodel1 = create_xy_models(x1, int(channel[0]), coeff_names, name='x')
+    ymodel1 = create_xy_models(y1, int(channel[0]), coeff_names, name='y')
+    xmodel2 = create_xy_models(x2, int(channel[1]), coeff_names, name='x')
+    ymodel2 = create_xy_models(y2, int(channel[1]), coeff_names, name='y')
+    amodel1.update(amodel2)
+    xmodel1.update(xmodel2)
+    ymodel1.update(ymodel2)
+    lmodel1.update(lmodel2)
+
+    bmodel1 = create_beta_models(b0_ch1, bdel_ch1, int(channel[0]), len(alpha1))
+    bmodel2 = create_beta_models(b0_ch2, bdel_ch2, int(channel[1]), len(alpha2))
+
+    bmodel1.update(bmodel2)
+    useafter = "2000-01-01T00:00:00"
+    author =  'David R. Law, Polychronis Patapis, Adrian M. Glauser'  #Author of the data
+    description = 'MIRI MRS CDP8b (8B.05.01) distortion reference data.'
+
+    create_distortion_file(reftype='distortion', detector=detector, band=band, channel=channel, channels=channels,
+                           data=(amodel1, bmodel1, xmodel1, ymodel1, bzero, bdel, ab_v23, v23_ab), name=ref['distortion'],
+                           author=author, useafter=useafter, description=description, outformat=outformat)
+
+    create_specwcs_file('specwcs', detector, band, channel, lmodel1, ref['specwcs'], author,
+                        useafter, description, outformat)
+
+    create_regions_file(slices, detector, band, channel, ref['regions'], author, useafter,
+               description, outformat)
+
+    # We don't need to make the wavelength range file again as that already has x-dichroic info
+    
+#############################
 
 def create_regions_file(slices, detector, band, channel, name, author, useafter, description, outformat):
     model = RegionsModel()
@@ -202,6 +399,7 @@ def create_regions_file(slices, detector, band, channel, name, author, useafter,
     model.regions = slices
     model.save(name)
 
+#############################
 
 def create_reffile_header(model, detector, band, channel, author, useafter,
                           description=""):
@@ -223,6 +421,7 @@ def create_reffile_header(model, detector, band, channel, author, useafter,
 
     return model
 
+#############################
 
 def create_distortion_file(reftype, detector,  band, channel, channels, data, name, author,
                            useafter, description, outformat):
@@ -307,6 +506,7 @@ def create_distortion_file(reftype, detector,  band, channel, channels, data, na
     dist.meta.output_units = u.arcsec
     dist.save(name)
 
+#############################
 
 def create_specwcs_file(reftype, detector, band, channel, lmodel, name, author, useafter, description, outformat):
     spec = SpecwcsModel()
@@ -325,6 +525,7 @@ def create_specwcs_file(reftype, detector, band, channel, lmodel, name, author, 
 
     spec.save(name)
 
+#############################
 
 # Create the x,y to a,b models
 def create_poly_models(data, channel, coeff_names, name):
@@ -354,6 +555,8 @@ def create_poly_models(data, channel, coeff_names, name):
 
     return transforms
 
+#############################
+
 # Create the a,b, to x,y models
 def create_xy_models(data, channel, coeff_names, name):
     """
@@ -381,11 +584,14 @@ def create_xy_models(data, channel, coeff_names, name):
 
     return transforms
 
+#############################
 
 def build_coeff_names(names):
     names = names[1:]
     names = [name.replace('VAR2_', "c") for name in names]
     return names
+
+#############################
 
 def create_beta_models(b0, bdel, channel, nslices):
     beta = {}
@@ -396,6 +602,7 @@ def create_beta_models(b0, bdel, channel, nslices):
         beta[sl] = m
     return beta
 
+#############################
 
 def create_wavelengthrange_file(name, detector, author, useafter, description, outformat):
     model = WavelengthrangeModel()
@@ -418,6 +625,47 @@ def create_wavelengthrange_file(name, detector, author, useafter, description, o
     channels = ['1SHORT', '1MEDIUM', '1LONG', '2SHORT', '2MEDIUM', '2LONG',
                 '3SHORT', '3MEDIUM', '3LONG', '4SHORT', '4MEDIUM', '4LONG']
 
+    # We also need to add cross-dichroic information
+    channels.append('1SHORT-MEDIUM'), channels.append('1SHORT-LONG')
+    channels.append('1MEDIUM-SHORT'), channels.append('1MEDIUM-LONG')
+    channels.append('1LONG-SHORT'), channels.append('1LONG-MEDIUM')
+    wavelengthrange['1SHORT-MEDIUM'] = wavelengthrange['1SHORT']
+    wavelengthrange['1SHORT-LONG'] = wavelengthrange['1SHORT']
+    wavelengthrange['1MEDIUM-SHORT'] = wavelengthrange['1MEDIUM']
+    wavelengthrange['1MEDIUM-LONG'] = wavelengthrange['1MEDIUM']
+    wavelengthrange['1LONG-SHORT'] = wavelengthrange['1LONG']
+    wavelengthrange['1LONG-MEDIUM'] = wavelengthrange['1LONG']    
+
+    channels.append('2SHORT-MEDIUM'), channels.append('2SHORT-LONG')
+    channels.append('2MEDIUM-SHORT'), channels.append('2MEDIUM-LONG')
+    channels.append('2LONG-SHORT'), channels.append('2LONG-MEDIUM')
+    wavelengthrange['2SHORT-MEDIUM'] = wavelengthrange['2MEDIUM']
+    wavelengthrange['2SHORT-LONG'] = wavelengthrange['2LONG']
+    wavelengthrange['2MEDIUM-SHORT'] = wavelengthrange['2SHORT']
+    wavelengthrange['2MEDIUM-LONG'] = wavelengthrange['2LONG']
+    wavelengthrange['2LONG-SHORT'] = wavelengthrange['2SHORT']
+    wavelengthrange['2LONG-MEDIUM'] = wavelengthrange['2MEDIUM']   
+
+    channels.append('3SHORT-MEDIUM'), channels.append('3SHORT-LONG')
+    channels.append('3MEDIUM-SHORT'), channels.append('3MEDIUM-LONG')
+    channels.append('3LONG-SHORT'), channels.append('3LONG-MEDIUM')
+    wavelengthrange['3SHORT-MEDIUM'] = wavelengthrange['3MEDIUM']
+    wavelengthrange['3SHORT-LONG'] = wavelengthrange['3LONG']
+    wavelengthrange['3MEDIUM-SHORT'] = wavelengthrange['3SHORT']
+    wavelengthrange['3MEDIUM-LONG'] = wavelengthrange['3LONG']
+    wavelengthrange['3LONG-SHORT'] = wavelengthrange['3SHORT']
+    wavelengthrange['3LONG-MEDIUM'] = wavelengthrange['3MEDIUM']  
+
+    channels.append('4SHORT-MEDIUM'), channels.append('4SHORT-LONG')
+    channels.append('4MEDIUM-SHORT'), channels.append('4MEDIUM-LONG')
+    channels.append('4LONG-SHORT'), channels.append('4LONG-MEDIUM')
+    wavelengthrange['4SHORT-MEDIUM'] = wavelengthrange['4SHORT']
+    wavelengthrange['4SHORT-LONG'] = wavelengthrange['4SHORT']
+    wavelengthrange['4MEDIUM-SHORT'] = wavelengthrange['4MEDIUM']
+    wavelengthrange['4MEDIUM-LONG'] = wavelengthrange['4MEDIUM']
+    wavelengthrange['4LONG-SHORT'] = wavelengthrange['4LONG']
+    wavelengthrange['4LONG-MEDIUM'] = wavelengthrange['4LONG']   
+    
     model = create_reffile_header(model, detector, band="N/A", channel="N/A", author=author,
                                  useafter=useafter, description=description)
     model.meta.filename = os.path.split(name)[-1]
@@ -427,6 +675,8 @@ def create_wavelengthrange_file(name, detector, author, useafter, description, o
     model.wavelengthrange = wr
     model.meta.wavelength_units = u.micron
     model.save(name)
+
+#############################
 
 # Function to test the implemented transforms and ASDF files
 # Detband is (e.g.) '12A'
