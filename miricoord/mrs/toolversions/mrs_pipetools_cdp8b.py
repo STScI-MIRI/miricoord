@@ -38,41 +38,54 @@ def version():
 
 # Set the relevant CRDS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    rootdir=os.path.join(rootdir,'data/crds/')
-
-    wavefile=rootdir+'jwst_miri_mrs_wavelengthrange_cdp8b.asdf'
+    wavefile='jwst_miri_mrs_wavelengthrange_cdp8b.asdf'
 
     # Channel should be of the form (e.g.) '1A', '3C', etc
     # See https://jwst-crds.stsci.edu//display_result/52cef902-ad77-4792-9964-d26a0a8a96a8
     if ((channel is '1A')or(channel is '2A')):
-       distfile=rootdir+'jwst_miri_mrs12A_distortion_cdp8b.asdf'
-       regfile=rootdir+'jwst_miri_mrs12A_regions_cdp8b.asdf'
-       specfile=rootdir+'jwst_miri_mrs12A_specwcs_cdp8b.asdf'
+       distfile='jwst_miri_mrs12A_distortion_cdp8b.asdf'
+       regfile='jwst_miri_mrs12A_regions_cdp8b.asdf'
+       specfile='jwst_miri_mrs12A_specwcs_cdp8b.asdf'
     elif ((channel is '3A')or(channel is '4A')):
-       distfile=rootdir+'jwst_miri_mrs34A_distortion_cdp8b.asdf'
-       regfile=rootdir+'jwst_miri_mrs34A_regions_cdp8b.asdf'
-       specfile=rootdir+'jwst_miri_mrs34A_specwcs_cdp8b.asdf'
+       distfile='jwst_miri_mrs34A_distortion_cdp8b.asdf'
+       regfile='jwst_miri_mrs34A_regions_cdp8b.asdf'
+       specfile='jwst_miri_mrs34A_specwcs_cdp8b.asdf'
     elif ((channel is '1B')or(channel is '2B')):
-       distfile=rootdir+'jwst_miri_mrs12B_distortion_cdp8b.asdf'
-       regfile=rootdir+'jwst_miri_mrs12B_regions_cdp8b.asdf'
-       specfile=rootdir+'jwst_miri_mrs12B_specwcs_cdp8b.asdf'
+       distfile='jwst_miri_mrs12B_distortion_cdp8b.asdf'
+       regfile='jwst_miri_mrs12B_regions_cdp8b.asdf'
+       specfile='jwst_miri_mrs12B_specwcs_cdp8b.asdf'
     elif ((channel is '3B')or(channel is '4B')):
-       distfile=rootdir+'jwst_miri_mrs34B_distortion_cdp8b.asdf'
-       regfile=rootdir+'jwst_miri_mrs34B_regions_cdp8b.asdf'
-       specfile=rootdir+'jwst_miri_mrs34B_specwcs_cdp8b.asdf'
+       distfile='jwst_miri_mrs34B_distortion_cdp8b.asdf'
+       regfile='jwst_miri_mrs34B_regions_cdp8b.asdf'
+       specfile='jwst_miri_mrs34B_specwcs_cdp8b.asdf'
     elif ((channel is '1C')or(channel is '2C')):
-       distfile=rootdir+'jwst_miri_mrs12C_distortion_cdp8b.asdf'
-       regfile=rootdir+'jwst_miri_mrs12C_regions_cdp8b.asdf'
-       specfile=rootdir+'jwst_miri_mrs12C_specwcs_cdp8b.asdf'
+       distfile='jwst_miri_mrs12C_distortion_cdp8b.asdf'
+       regfile='jwst_miri_mrs12C_regions_cdp8b.asdf'
+       specfile='jwst_miri_mrs12C_specwcs_cdp8b.asdf'
     elif ((channel is '3C')or(channel is '4C')):
-       distfile=rootdir+'jwst_miri_mrs34C_distortion_cdp8b.asdf'
-       regfile=rootdir+'jwst_miri_mrs34C_regions_cdp8b.asdf'
-       specfile=rootdir+'jwst_miri_mrs34C_specwcs_cdp8b.asdf'
+       distfile='jwst_miri_mrs34C_distortion_cdp8b.asdf'
+       regfile='jwst_miri_mrs34C_regions_cdp8b.asdf'
+       specfile='jwst_miri_mrs34C_specwcs_cdp8b.asdf'
     else:
        print('Failure!')
 
-    refs={'distortion': distfile, 'regions':regfile, 'specwcs':specfile, 'wavelengthrange':wavefile}
+    # Try looking for the files in the expected location
+    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir=os.path.join(rootdir,'data/crds/')
+    refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
+          'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
+    if os.path.exists(os.path.join(rootdir,distfile)):
+        return refs
+
+    # If that didn't work, look in the system path
+    rootdir=sys.prefix
+    rootdir=os.path.join(rootdir,'data/crds/')
+    refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
+          'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
+    if os.path.exists(os.path.join(rootdir,distfile)):
+        return refs    
+
+    # If that didn't work either, just return what we've got
     return refs
 
 #############################

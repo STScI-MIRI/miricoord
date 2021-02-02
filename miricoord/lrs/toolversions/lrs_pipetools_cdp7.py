@@ -40,12 +40,26 @@ def version():
 
 # Set the relevant FITS distortion files
 def get_fitsreffile():
+    base_dist='data/crds/jwst_miri_distortion_0028.asdf'
+    base_spec='data/crds/jwst_miri_specwcs_0003.fits'
+    
+    # Try looking for the file in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    distfile=os.path.join(rootdir,'data/crds/jwst_miri_distortion_0028.asdf')
-    specfile=os.path.join(rootdir,'data/crds/jwst_miri_specwcs_0003.fits')
-
+    distfile=os.path.join(rootdir,base_dist)
+    specfile=os.path.join(rootdir,base_spec)
     refs = {"distortion": distfile, "specwcs": specfile}
-   
+    if os.path.exists(distfile):
+        return refs
+    
+    # If that didn't work, look in the system path
+    rootdir=sys.prefix
+    distfile=os.path.join(rootdir,base_dist)
+    specfile=os.path.join(rootdir,base_spec)
+    refs = {"distortion": distfile, "specwcs": specfile}
+    if os.path.exists(distfile):
+        return refs
+
+    # If that didn't work either, just return what we've got
     return refs
 
 #############################

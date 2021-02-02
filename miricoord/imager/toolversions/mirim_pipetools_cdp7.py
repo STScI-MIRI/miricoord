@@ -40,12 +40,26 @@ def version():
 
 # Set the relevant FITS distortion file
 def get_fitsreffile():
+    base_dist='data/crds/jwst_miri_distortion_0028.asdf'
+    base_off='data/crds/jwst_miri_filteroffset_0004.asdf'
+    
+    # Try looking for the file in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    distfile=os.path.join(rootdir,'data/crds/jwst_miri_distortion_0028.asdf')
-    offfile=os.path.join(rootdir,'data/crds/jwst_miri_filteroffset_0004.asdf')
-
+    distfile=os.path.join(rootdir,base_dist)
+    offfile=os.path.join(rootdir,base_off)
     refs = {"distortion": distfile, "filteroffset": offfile}
-   
+    if os.path.exists(distfile):
+        return refs
+    
+    # If that didn't work, look in the system path
+    rootdir=sys.prefix
+    distfile=os.path.join(rootdir,base_dist)
+    offfile=os.path.join(rootdir,base_off)
+    refs = {"distortion": distfile, "filteroffset": offfile}
+    if os.path.exists(distfile):
+        return refs
+
+    # If that didn't work either, just return what we've got
     return refs
 
 #############################

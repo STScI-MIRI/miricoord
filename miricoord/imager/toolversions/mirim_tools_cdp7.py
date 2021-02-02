@@ -25,6 +25,7 @@ import math
 import numpy as np
 from astropy.io import fits
 import pdb
+import sys
 
 #############################
 
@@ -36,9 +37,21 @@ def version():
 
 # Set the relevant FITS distortion file
 def get_fitsreffile():
+    basefile='data/fits/cdp7/MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits'
+
+    # Try looking for the file in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    reffile=os.path.join(rootdir,'data/fits/cdp7/MIRI_FM_MIRIMAGE_DISTORTION_07.04.01.fits')
-   
+    reffile=os.path.join(rootdir,basefile)
+    if os.path.exists(reffile):
+        return reffile
+    
+    # If that didn't work, look in the system path
+    rootdir=sys.prefix
+    reffile=os.path.join(rootdir,basefile)
+    if os.path.exists(reffile):
+        return reffile    
+
+    # If that didn't work either, just return what we've got
     return reffile
 
 #############################

@@ -38,41 +38,54 @@ def version():
 
 # Set the relevant CRDS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    rootdir=os.path.join(rootdir,'data/crds/')
-
-    wavefile=rootdir+'jwst_miri_wavelengthrange_0003.asdf'
+    wavefile='jwst_miri_wavelengthrange_0003.asdf'
 
     # Channel should be of the form (e.g.) '1A', '3C', etc
     # See https://jwst-crds.stsci.edu//display_result/52cef902-ad77-4792-9964-d26a0a8a96a8
     if ((channel is '1A')or(channel is '2A')):
-       distfile=rootdir+'jwst_miri_distortion_0021.asdf'
-       regfile=rootdir+'jwst_miri_regions_0016.asdf'
-       specfile=rootdir+'jwst_miri_specwcs_0015.asdf'
+       distfile='jwst_miri_distortion_0021.asdf'
+       regfile='jwst_miri_regions_0016.asdf'
+       specfile='jwst_miri_specwcs_0015.asdf'
     elif ((channel is '3A')or(channel is '4A')):
-       distfile=rootdir+'jwst_miri_distortion_0024.asdf'
-       regfile=rootdir+'jwst_miri_regions_0013.asdf'
-       specfile=rootdir+'jwst_miri_specwcs_0017.asdf'
+       distfile='jwst_miri_distortion_0024.asdf'
+       regfile='jwst_miri_regions_0013.asdf'
+       specfile='jwst_miri_specwcs_0017.asdf'
     elif ((channel is '1B')or(channel is '2B')):
-       distfile=rootdir+'jwst_miri_distortion_0022.asdf'
-       regfile=rootdir+'jwst_miri_regions_0015.asdf'
-       specfile=rootdir+'jwst_miri_specwcs_0013.asdf'
+       distfile='jwst_miri_distortion_0022.asdf'
+       regfile='jwst_miri_regions_0015.asdf'
+       specfile='jwst_miri_specwcs_0013.asdf'
     elif ((channel is '3B')or(channel is '4B')):
-       distfile=rootdir+'jwst_miri_distortion_0026.asdf'
-       regfile=rootdir+'jwst_miri_regions_0014.asdf'
-       specfile=rootdir+'jwst_miri_specwcs_0018.asdf'
+       distfile='jwst_miri_distortion_0026.asdf'
+       regfile='jwst_miri_regions_0014.asdf'
+       specfile='jwst_miri_specwcs_0018.asdf'
     elif ((channel is '1C')or(channel is '2C')):
-       distfile=rootdir+'jwst_miri_distortion_0025.asdf'
-       regfile=rootdir+'jwst_miri_regions_0018.asdf'
-       specfile=rootdir+'jwst_miri_specwcs_0014.asdf'
+       distfile='jwst_miri_distortion_0025.asdf'
+       regfile='jwst_miri_regions_0018.asdf'
+       specfile='jwst_miri_specwcs_0014.asdf'
     elif ((channel is '3C')or(channel is '4C')):
-       distfile=rootdir+'jwst_miri_distortion_0027.asdf'
-       regfile=rootdir+'jwst_miri_regions_0017.asdf'
-       specfile=rootdir+'jwst_miri_specwcs_0016.asdf'
+       distfile='jwst_miri_distortion_0027.asdf'
+       regfile='jwst_miri_regions_0017.asdf'
+       specfile='jwst_miri_specwcs_0016.asdf'
     else:
        print('Failure!')
 
-    refs={'distortion': distfile, 'regions':regfile, 'specwcs':specfile, 'wavelengthrange':wavefile}
+    # Try looking for the files in the expected location
+    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir=os.path.join(rootdir,'data/crds/')
+    refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
+          'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
+    if os.path.exists(os.path.join(rootdir,distfile)):
+        return refs
+
+    # If that didn't work, look in the system path
+    rootdir=sys.prefix
+    rootdir=os.path.join(rootdir,'data/crds/')
+    refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
+          'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
+    if os.path.exists(os.path.join(rootdir,distfile)):
+        return refs    
+
+    # If that didn't work either, just return what we've got
     return refs
 
 #############################

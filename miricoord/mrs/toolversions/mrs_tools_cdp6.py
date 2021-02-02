@@ -41,8 +41,6 @@ def version():
 
 # Set the relevant FITS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
     if (channel == '1A'):
         file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_06.04.00.fits'
     elif (channel == '1B'):
@@ -67,10 +65,22 @@ def get_fitsreffile(channel):
         file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_06.04.00.fits'
     elif (channel == '4C'):
         file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_06.04.00.fits'
-        
+
+    # Try looking for the file in the expected location
+    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     rootdir=os.path.join(rootdir,'data/fits/cdp6/')
     reffile=os.path.join(rootdir,file)
-   
+    if os.path.exists(reffile):
+        return reffile
+    
+    # If that didn't work, look in the system path
+    rootdir=sys.prefix
+    rootdir=os.path.join(rootdir,'data/fits/cdp6/')
+    reffile=os.path.join(rootdir,file)
+    if os.path.exists(reffile):
+        return reffile    
+
+    # If that didn't work either, just return what we've got
     return reffile
 
 #############################
