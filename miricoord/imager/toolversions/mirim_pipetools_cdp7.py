@@ -24,6 +24,7 @@ REVISION HISTORY:
 
 import os as os
 import numpy as np
+import sys
 from astropy.modeling import models
 from asdf import AsdfFile
 from jwst import datamodels

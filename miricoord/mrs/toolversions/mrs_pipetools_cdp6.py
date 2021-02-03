@@ -22,6 +22,7 @@ REVISION HISTORY:
 
 import os as os
 import numpy as np
+import sys
 import pdb as pdb
 from astropy.modeling import models
 from asdf import AsdfFile

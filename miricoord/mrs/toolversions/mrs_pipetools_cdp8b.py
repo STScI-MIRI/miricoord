@@ -21,6 +21,7 @@ REVISION HISTORY:
 """
 
 import os as os
+import sys
 import numpy as np
 import pdb as pdb
 from astropy.modeling import models

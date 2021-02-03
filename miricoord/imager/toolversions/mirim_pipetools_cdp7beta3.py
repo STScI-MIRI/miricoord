@@ -23,6 +23,7 @@ REVISION HISTORY:
 """
 
 import os as os
+import sys
 import numpy as np
 from astropy.modeling import models
 from asdf import AsdfFile

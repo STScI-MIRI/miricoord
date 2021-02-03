@@ -23,6 +23,7 @@ REVISION HISTORY:
 
 import os as os
 import math
+import sys
 import numpy as np
 from numpy import matlib as mb
 from astropy.modeling import models
