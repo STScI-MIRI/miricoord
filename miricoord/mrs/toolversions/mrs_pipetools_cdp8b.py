@@ -43,27 +43,27 @@ def get_fitsreffile(channel):
 
     # Channel should be of the form (e.g.) '1A', '3C', etc
     # See https://jwst-crds.stsci.edu//display_result/52cef902-ad77-4792-9964-d26a0a8a96a8
-    if ((channel is '1A')or(channel is '2A')):
+    if ((channel == '1A')or(channel == '2A')):
        distfile='jwst_miri_mrs12A_distortion_cdp8b.asdf'
        regfile='jwst_miri_mrs12A_regions_cdp8b.asdf'
        specfile='jwst_miri_mrs12A_specwcs_cdp8b.asdf'
-    elif ((channel is '3A')or(channel is '4A')):
+    elif ((channel == '3A')or(channel == '4A')):
        distfile='jwst_miri_mrs34A_distortion_cdp8b.asdf'
        regfile='jwst_miri_mrs34A_regions_cdp8b.asdf'
        specfile='jwst_miri_mrs34A_specwcs_cdp8b.asdf'
-    elif ((channel is '1B')or(channel is '2B')):
+    elif ((channel == '1B')or(channel == '2B')):
        distfile='jwst_miri_mrs12B_distortion_cdp8b.asdf'
        regfile='jwst_miri_mrs12B_regions_cdp8b.asdf'
        specfile='jwst_miri_mrs12B_specwcs_cdp8b.asdf'
-    elif ((channel is '3B')or(channel is '4B')):
+    elif ((channel == '3B')or(channel == '4B')):
        distfile='jwst_miri_mrs34B_distortion_cdp8b.asdf'
        regfile='jwst_miri_mrs34B_regions_cdp8b.asdf'
        specfile='jwst_miri_mrs34B_specwcs_cdp8b.asdf'
-    elif ((channel is '1C')or(channel is '2C')):
+    elif ((channel == '1C')or(channel == '2C')):
        distfile='jwst_miri_mrs12C_distortion_cdp8b.asdf'
        regfile='jwst_miri_mrs12C_regions_cdp8b.asdf'
        specfile='jwst_miri_mrs12C_specwcs_cdp8b.asdf'
-    elif ((channel is '3C')or(channel is '4C')):
+    elif ((channel == '3C')or(channel == '4C')):
        distfile='jwst_miri_mrs34C_distortion_cdp8b.asdf'
        regfile='jwst_miri_mrs34C_regions_cdp8b.asdf'
        specfile='jwst_miri_mrs34C_specwcs_cdp8b.asdf'
@@ -94,22 +94,22 @@ def get_fitsreffile(channel):
 # Convenience function to turn '1A' type name into '12' and 'SHORT' type names
 def bandchan(channel):
     # Channel should be of the form (e.g.) '1A', '3C', etc
-    if ((channel is '1A')or(channel is '2A')):
+    if ((channel == '1A')or(channel == '2A')):
        newband='SHORT'
        newchannel='12'
-    elif ((channel is '3A')or(channel is '4A')):
+    elif ((channel == '3A')or(channel == '4A')):
        newband='SHORT'
        newchannel='34'
-    elif ((channel is '1B')or(channel is '2B')):
+    elif ((channel == '1B')or(channel == '2B')):
        newband='MEDIUM'
        newchannel='12'
-    elif ((channel is '3B')or(channel is '4B')):
+    elif ((channel == '3B')or(channel == '4B')):
        newband='MEDIUM'
        newchannel='34'
-    elif ((channel is '1C')or(channel is '2C')):
+    elif ((channel == '1C')or(channel == '2C')):
        newband='LONG'
        newchannel='12'
-    elif ((channel is '3C')or(channel is '4C')):
+    elif ((channel == '3C')or(channel == '4C')):
        newband='LONG'
        newchannel='34'
     else:
@@ -151,29 +151,29 @@ def channel(detband):
 # Convenience function to return the rough middle wavelength of a given channel
 # Note that this ISNT exact, just some valid value
 def midwave(channel):
-    if (channel is '1A'):
+    if (channel == '1A'):
        thewave=5.32
-    elif (channel is '1B'):
+    elif (channel == '1B'):
        thewave=6.145
-    elif (channel is '1C'):
+    elif (channel == '1C'):
        thewave=7.09
-    elif (channel is '2A'):
+    elif (channel == '2A'):
        thewave=8.135
-    elif (channel is '2B'):
+    elif (channel == '2B'):
        thewave=9.395
-    elif (channel is '2C'):
+    elif (channel == '2C'):
        thewave=10.85
-    elif (channel is '3A'):
+    elif (channel == '3A'):
        thewave=12.505
-    elif (channel is '3B'):
+    elif (channel == '3B'):
        thewave=14.5
-    elif (channel is '3C'):
+    elif (channel == '3C'):
        thewave=16.745
-    elif (channel is '4A'):
+    elif (channel == '4A'):
        thewave=19.29
-    elif (channel is '4B'):
+    elif (channel == '4B'):
        thewave=22.47
-    elif (channel is '4C'):
+    elif (channel == '4C'):
        thewave=26.2
 
     return thewave
