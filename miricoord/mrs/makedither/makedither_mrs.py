@@ -83,10 +83,10 @@ def makepattern_generic(astart,along,ashort,bstart,blong,bshort):
 def maxfwhm(channel):
     # Maximum wavelength in microns for the channel
     wave=0.
-    if (channel is 1): wave=8.0
-    if (channel is 2): wave=12.0
-    if (channel is 3): wave=18.0
-    if (channel is 4): wave=29.0
+    if (channel == 1): wave=8.0
+    if (channel == 2): wave=12.0
+    if (channel == 3): wave=18.0
+    if (channel == 4): wave=29.0
 
     return 0.31*wave/8.0
     
@@ -438,9 +438,11 @@ def writeresults_prd(dxidl,dyidl,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-        outdir=os.path.join(data_dir,'dithers/temp/')
-    # Set the output filename
-    outfile=os.path.join(outdir,'MiriMrsDithers.txt')
+        relfile='dithers/temp/MiriMrsDithers.txt'
+        outfile=os.path.join(data_dir,relfile)
+    else:
+        relfile='MiriMrsDithers.txt'
+        outfile=os.path.join(outdir,relfile)
 
     now=datetime.datetime.now()
     thisfile=__file__
@@ -513,6 +515,9 @@ def writeresults_prd(dxidl,dyidl,outdir=''):
     for ii in range(48,52):
         print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-47,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
+
+    # Log the operation is complete
+    print('Successfully wrote PRD dithers file to ',relfile)
     
 #############################
 
@@ -522,9 +527,11 @@ def writeresults_mirisim(ch,v2,v3,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-        outdir=os.path.join(data_dir,'dithers/temp/')
-    # Set the output filename
-    outfile=os.path.join(outdir,'mrs_recommended_dither.dat')
+        relfile='dithers/temp/mrs_recommended_dither.dat'
+        outfile=os.path.join(data_dir,relfile)
+    else:
+        relfile='mrs_recommended_dither.dat'
+        outfile=os.path.join(outdir,relfile)
 
     now=datetime.datetime.now()
     thisfile=__file__
@@ -608,6 +615,8 @@ def writeresults_mirisim(ch,v2,v3,outdir=''):
     for ii in range(48,52):
         print("{0:>7.4f}, {1:>7.4f}".format(dalpha[ii],dbeta[ii]),file=open(outfile,"a"))  
 
+    # Log the operation is complete
+    print('Successfully wrote mirisim dithers file to ',relfile)
         
 #############################
 
@@ -617,9 +626,11 @@ def writeresults_full(index,ch,v2,v3,dxidl,dyidl,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
-        outdir=os.path.join(data_dir,'dithers/temp/')
-    # Set the output filename
-    outfile=os.path.join(outdir,'mrs_dithers.txt')
+        relfile='dithers/temp/mrs_dithers.txt'
+        outfile=os.path.join(data_dir,relfile)
+    else:
+        relfile='mrs_dithers.txt'
+        outfile=os.path.join(outdir,relfile)
 
     now=datetime.datetime.now()
     thisfile=__file__
@@ -649,6 +660,9 @@ def writeresults_full(index,ch,v2,v3,dxidl,dyidl,outdir=''):
         # Write information to a text file
         print("{0:<10} {1:<8} {2:<10.5f} {3:<10.5f} {4:<10.5f} {5:<10.5f} {6:<15.5f} {7:<15.5f}".format(index[i],band[i],dalpha[i],dbeta[i],v2[i],v3[i],dxidl[i],dyidl[i]),file=open(outfile,"a"))
 
+    # Log the operation is complete
+    print('Successfully wrote full dithers file to ',relfile)
+        
 #############################
 
 # Plot showing the location of the point-source dithers
