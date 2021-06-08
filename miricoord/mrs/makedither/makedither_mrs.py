@@ -1,7 +1,8 @@
 #
 """
 Python tools for creating the MIRI MRS dither sequences for a given
-set of distortion files.
+set of distortion files.  These functions will be called from the
+associated notebook front-end.
 
 Beta dithers: Ch1 long offset is 5.5 times the Ch1 width because that will be
 half-integer for all other channels.  Ch 2/3/4 are odd multiples of the 5.5 times
@@ -29,6 +30,7 @@ Author: David R. Law (dlaw@stsci.edu)
 REVISION HISTORY:
 15-Apr-2019  Adapt from old IDL routines (D. Law; dlaw@stsci.edu)
 05-Aug-2020  Remove dither flips for mirisim per ticket MIRI-677 (D. Law)
+08-Jun-2021  Fold JDox figure creation into these functions instead of notebook (D. Law)
 """
 
 import matplotlib as mpl
@@ -662,7 +664,20 @@ def writeresults_full(index,ch,v2,v3,dxidl,dyidl,outdir=''):
 
     # Log the operation is complete
     print('Successfully wrote full dithers file to ',relfile)
-        
+
+#############################
+
+# Make assorted plots for JDox
+def make_jdox(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir='./'):
+    qaplot_ptsourceloc(v2_all,v3_all,allsiaf,outdir)
+    qaplot_extsourceloc(v2_all,v3_all,allsiaf,outdir)
+    qaplot_ps4all(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+    qaplot_ps2ch4(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+    qaplot_ext2all(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+    qaplot_ext4all(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+    qaplot_ext2ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+    qaplot_ext4ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+
 #############################
 
 # Plot showing the location of the point-source dithers
@@ -726,7 +741,7 @@ def qaplot_ptsourceloc(v2,v3,allsiaf,outdir=''):
     plt.legend()
     
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
 
 #############################
@@ -793,7 +808,7 @@ def qaplot_extsourceloc(v2,v3,allsiaf,outdir=''):
     plt.legend()
     
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
     
 #############################
@@ -882,7 +897,7 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf,outdir=''):
     plt.legend()
 
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
 
 #############################
@@ -963,7 +978,7 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,outdir=''):
     plt.legend()
 
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
 
 #############################
@@ -1044,7 +1059,7 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf,outdir=''):
     plt.legend()
 
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
 
 #############################
@@ -1133,7 +1148,7 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf,outdir=''):
     plt.legend()
 
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
     
 #############################
@@ -1214,7 +1229,7 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,outdir=''):
     plt.legend()
 
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
         
 #############################
@@ -1303,7 +1318,7 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,outdir=''):
     plt.legend()
 
     plt.savefig(filename)
-    plt.show()
+    #plt.show()
     plt.close()
 
 #############################
