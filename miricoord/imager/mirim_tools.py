@@ -22,6 +22,7 @@ REVISION HISTORY:
 10-Oct-2018  Written by David Law (dlaw@stsci.edu)
 02-Dec-2018  Revise version handling using globals (D. Law)
 06-Feb-2019  Set default to CDP-7 (D. Law)
+26-Jul-2021  Add roundtrip error calculation (D. Law)
 """
 
 import os as os
@@ -29,6 +30,8 @@ import sys
 import math
 import numpy as np
 from numpy.testing import assert_allclose
+from numpy import matlib as mb
+from astropy.io import fits
 import pdb
 
 #############################
@@ -220,7 +223,53 @@ def v2v3toIdeal(v2,v3,apername,**kwargs):
 
 #############################
 
-# Test the forward and reverse transforms
+# Test the roundtrip calculations in F770W and make a difference image
+def roundtrip():
+    # Determine whether the CDP toolversion has been set.  If not, set to default.
+    try:
+        sys.getrefcount(tv)
+    except:
+        set_toolversion('default')
+
+    # Make a grid of all pixel values
+    xrow=np.mgrid[4:1028]
+    yrow=np.mgrid[0:1024]
+    xall=mb.repmat(xrow,yrow.size,1)*1.
+    yall=mb.repmat(yrow,xrow.size,1)*1.
+    yall=np.transpose(yall)
+    # Recast as 1d arrays
+    xall=xall.reshape(-1)
+    yall=yall.reshape(-1)
+
+    # Forward transform
+    v2,v3 = xytov2v3(xall,yall,'F770W')
+    # Backward transform
+    xnew,ynew = v2v3toxy(v2,v3,'F770W')
+
+    # Differences
+    xdiff,ydiff = xall-xnew, yall-ynew
+    rdiff = np.sqrt(xdiff*xdiff + ydiff*ydiff)
+
+    # Reshape as a 2d array
+    rdiff=rdiff.reshape(1024,1024)
+    # Put in the right orientation for ds9 display
+    rdiff=rdiff.transpose()
+
+    hdu=fits.PrimaryHDU(rdiff)
+    hdu.writeto('roundtrip.fits',overwrite=True)
+
+    print('Median roundtrip difference: ',np.median(rdiff),' pixels.')
+    print('Maximum roundtrip difference: ',np.max(rdiff),' pixels.')
+
+    if (np.max(rdiff) > 0.06):
+        print('WARNING: maximum difference is unexpectedly large!')
+    
+    return
+
+
+#############################
+
+# Test the forward and reverse transforms at key points against a truth table
 def testtransform():
     # Determine whether the CDP toolversion has been set.  If not, set to default.
     try:
