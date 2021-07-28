@@ -168,13 +168,19 @@ def v2imarot(x,y):
 def Idealtov2v3(XIdl,YIdl,apername,**kwargs):
     import pysiaf
 
-    if ('basepath' in kwargs):
-        siaf = pysiaf.Siaf('MIRI',basepath=kwargs['basepath'])
+    if ('instr' in kwargs):
+        instrument = kwargs['instr']
     else:
-        siaf = pysiaf.Siaf('MIRI')
+        instrument = 'MIRI'
+    
+    if ('basepath' in kwargs):
+        siaf = pysiaf.Siaf(instrument,basepath=kwargs['basepath'])
+    else:
+        siaf = pysiaf.Siaf(instrument)
 
     print('SIAF version: ',pysiaf.JWST_PRD_VERSION)
-        
+
+    print(apername)
     thisentry=siaf[apername]
 
     v2ref,v3ref=thisentry.V2Ref,thisentry.V3Ref
@@ -198,13 +204,18 @@ def Idealtov2v3(XIdl,YIdl,apername,**kwargs):
 def v2v3toIdeal(v2,v3,apername,**kwargs):
     import pysiaf
 
-    if ('basepath' in kwargs):
-        siaf = pysiaf.Siaf('MIRI',basepath=kwargs['basepath'])
+    if ('instr' in kwargs):
+        instrument = kwargs['instr']
     else:
-        siaf = pysiaf.Siaf('MIRI')
+        instrument = 'MIRI'
+    
+    if ('basepath' in kwargs):
+        siaf = pysiaf.Siaf(instrument,basepath=kwargs['basepath'])
+    else:
+        siaf = pysiaf.Siaf(instrument)
 
     print('SIAF version: ',pysiaf.JWST_PRD_VERSION)
-        
+    
     thisentry=siaf[apername]
 
     v2ref,v3ref=thisentry.V2Ref,thisentry.V3Ref

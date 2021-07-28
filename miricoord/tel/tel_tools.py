@@ -42,6 +42,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pdb
 from astropy.io import fits
+import miricoord.imager.mirim_tools as mt
 
 #############################
 
@@ -337,7 +338,7 @@ def testtransform():
 
 # Test for consistency in a FITS header
 
-def testhdr(file):
+def testhdr(file,verbose=False):
     hdu=fits.open(file)
     hdr0=hdu[0].header
     hdr1=hdu['SCI'].header
@@ -358,20 +359,38 @@ def testhdr(file):
     decref=hdr1['DEC_REF']
     rollref=hdr1['ROLL_REF']
 
-    print('Nominal source RA/DEC = ',targra,targdec)
-    print('Reference point V2/V3 = ',v2ref,v3ref)
-    print('')
+    # Make any necessary dither corrections to figure out where the target SHOULD
+    # be in v2/v3
+    dx=hdr0['XOFFSET']
+    dy=hdr0['YOFFSET']
+    # These are offsets in Ideal coordinates wrt the aperture in use
+    apername=hdr0['PPS_APER']
+    instr=hdr0['INSTRUME']
+    
+    v2nom,v3nom=mt.Idealtov2v3(dx,dy,apername,instr=instr)
+    
+    if (verbose is True):
+        print('Nominal source RA/DEC = ',targra,targdec)
+        print('Nominal source V2/V3 = ',v2nom,v3nom)
+        print('')
     
     # Figure out where source is in V2/V3 according to pointing info
     v2,v3,_=jwst_radectov2v3([targra],[targdec],v2ref=v2ref,v3ref=v3ref,raref=raref,decref=decref,rollref=rollref)
-    print('Pointing keywords think target is at V2/V3 = ',v2,v3)
-    dv2,dv3=v2ref-v2,v3ref-v3
-    print('Which is ',dv2,dv3,' arcsec away from nominal location')
-    print('')
+    dv2,dv3=v2nom-v2,v3nom-v3
+    # Overall offset according to Ref data
+    dv_point = np.sqrt(dv2*dv2 + dv3*dv3)
+    if (verbose is True):
+        print('Pointing keywords think target is at V2/V3 = ',v2,v3)
+        print('Which is ',dv2,dv3,' arcsec away from nominal location')
+        print('')
 
     # Figure out where source is in V2/V3 according to boresight info
     v2,v3,_=jwst_radectov2v3([targra],[targdec],v2ref=0.,v3ref=0.,raref=rav1,decref=decv1,rollref=pav3)
-    print('Boresight keywords think target is at V2/V3 = ',v2,v3)
-    dv2,dv3=v2ref-v2,v3ref-v3
-    print('Which is ',dv2,dv3,' arcsec away from nominal location')
+    dv2,dv3=v2nom-v2,v3nom-v3
+    # Overall offset according to boresight
+    dv_bore = np.sqrt(dv2*dv2 + dv3*dv3)
+    if (verbose is True):
+        print('Boresight keywords think target is at V2/V3 = ',v2,v3)
+        print('Which is ',dv2,dv3,' arcsec away from nominal location')
     
+    return dv_point,dv_bore
