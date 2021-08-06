@@ -394,3 +394,46 @@ def testhdr(file,verbose=False):
         print('Which is ',dv2,dv3,' arcsec away from nominal location')
     
     return dv_point,dv_bore
+
+#############################
+
+# Return the dither commands expected in a Visit file
+# Visit files can specify dithers in two different ways.
+#
+# The 'dither' list at the top of a visit file is a set
+# of position differences in the MIRIM_FULL_OSS Ideal
+# frame executed by MIRMAIN.
+#
+# Mosaics (and any dithers therein) are instead handled
+# by SCSAMMAIN commands that take position differences
+# in the FGS1_FULL_OSS Ideal frame.
+
+def check_visit_dithers(v2,v3):
+    import pysiaf
+
+    # Compute dither offsets in the MIRIM_FULL_OSS frame
+    nloc=len(v2)
+    xmirim=np.zeros(nloc)
+    ymirim=np.zeros(nloc)
+    for ii in range(0,nloc):
+        tempx,tempy=mt.v2v3toIdeal(v2[ii],v3[ii],'MIRIM_FULL_OSS')
+        xmirim[ii]=tempx
+        ymirim[ii]=tempy
+    dxmirim = np.diff(xmirim)
+    dymirim = np.diff(ymirim)
+
+    # If necessary keywords are set from Visit file, compute offsets
+    # in the FGS1_FULL_OSS frame.  We could do this in a much more complex
+    # manner, transforming all positions to guider x/y first and then
+    # measuring offsets, but the differences are irrelevant (~1e-5 pixels)
+    # and require way more pointing information.
+    xfgs=np.zeros(nloc)
+    yfgs=np.zeros(nloc)
+    for ii in range(0,nloc):
+        tempx,tempy=mt.v2v3toIdeal(v2[ii],v3[ii],'FGS1_FULL_OSS',instr='FGS')
+        xfgs[ii]=tempx
+        yfgs[ii]=tempy
+    dxfgs = np.diff(xfgs)
+    dyfgs = np.diff(yfgs)    
+
+    return dxmirim,dymirim,dxfgs,dyfgs
