@@ -37,6 +37,7 @@ REVISION HISTORY:
 """
 
 import os as os
+import re
 import math
 import numpy as np
 from numpy.testing import assert_allclose
@@ -397,7 +398,11 @@ def testhdr(file,verbose=False):
 
 #############################
 
-# Return the dither commands expected in a Visit file
+# Return the dither commands expected in a Visit file.
+# Arguments are the v2,v3 locations from the corresponding
+# APT pointing file- these will be converted to the format
+# displayed in a Visit file for visual comparison.
+#
 # Visit files can specify dithers in two different ways.
 #
 # The 'dither' list at the top of a visit file is a set
@@ -437,3 +442,119 @@ def check_visit_dithers(v2,v3):
     dyfgs = np.diff(yfgs)    
 
     return dxmirim,dymirim,dxfgs,dyfgs
+
+#############################
+
+# Check the initial pointing of a visit file by parsing it and looking
+# for guide star keywords.
+# Note that this can only work with PRD versions in pysiaf, NOT with
+# draft PRD deliveries, against which the results must be compared by hand.
+
+def check_visit_pointing(visitfile,scira=0.,scidec=0.):
+    import pysiaf
+
+    if ((scira == 0)or(scidec == 0)):
+        print('WARNING: No science target SCIRA/SCIDEC location specified!  Using default.')
+
+    file = open(visitfile, 'r')
+    lines=file.readlines()
+    nline=len(lines)
+
+    # Find where SCSLEWMAIN is commanded
+    flags=np.zeros(nline)
+    for ii in range(0,nline):
+        if (re.search('SCSLEWMAIN',lines[ii])):
+            flags[ii]=1
+
+    # If more than one slew option, it picks the first one
+    slewline=(np.where(flags == 1))[0][0]
+
+    # Search slew lines for guide star keywords
+    entries=str.split(lines[slewline],',') + str.split(lines[slewline+1],',') + str.split(lines[slewline+2],',')
+    for entry in entries:
+        if re.search('GSRA',entry):
+            values=str.split(entry,'=')
+            gsra=float(values[1])
+        if re.search('GSDEC',entry):
+            values=str.split(entry,'=')
+            gsdec=float(values[1])
+        if re.search('GSXSCI',entry):
+            values=str.split(entry,'=')
+            gsxsci=float(values[1])
+        if re.search('GSYSCI',entry):
+            values=str.split(entry,'=')
+            gsysci=float(values[1])
+        if re.search('GSPA',entry):
+            values=str.split(entry,'=')
+            gspa=float(values[1])
+        if re.search('DETECTOR',entry):
+            values=str.split(entry,'=')
+            fgsdet=str.strip(values[1])
+
+    # Check that at least one of these has been set, otherwise fail out
+    if (not gsra):
+        print('Could not find guide star info in Visit file!')
+        exit
+
+    siaf = pysiaf.Siaf('FGS')
+    if (fgsdet == 'GUIDER1'):
+        fgsaper = 'FGS1_FULL_OSS'
+    if (fgsdet == 'GUIDER2'):
+        fgsaper = 'FGS2_FULL_OSS'
+    aper = siaf[fgsaper]
+    fgsang = aper.V3IdlYAngle
+    GSPAV3=gspa-fgsang
+
+    # Find where MIRTAMAIN or MIRMAIN are commanded
+    # If found, this will be used to get the first relevant filter setting
+    flags[:]=0
+    for ii in range(0,nline):
+        if (re.search('MIRTAMAIN',lines[ii])):
+            flags[ii]=1
+        if (re.search('MIRMAIN',lines[ii])):
+            flags[ii]=1
+    mirline=np.where(flags == 1)[0]
+    nmir=len(mirline)
+    if (nmir > 0):
+        # Pick the first one as the first-commanded filter
+        mirline=mirline[0]
+        # Get the various entries
+        entries=str.split(lines[mirline],',') + str.split(lines[mirline+1],',') + str.split(lines[mirline+2],',') + str.split(lines[mirline+3],',')
+        for entry in entries:
+            if re.search('FILTER',entry):
+                values=str.split(entry,'=')
+                filter=str.strip(values[1])
+
+    gsv2,gsv3=mt.Idealtov2v3(gsxsci,gsysci,fgsaper,instr='FGS')
+    v2,v3,_=jwst_radectov2v3([scira],[scidec],v2ref=gsv2,v3ref=gsv3,raref=gsra,decref=gsdec,rollref=GSPAV3)
+
+    # If a MIRI filter was found, apply boresight correction to what the commanded
+    # v2,v3 position would have been if F770W were in use
+    if filter:
+        x,y=mt.v2v3toxy(v2,v3,filter)
+        v2_770,v3_770=mt.xytov2v3(x,y,'F770W')
+        v2,v3 = v2_770, v3_770
+
+    print('Science target should be at (v2,v3) = ',v2,v3)
+
+    # Read in all MIRI apertures to find the closest one
+    siaf=pysiaf.Siaf('MIRI')
+    allv2=np.zeros(len(siaf))
+    allv3=np.zeros(len(siaf))
+    allname = [''  for allname in np.arange(len(siaf))]
+    ii=0
+    for aperture_name,aperture in siaf.apertures.items():
+        allv2[ii]=aperture.V2Ref
+        allv3[ii]=aperture.V3Ref
+        allname[ii]=aperture.AperName
+        ii+=1
+
+    # Find the closest aperture
+    dv2,dv3 = v2-allv2, v3-allv3
+    dist=np.sqrt(dv2*dv2 + dv3*dv3)
+    indx=np.argmin(dist)
+
+    print('Closest MIRI aperture is ',allname[indx], ' at (v2,v3) = ',allv2[indx],allv3[indx])
+    print('Offset is ', dist[indx], ' arcsec')
+
+    return v2,v3
