@@ -53,6 +53,8 @@ def set_toolversion(version):
         import miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
     elif (version == 'cdp7'):
         import miricoord.imager.toolversions.mirim_tools_cdp7 as tv
+    elif (version == 'lre5'):
+        import miricoord.imager.toolversions.mirim_tools_lre5 as tv
     else:
         print('Invalid tool version specified!')
         
