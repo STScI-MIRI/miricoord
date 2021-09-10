@@ -393,7 +393,16 @@ def testhdr(file,verbose=False):
     if (verbose is True):
         print('Boresight keywords think target is at V2/V3 = ',v2,v3)
         print('Which is ',dv2,dv3,' arcsec away from nominal location')
-    
+        print('')
+
+    # Figure out implied location of the guide star on FGS1
+    gsra=hdr0['GS_RA']
+    gsdec=hdr0['GS_DEC']
+    gsv2,gsv3,_=jwst_radectov2v3([gsra],[gsdec],v2ref=v2ref,v3ref=v3ref,raref=raref,decref=decref,rollref=rollref)
+    gsxsci,gsysci=mt.v2v3toIdeal(gsv2,gsv3,'FGS1_FULL_OSS',instr='FGS')
+    if (verbose is True):
+        print('Pointing keywords imply guide star is at XIdeal/YIdeal = ',gsxsci,gsysci)
+
     return dv_point,dv_bore
 
 #############################
@@ -470,7 +479,7 @@ def check_visit_pointing(visitfile,scira=0.,scidec=0.):
     slewline=(np.where(flags == 1))[0][0]
 
     # Search slew lines for guide star keywords
-    entries=str.split(lines[slewline],',') + str.split(lines[slewline+1],',') + str.split(lines[slewline+2],',')
+    entries=str.split(lines[slewline],',') + str.split(lines[slewline+1],',') + str.split(lines[slewline+2],',') + str.split(lines[slewline+3],',')
     for entry in entries:
         if re.search('GSRA',entry):
             values=str.split(entry,'=')
