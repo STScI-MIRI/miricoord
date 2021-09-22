@@ -23,6 +23,7 @@ REVISION HISTORY:
 02-Dec-2018  Revise version handling using globals (D. Law)
 06-Feb-2019  Set default to CDP-7 (D. Law)
 26-Jul-2021  Add roundtrip error calculation (D. Law)
+22-Sep-2021  Add CDP-8 (D. Law)
 """
 
 import os as os
@@ -53,6 +54,8 @@ def set_toolversion(version):
         import miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
     elif (version == 'cdp7'):
         import miricoord.imager.toolversions.mirim_tools_cdp7 as tv
+    elif (version == 'cdp8'):
+        import miricoord.imager.toolversions.mirim_tools_cdp8 as tv
     else:
         print('Invalid tool version specified!')
         
