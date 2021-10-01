@@ -43,6 +43,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pdb
 from astropy.io import fits
+from astropy.time import Time
 import miricoord.imager.mirim_tools as mt
 
 #############################
@@ -347,6 +348,20 @@ def testhdr(file,verbose=False):
     # Target location
     targra=hdr0['TARG_RA']
     targdec=hdr0['TARG_DEC']
+    
+    # Apply any proper motions
+    mu_ra=hdr0['MU_RA'] # Given by FITS headers in arcsec/yr
+    mu_dec=hdr0['MU_DEC'] # Given by FITS headers in arcsec/yr
+    if ('MU_EPOCH' in hdr0):
+        mu_epochfull=hdr0['MU_EPOCH']
+        tt1=Time(mu_epochfull,format='iso', scale='utc')
+        mu_epoch=tt1.to_value('decimalyear')
+        mjdavg=hdr1['MJD-AVG']
+        tt2=Time(mjdavg,format='mjd')
+        obs_epoch=tt2.to_value('decimalyear')
+        dtime=(obs_epoch-mu_epoch)
+        targra += dtime*mu_ra/3600./np.cos(targdec*np.pi/180.)
+        targdec += dtime*mu_dec/3600.
 
     # Boresight info
     rav1=hdr1['RA_V1']
