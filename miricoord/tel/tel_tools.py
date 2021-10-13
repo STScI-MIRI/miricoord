@@ -339,8 +339,16 @@ def testtransform():
 #############################
 
 # Test for consistency in a FITS header
+# Additional optional keywords include:
+# override_ra
+# override_dec
+# ta_x, ta_y: x/y pixel location (SIAF convention) of TA source
+# ta2_x, ta2_y: x/y pixel location (SIAF convention) of secondary coron TA source
+# ta_filt: TA filter
 
-def testhdr(file,verbose=False):
+def testhdr(file,verbose=False,**kwargs):
+    import pysiaf
+    
     hdu=fits.open(file)
     hdr0=hdu[0].header
     hdr1=hdu['SCI'].header
@@ -348,6 +356,13 @@ def testhdr(file,verbose=False):
     # Target location
     targra=hdr0['TARG_RA']
     targdec=hdr0['TARG_DEC']
+
+    if ('override_ra' in kwargs):
+        print('Overriding Target RA in header!')
+        targra=kwargs['override_ra']
+    if ('override_dec' in kwargs):
+        print('Overriding Target DEC in header!')
+        targdec=kwargs['override_dec']
     
     # Apply any proper motions
     mu_ra=hdr0['MU_RA'] # Given by FITS headers in arcsec/yr
@@ -362,7 +377,7 @@ def testhdr(file,verbose=False):
         dtime=(obs_epoch-mu_epoch)
         targra += dtime*mu_ra/3600./np.cos(targdec*np.pi/180.)
         targdec += dtime*mu_dec/3600.
-
+        
     # Boresight info
     rav1=hdr1['RA_V1']
     decv1=hdr1['DEC_V1']
@@ -384,6 +399,78 @@ def testhdr(file,verbose=False):
     instr=hdr0['INSTRUME']
     
     v2nom,v3nom=mt.Idealtov2v3(dx,dy,apername,instr=instr)
+
+    # Read in all MIRI apertures and load them into vectors of v2/v3/name
+    # that we can refer to later
+    siaf=pysiaf.Siaf('MIRI')
+    siaf_v2=np.zeros(len(siaf))
+    siaf_v3=np.zeros(len(siaf))
+    siaf_name = [''  for siaf_name in np.arange(len(siaf))]
+    ii=0
+    for aperture_name,aperture in siaf.apertures.items():
+        siaf_v2[ii]=aperture.V2Ref
+        siaf_v3[ii]=aperture.V3Ref
+        siaf_name[ii]=aperture.AperName
+        ii+=1
+    
+    # If target acquisition keywords were specified, correct for
+    # where the TA source was found and any filter-dep boresight offsets
+    if (('ta_x' in kwargs)&('ta_y' in kwargs)&('ta_filt' in kwargs)):
+        tax,tay,tafilt = kwargs['ta_x'],kwargs['ta_y'],kwargs['ta_filt']
+        ta_v2act,ta_v3act=mt.xytov2v3(tax-1,tay-1,'F770W')# Because OSS only knows about F770W
+        
+        # Define current filter (F770W if either LRS or MRS)
+        exptype=hdr0['EXP_TYPE']
+        if ((exptype == 'MIR_MRS')or(exptype == 'MIR_LRS-SLITLESS')or(exptype == 'MIR_LRS')):
+            curfilt='F770W'
+        elif ('FILTER' in hdr0):
+            curfilt=hdr0['FILTER']
+        else:
+            curfilt='F770W'
+            
+        # Find intended TA location (assuming closest MIRI aperture)
+        temp_v2,temp_v3 = ta_v2act-siaf_v2, ta_v3act-siaf_v3
+        dist=np.sqrt(temp_v2*temp_v2 + temp_v3*temp_v3)
+        indx=np.argmin(dist)
+        # And compute offset in v2,v3
+        ta_v2nom,ta_v3nom=siaf_v2[indx],siaf_v3[indx]
+        ta_dv2,ta_dv3=ta_v2nom-ta_v2act,ta_v3nom-ta_v3act
+        # Compute filter-dep boresight offset
+        bore_dv2=mt.xytov2v3(tax-1,tay-1,curfilt)[0]-mt.xytov2v3(tax-1,tay-1,tafilt)[0]
+        bore_dv3=mt.xytov2v3(tax-1,tay-1,curfilt)[1]-mt.xytov2v3(tax-1,tay-1,tafilt)[1]
+
+        # Apply to positions
+        v2nom,v3nom = v2nom+ta_dv2+bore_dv2, v3nom+ta_dv3+bore_dv3
+        
+        if (verbose is True):
+            print('Applying TA source correction.')
+            print('TA source found at x,y = ',tax,tay)
+            print('TA location best matches MIRI aperture ',siaf_name[indx])
+            print('TA source shift dv2,dv3 = ', ta_dv2, ta_dv3)
+            print('Boresight source shift dv2,dv3 = ',bore_dv2, bore_dv3)
+
+    # If secondary TA keywords were specified (i.e., coron) then
+    # correct for where source was found in secondary TA
+    if (('ta2_x' in kwargs)&('ta2_y' in kwargs)):
+        ta2x,ta2y = kwargs['ta2_x'],kwargs['ta2_y']
+        ta_v2act,ta_v3act=mt.xytov2v3(ta2x-1,ta2y-1,'F770W')# Because OSS only knows about F770W
+            
+        # Find intended TA location (assuming closest MIRI aperture)
+        temp_v2,temp_v3 = ta_v2act-siaf_v2, ta_v3act-siaf_v3
+        dist=np.sqrt(temp_v2*temp_v2 + temp_v3*temp_v3)
+        indx=np.argmin(dist)
+        # And compute offset in v2,v3
+        ta_v2nom,ta_v3nom=siaf_v2[indx],siaf_v3[indx]
+        ta_dv2,ta_dv3=ta_v2nom-ta_v2act,ta_v3nom-ta_v3act
+
+        # Apply to positions
+        v2nom,v3nom = v2nom+ta_dv2, v3nom+ta_dv3
+        
+        if (verbose is True):
+            print('Applying secondary TA source correction.')
+            print('TA source found at x,y = ',ta2x,ta2y)
+            print('TA location best matches MIRI aperture ',siaf_name[indx])
+            print('TA source shift dv2,dv3 = ', ta_dv2, ta_dv3)
     
     if (verbose is True):
         print('Nominal source RA/DEC = ',targra,targdec)
