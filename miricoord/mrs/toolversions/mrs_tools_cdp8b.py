@@ -278,15 +278,20 @@ def xytoabl(xin,yin,channel,**kwargs):
     # Define slice for these pixels
     slicenum=np.zeros(x.size, int)
     slicename=np.array(['JUNK' for i in range(0,x.size)])
- 
+
     for i in range(0,x.size):
         slicenum[i]=int(d2c_slice[int(round(y[i])),int(round(x[i]))])-int(ch)*100
         slicename[i]=str(int(d2c_slice[int(round(y[i])),int(round(x[i]))]))+sband
+
+    # Eliminate slice numbers on the wrong half of the detector
+    bad=np.where((slicenum < 0) | (slicenum > 50))
+    slicenum[bad]=-100
+    slicename[bad]='NA'
         
     # Define index0 where the slice number is physical
     # (i.e., not between slices).  The [0] seems necessary to get
     # actual values rather than a single list object
-    index0=(np.where((slicenum > 0) & (slicenum < 99)))[0]
+    index0=(np.where((slicenum > 0) & (slicenum < 50)))[0]
     nindex0=len(index0)
 
     # Initialize a,b,l to -999.
