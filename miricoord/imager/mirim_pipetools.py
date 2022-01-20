@@ -57,6 +57,8 @@ def set_toolversion(version):
         import miricoord.imager.toolversions.mirim_pipetools_cdp7beta3 as tv
     elif (version == 'cdp7'):
         import miricoord.imager.toolversions.mirim_pipetools_cdp7 as tv
+    elif (version == 'poly6'):
+        import miricoord.imager.toolversions.mirim_pipetools_poly6 as tv
     else:
         print('Invalid tool version specified!')
         

@@ -1,0 +1,337 @@
+#ASDF 1.0.0
+#ASDF_STANDARD 1.5.0
+%YAML 1.1
+%TAG ! tag:stsci.edu:asdf/
+--- !core/asdf-1.1.0
+asdf_library: !core/software-1.0.0 {author: The ASDF Developers, homepage: 'http://github.com/asdf-format/asdf',
+  name: asdf, version: 2.8.1}
+history:
+  entries:
+  - !core/history_entry-1.0.0
+    description: New version created from CDP-7 with updated filter offset format
+    software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
+      name: miricoord, version: master}
+    time: 2022-01-20 18:36:49.172881
+  extensions:
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension.BuiltinExtension
+    software: !core/software-1.0.0 {name: asdf, version: 2.8.1}
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension._manifest.ManifestExtension
+    extension_uri: asdf://asdf-format.org/transform/extensions/transform-1.5.0
+    software: !core/software-1.0.0 {name: asdf-astropy, version: 0.1.2}
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension._manifest.ManifestExtension
+    extension_uri: asdf://asdf-format.org/core/extensions/core-1.5.0
+    software: !core/software-1.0.0 {name: asdf-astropy, version: 0.1.2}
+meta:
+  author: Alistair Glasse, David R. Law
+  date: '2022-01-20T18:36:49.159'
+  description: CDP7 delivery
+  exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|MIR_TACONFIRM|,
+    type: MIR_IMAGE}
+  input_units: !unit/unit-1.0.0 pixel
+  instrument: {band: N/A, channel: N/A, detector: MIRIMAGE, name: MIRI}
+  model_type: DistortionModel
+  output_units: !unit/unit-1.0.0 arcsec
+  pedigree: GROUND
+  reftype: distortion
+  telescope: JWST
+  title: MIRI imager distortion - CDP7
+  useafter: '2000-01-01T00:00:00'
+model: !transform/compose-1.2.0
+  forward:
+  - !transform/compose-1.2.0
+    forward:
+    - !transform/compose-1.2.0
+      forward:
+      - !transform/compose-1.2.0
+        forward:
+        - !transform/compose-1.2.0
+          forward:
+          - !transform/compose-1.2.0
+            forward:
+            - !transform/compose-1.2.0
+              forward:
+              - !transform/concatenate-1.2.0
+                forward:
+                - !transform/shift-1.2.0
+                  inputs: [x]
+                  offset: -4.0
+                  outputs: [y]
+                - !transform/identity-1.2.0
+                  inputs: [x0]
+                  outputs: [x0]
+                inputs: [x, x0]
+                outputs: [y, x0]
+              - !transform/concatenate-1.2.0
+                forward:
+                - !transform/polynomial-1.2.0
+                  coefficients: !core/ndarray-1.0.0
+                    source: 0
+                    datatype: float64
+                    byteorder: little
+                    shape: [2]
+                  domain: &id001 [-1, 1]
+                  inputs: [x]
+                  inverse: !transform/polynomial-1.2.0
+                    coefficients: !core/ndarray-1.0.0
+                      source: 1
+                      datatype: float64
+                      byteorder: little
+                      shape: [2]
+                    domain: *id001
+                    inputs: [x]
+                    outputs: [y]
+                    window: *id001
+                  name: M_column_correction
+                  outputs: [y]
+                  window: *id001
+                - !transform/polynomial-1.2.0
+                  coefficients: !core/ndarray-1.0.0
+                    source: 2
+                    datatype: float64
+                    byteorder: little
+                    shape: [2]
+                  domain: *id001
+                  inputs: [x]
+                  inverse: !transform/polynomial-1.2.0
+                    coefficients: !core/ndarray-1.0.0
+                      source: 3
+                      datatype: float64
+                      byteorder: little
+                      shape: [2]
+                    domain: *id001
+                    inputs: [x]
+                    outputs: [y]
+                    window: *id001
+                  name: M_row_correction
+                  outputs: [y]
+                  window: *id001
+                inputs: [x0, x1]
+                inverse: !transform/concatenate-1.2.0
+                  forward:
+                  - !transform/polynomial-1.2.0
+                    coefficients: !core/ndarray-1.0.0
+                      source: 4
+                      datatype: float64
+                      byteorder: little
+                      shape: [2]
+                    domain: *id001
+                    inputs: [x]
+                    outputs: [y]
+                    window: *id001
+                  - !transform/polynomial-1.2.0
+                    coefficients: !core/ndarray-1.0.0
+                      source: 5
+                      datatype: float64
+                      byteorder: little
+                      shape: [2]
+                    domain: *id001
+                    inputs: [x]
+                    outputs: [y]
+                    window: *id001
+                  inputs: [x0, x1]
+                  outputs: [y0, y1]
+                outputs: [y0, y1]
+              inputs: [x, x0]
+              outputs: [y0, y1]
+            - !transform/remap_axes-1.3.0
+              inputs: [x0, x1]
+              inverse: !transform/identity-1.2.0
+                inputs: [x0, x1]
+                n_dims: 2
+                outputs: [x0, x1]
+              mapping: [0, 1, 0, 1]
+              outputs: [x0, x1, x2, x3]
+            inputs: [x, x0]
+            outputs: [x0, x1, x2, x3]
+          - !transform/concatenate-1.2.0
+            forward:
+            - !transform/polynomial-1.2.0
+              coefficients: !core/ndarray-1.0.0
+                source: 6
+                datatype: float64
+                byteorder: little
+                shape: [6, 6]
+              domain:
+              - *id001
+              - *id001
+              inputs: [x, y]
+              inverse: &id003 !transform/polynomial-1.2.0
+                coefficients: !core/ndarray-1.0.0
+                  source: 7
+                  datatype: float64
+                  byteorder: little
+                  shape: [6, 6]
+                domain:
+                - *id001
+                - *id001
+                inputs: [x, y]
+                outputs: [z]
+                window:
+                - *id001
+                - *id001
+              name: B_correction
+              outputs: [z]
+              window:
+              - *id001
+              - *id001
+            - !transform/polynomial-1.2.0
+              coefficients: !core/ndarray-1.0.0
+                source: 8
+                datatype: float64
+                byteorder: little
+                shape: [6, 6]
+              domain:
+              - *id001
+              - *id001
+              inputs: [x, y]
+              inverse: &id002 !transform/polynomial-1.2.0
+                coefficients: !core/ndarray-1.0.0
+                  source: 9
+                  datatype: float64
+                  byteorder: little
+                  shape: [6, 6]
+                domain:
+                - *id001
+                - *id001
+                inputs: [x, y]
+                outputs: [z]
+                window:
+                - *id001
+                - *id001
+              name: A_correction
+              outputs: [z]
+              window:
+              - *id001
+              - *id001
+            inputs: [x0, y0, x1, y1]
+            inverse: !transform/concatenate-1.2.0
+              forward:
+              - *id002
+              - *id003
+              inputs: [x0, y0, x1, y1]
+              outputs: [z0, z1]
+            outputs: [z0, z1]
+          inputs: [x, x0]
+          outputs: [z0, z1]
+        - !transform/remap_axes-1.3.0
+          inputs: [x0, x1]
+          inverse: !transform/remap_axes-1.3.0
+            inputs: [x0, x1]
+            mapping: [0, 1, 0, 1]
+            outputs: [x0, x1, x2, x3]
+          mapping: [0, 1, 0, 1]
+          outputs: [x0, x1, x2, x3]
+        inputs: [x, x0]
+        outputs: [x0, x1, x2, x3]
+      - !transform/concatenate-1.2.0
+        forward:
+        - !transform/polynomial-1.2.0
+          coefficients: !core/ndarray-1.0.0
+            source: 10
+            datatype: float64
+            byteorder: little
+            shape: [2, 2]
+          domain:
+          - *id001
+          - *id001
+          inputs: [x, y]
+          name: TI_row_correction
+          outputs: [z]
+          window:
+          - *id001
+          - *id001
+        - !transform/polynomial-1.2.0
+          coefficients: !core/ndarray-1.0.0
+            source: 11
+            datatype: float64
+            byteorder: little
+            shape: [2, 2]
+          domain:
+          - *id001
+          - *id001
+          inputs: [x, y]
+          name: TI_column_correction
+          outputs: [z]
+          window:
+          - *id001
+          - *id001
+        inputs: [x0, y0, x1, y1]
+        inverse: !transform/concatenate-1.2.0
+          forward:
+          - !transform/polynomial-1.2.0
+            coefficients: !core/ndarray-1.0.0
+              source: 12
+              datatype: float64
+              byteorder: little
+              shape: [2, 2]
+            domain:
+            - *id001
+            - *id001
+            inputs: [x, y]
+            name: T_row_correction
+            outputs: [z]
+            window:
+            - *id001
+            - *id001
+          - !transform/polynomial-1.2.0
+            coefficients: !core/ndarray-1.0.0
+              source: 13
+              datatype: float64
+              byteorder: little
+              shape: [2, 2]
+            domain:
+            - *id001
+            - *id001
+            inputs: [x, y]
+            name: T_column_correction
+            outputs: [z]
+            window:
+            - *id001
+            - *id001
+          inputs: [x0, y0, x1, y1]
+          outputs: [z0, z1]
+        outputs: [z0, z1]
+      inputs: [x, x0]
+      outputs: [z0, z1]
+    - !transform/identity-1.2.0
+      inputs: [x0, x1]
+      inverse: !transform/remap_axes-1.3.0
+        inputs: [x0, x1]
+        mapping: [0, 1, 0, 1]
+        outputs: [x0, x1, x2, x3]
+      n_dims: 2
+      outputs: [x0, x1]
+    inputs: [x, x0]
+    outputs: [x0, x1]
+  - !transform/remap_axes-1.3.0
+    inputs: [x0, x1]
+    mapping: [1, 0]
+    outputs: [x0, x1]
+  inputs: [x, x0]
+  outputs: [x0, x1]
+...
+ÓBLK 0                             >SuEùß-ïKš—ƒÎN43333“)Àš™™™™™™?ÓBLK 0                             E‹Õ¿5“N—âßh…{     ø@      D@ÓBLK 0                             >SuEùß-ïKš—ƒÎN43333“)Àš™™™™™™?ÓBLK 0                             E‹Õ¿5“N—âßh…{     ø@      D@ÓBLK 0                             E‹Õ¿5“N—âßh…{     ø@      D@ÓBLK 0                             E‹Õ¿5“N—âßh…{     ø@      D@ÓBLK 0                             ;ÚŠ!Ï”è2§Ds-µµjÒn²vnX?èAØâÊ@¦ØH+¿ #†wÉü%¿Ä/ÕrÃêÕ>  JÃ’ºo¾àÎ•øv†?X ‘äåI-?  Ééñ/Ž> F?8êK>  }%i¾        × ¥E—cU¿ ÿpÒ(è¿tl1úñ1Õ> ~€¦xy¾                  ªò|µ4¾ °Ü§¥j8> €OJ®¸¾                        ð¿@íV™¨> Ü÷Fœa¾                                  €™ã°=                                        ÓBLK 0                             ˆñUŒÔ&ädòeâê®0äXo'I¿ NðòæB¿" µÿð> °ÿT²¾˜l8Áþ½  ~Ðf½Ð$¡ÇÌ?ð[YZÆ¾ M¯æ"[‹>€ÙÏŽ	‡¥= ˜,o
+Ù”=        |œHr_™Ì>  œŒºpô½ƒ+s Y*¾  „NÃÙ=                 ®Êà›>ÀÍé½þ³= \bG,²=                        ">v °D-¾  X±¸í½                                  CÇñ#®=                                        ÓBLK 0                             {-`øtçaL«,8æYeË}ÿ¤¹ry	j?°÷|Ï&–¿€“§C£l¿ À«"K±> HÓz»U¾ €0¯A¹¾,•³Õá¦@z™¯áßíf¿ ¸äi8(þ¾à=¥à0eÌ> ¯ùåÈ›p¾        ¨ôÓ‚='? ÙÑ—º”> B*0YšW¾ €Ýg’Í=                 €›¼»Éñ>o1e
+Ä> @ˆ„Æhu¾                         €*å%` >   ›Œé±½                                  =&CÕU¾                                        ÓBLK 0                             +mƒËzd¨\Ö!š‡ie„àÊënyœF¿Õ†¼GiÍ?Ø>*ÌÊrÁ¾ È}D\¢g¾ TÂ û„= `ézsXˆ=àˆæ|úQ?¤@hËŽ? à˜25¨¾úì58R¾ €msöÂ1=        ÀKVøÖû©> *¦¿&”s> ‡ó•Ü6•½ ˜´Ì‡§=                 €Ö:Ý‘
+>U=Å¬ûF!¾  ­íTá:=                          {Õ¤‘= Ú-Õ0ð¤=                                  °û^ ç¼                                        ÓBLK 0                                eôäz»Ñ;˜¦i±fi
+×£p=vwÀ¤‡é›T´?âìôD æï?        ÓBLK 0                                í5µêüZÁ˜zÏO”§2ÓMbX!{ÀâìôD æï¿¤‡é›T´?        ÓBLK 0                                ªJRk>T	 ˜GñN!á©¡Ý ¡_×Šy@¤‡é›T´?âìôD æï?        ÓBLK 0                                ¥Âsue¯ÞlÛ€wfPæ¯qj.yÀãìôD æï¿¤‡é›T´?        #ASDF BLOCK INDEX
+%YAML 1.1
+---
+- 10350
+- 10420
+- 10490
+- 10560
+- 10630
+- 10700
+- 10770
+- 11112
+- 11454
+- 11796
+- 12138
+- 12224
+- 12310
+- 12396
+...
