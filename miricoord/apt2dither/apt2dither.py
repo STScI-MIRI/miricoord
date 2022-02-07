@@ -126,7 +126,6 @@ def print_head(f):
     SUB128_x, SUB128_y =  69.5, 951.5
     SUB64_x, SUB64_y =  37.5, 809.5
 
-    f.write('# Dithers are multiplied by -1 pending resolution of http://www.miricle.org/bugzilla/show_bug.cgi?id=588 \n')
     f.write('# The following reference pixels are hard-coded for use: \n')
     f.write('# Imaging: {}, {} \n'.format(xref,yref))
     f.write('# LRS Slit: {}, {} \n'.format(xref_slit,yref_slit))
@@ -190,8 +189,8 @@ def make_dith_file(in_file, outfile):
                 
                 #compute dither
                 else:
-                    dx = xref - x[0]
-                    dy = yref - y[0]
+                    dx = x[0] - xref
+                    dy = y[0] - yref
                 
                 #write to file
                 try:
@@ -209,9 +208,9 @@ def make_dith_file(in_file, outfile):
                 channel = r[4][-2:]
 
                 #convert to alpha,beta
-                a,b = mrst.v2v3toab(v2,v3, channel) #mult by -1
-                da = -1.*a
-                db = -1.*b
+                a,b = mrst.v2v3toab(v2,v3, channel)
+                da = 1.*a
+                db = 1.*b
 
                 try:
                     s = "{0:.3f}, {1:.3f}".format(da,db)
