@@ -122,6 +122,29 @@ def channel(detband):
 
 #############################
 
+# Convenience function to read a header and return detband (e.g., '12A')
+def hdr_to_detband(hdr):
+    channel = hdr['CHANNEL']
+    band = hdr['BAND']
+
+    if ((channel == '12')&(band == 'SHORT')):
+        detband = '12A'
+    if ((channel == '12')&(band == 'MEDIUM')):
+        detband = '12B'        
+    if ((channel == '12')&(band == 'LONG')):
+        detband = '12C'
+
+    if ((channel == '34')&(band == 'SHORT')):
+        detband = '34A'
+    if ((channel == '34')&(band == 'MEDIUM')):
+        detband = '34B'        
+    if ((channel == '34')&(band == 'LONG')):
+        detband = '34C'
+
+    return detband
+        
+#############################
+
 # Convenience function to return the rough middle wavelength of a given channel
 # Note that this ISNT exact, just some valid value
 def midwave(channel):
