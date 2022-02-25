@@ -521,7 +521,7 @@ def testtransform():
         data=refdata[channel[i]]
         thisx,thisy=data['x'],data['y']
         thissl,thisal,thisbe,thislam=data['s'],data['alpha'],data['beta'],data['lam']
-        if (tv.version() is 'cdp6'):
+        if (tv.version() == 'cdp6'):
             thisxan,thisyan=data['xan'],data['yan']
             thisv2,thisv3=xanyan_to_v2v3(thisxan,thisyan)
         else:
