@@ -19,6 +19,7 @@ REVISION HISTORY:
 07-Dec-2018  Revise version handling using globals (D. Law)
 18-Apr-2019  Add slice width and pixel size (D. Law)
 04-Dec-2020  Add reverse transform from ideal to v2v3 (D. Law)
+04-Apr-2022  Start adding flt1 model (D. Law)
 """
 
 import os as os
@@ -35,7 +36,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is CDP-8b
+# Set the tools version.  Default is flt1
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -47,7 +48,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_tools_cdp8b as tv
+        import miricoord.mrs.toolversions.mrs_tools_flt1 as tv
+    elif (version == 'flt1'):
+        import miricoord.mrs.toolversions.mrs_tools_flt1 as tv
     elif (version == 'cdp6'):
         import miricoord.mrs.toolversions.mrs_tools_cdp6 as tv
     elif (version == 'cdp8b'):
@@ -135,7 +138,7 @@ def alphafov(channel):
 # the value of their wavelength.  Specifying loc='cen','lo', or 'hi'
 # gives values at center, or low/high values for pixel
 
-def waveimage(channel,loc='cen'):
+def waveimage(channel,loc='cen', **kwargs):
     # Determine whether the CDP toolversion has been set.  If not, set to default.
     try:
         sys.getrefcount(tv)
@@ -173,21 +176,23 @@ def waveimage(channel,loc='cen'):
     usey=usey.reshape(-1)
     
     # Convert to base alpha,beta,lambda at pixel center
-    values=xytoabl(basex,usey,channel)
+    values=xytoabl(basex,usey,channel,**kwargs)
     basealpha,basebeta=values['alpha'],values['beta']
     baselambda,slicenum=values['lam'],values['slicenum']
 
     # Crop to only pixels on a real slice for this channel
     index0=np.where(basealpha > -50)
+    
     basex,basey,usey=basex[index0],basey[index0],usey[index0]
     basealpha,basebeta=basealpha[index0],basebeta[index0]
     baselambda,slicenum=baselambda[index0],slicenum[index0]
 
     mockimg=np.zeros([1024,1032])
     npix=len(baselambda)
+
     for jj in range(0,npix):
         mockimg[basey[jj],basex[jj]]=baselambda[jj]
-        
+
     return mockimg
 
 #############################
