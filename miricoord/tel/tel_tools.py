@@ -290,7 +290,14 @@ def radectoxieta(crval1,crval2,ra,dec):
 # Compute angle between spacecraft v1 optical axis and the sun vector
 # based on information in the 'SCI' extension header.
 # Returns separation angle in degrees.
-def jwst_sunangle(hdr):
+def jwst_sunangle(hdr, verbose=True):
+    # Note that the spacecraft orientation is given by Pitch, Roll, Yaw
+    # Pitch is the most relevant to hot vs cold attitude and is related
+    # to how far away from the Sun the V1 axis is pointing.
+    # Roll is the roll about the V1 optical axis.
+    # Yaw is the orientation about the sunline, so the longitude of pointing
+    # around the observable torus.
+    
     # ICRS X/Y/Z of JWST relative to solar system barycenter in km
     jwstx=hdr['JWST_X']
     jwsty=hdr['JWST_Y']
@@ -318,7 +325,8 @@ def jwst_sunangle(hdr):
 
     # Apparent position of Sun from JWST tested against JPL Horizons
     # computation to within 0.1 arcsec or so
-    print('Apparent Sun position from JWST: ',sun_ra, sun_dec)
+    if (verbose):
+        print('Apparent Sun position from JWST: ',sun_ra, sun_dec)
 
     # Where is JWST pointing?
     ra=hdr['RA_V1']
