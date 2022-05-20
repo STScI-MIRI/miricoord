@@ -1,9 +1,9 @@
 import numpy as np
 import os
 from astropy.io import fits
-import miricoord.miricoord.mrs.mrs_tools as mmrs
-import miricoord.miricoord.tel.tel_tools as jwst
-import miricoord.miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
+import miricoord.mrs.mrs_tools as mmrs
+import miricoord.tel.tel_tools as jwst
+import miricoord.mrs.makesiaf.makesiaf_mrs as makesiaf
 from array_indices import *
 import idlwrap
 import pandas as pd
@@ -150,7 +150,7 @@ def assess_dith(rootdir=False, siafdir=False,
 
     #set root and siaf directories
     if rootdir == False:
-        rootdir = os.getenv('MIRICOORD_DATA_DIR')
+        rootdir = os.getenv('MIRICOORD_DATA_DIR')+'/dithers/temp/'
     if siafdir == False:
         siafdir = os.getenv('MIRICOORD_DATA_DIR')
 

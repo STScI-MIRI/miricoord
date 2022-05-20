@@ -241,7 +241,7 @@ def makepattern_ch1(siafA,siafB,siafC):
     ashort=0.5*pixsiz
     astart=0
     blong=5.5*slicesiz1
-    bshort=0.5*slicesiz
+    bshort=0.5*slicesiz# consider making this 1.5 to help out imager
     bstart=0
 
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
@@ -308,7 +308,7 @@ def makepattern_ch3(siafA,siafB,siafC):
     slicesiz1=slicewidth[0]# Ch1
     slicesiz=slicewidth[2]# Ch3
 
-    along=16.5*pixsiz
+    along=16.5*pixsiz # may need to reduce this!
     ashort=0.5*pixsiz
     astart=0
     blong=16.5*slicesiz1
