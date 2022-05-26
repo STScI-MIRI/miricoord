@@ -44,6 +44,9 @@ from numpy.testing import assert_allclose
 import pdb
 from astropy.io import fits
 from astropy.time import Time
+from astropy.coordinates import SkyCoord
+from astropy.coordinates import get_body_barycentric
+from astropy.constants import au
 import miricoord.imager.mirim_tools as mt
 
 #############################
@@ -281,6 +284,59 @@ def radectoxieta(crval1,crval2,ra,dec):
     eta = eta * rad2arcsec
 
     return xi,eta
+
+#############################
+
+# Compute angle between spacecraft v1 optical axis and the sun vector
+# based on information in the 'SCI' extension header.
+# Returns separation angle in degrees.
+def jwst_sunangle(hdr, verbose=True):
+    # Note that the spacecraft orientation is given by Pitch, Roll, Yaw
+    # Pitch is the most relevant to hot vs cold attitude and is related
+    # to how far away from the Sun the V1 axis is pointing.
+    # Roll is the roll about the V1 optical axis.
+    # Yaw is the orientation about the sunline, so the longitude of pointing
+    # around the observable torus.
+    
+    # ICRS X/Y/Z of JWST relative to solar system barycenter in km
+    jwstx=hdr['JWST_X']
+    jwsty=hdr['JWST_Y']
+    jwstz=hdr['JWST_Z']
+
+    # ICRS X/Y/Z of Sun relative to solar system barycenter
+    ti=Time(hdr['EPH_TIME'],format='mjd')
+    sun=get_body_barycentric('sun',ti) # This is in AU
+    # Convert from AU to km
+    sunx=sun.x.value*au.value/1000
+    suny=sun.y.value*au.value/1000
+    sunz=sun.z.value*au.value/1000
+
+    # Total vector from JWST to Sun
+    x=sunx-jwstx
+    y=suny-jwsty
+    z=sunz-jwstz
+    r=np.sqrt(x*x + y*y + z*z)
+
+    # ICRS RA/DEC of the vector from JWST to the Sun
+    sun_dec=np.arcsin(z/r)*180./np.pi
+    sun_ra=np.arctan2(y,x)*180./np.pi
+    if (sun_ra < 0):
+        sun_ra = jwst_ra+360.
+
+    # Apparent position of Sun from JWST tested against JPL Horizons
+    # computation to within 0.1 arcsec or so
+    if (verbose):
+        print('Apparent Sun position from JWST: ',sun_ra, sun_dec)
+
+    # Where is JWST pointing?
+    ra=hdr['RA_V1']
+    dec=hdr['DEC_V1']
+
+    c1 = SkyCoord(sun_ra, sun_dec, frame='icrs', unit='deg')
+    c2 = SkyCoord(ra, dec, frame='icrs', unit='deg')
+    sep = c1.separation(c2)
+    
+    return sep.value
 
 #############################
 
