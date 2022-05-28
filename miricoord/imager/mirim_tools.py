@@ -1,7 +1,7 @@
 #
 """
 Useful python tools for working with the MIRI Imager; calls a specific version
-of the tools specific below.
+of the tools specified below.
 
 This version of the tools uses a standalone implementation
 of the distortion solution to do the transformations,
@@ -23,6 +23,7 @@ REVISION HISTORY:
 02-Dec-2018  Revise version handling using globals (D. Law)
 06-Feb-2019  Set default to CDP-7 (D. Law)
 26-Jul-2021  Add roundtrip error calculation (D. Law)
+26-May-2022  Add FLT-1 (D. Law)
 """
 
 import os as os
@@ -36,7 +37,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is CDP-7
+# Set the tools version.  Default is FLT-1
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -48,11 +49,13 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.imager.toolversions.mirim_tools_cdp7 as tv
+        import miricoord.imager.toolversions.mirim_tools_flt1 as tv
     elif (version == 'cdp7b'):
         import miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
     elif (version == 'cdp7'):
         import miricoord.imager.toolversions.mirim_tools_cdp7 as tv
+    elif (version == 'flt1'):
+        import miricoord.imager.toolversions.mirim_tools_flt1 as tv
     else:
         print('Invalid tool version specified!')
         

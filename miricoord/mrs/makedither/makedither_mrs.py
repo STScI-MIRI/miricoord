@@ -7,23 +7,19 @@ associated notebook front-end.
 Beta dithers: Ch1 long offset is 5.5 times the Ch1 width because that will be
 half-integer for all other channels.  Ch 2/3/4 are odd multiples of the 5.5 times
 slice width offset so that it will similarly be half-integer for all channels.
-Short beta dithers are half-integer in the local channel because we're trying to
-optimize for this channel.
+Short beta dithers are 1.5x integer in the local channel because we're trying to
+optimize for this channel and using larger than 0.5x offset will significantly
+help simultaneous imaging by having a larger throw.
 
-Alpha dithers both long and short offsets are define related to the channel-specific
+Alpha dithers both long and short offsets are defined related to the channel-specific
 pixel size because we're optimizing for that channel.
 
-However, alpha/beta axes in Ch1 aren't quite aligned with other channels...  second
-order effect?
+However, alpha/beta axes in Ch1 aren't quite aligned with other channels, and alpha
+sampling changes discontinuously between slices, so attemps to do half-integer alpha
+while changing slices aren't perfect.  Assess performance using dedicated simulation
+code.
 
-Other thoughts: originally dithers were all defined using Ch1 alpha/beta even if they
-strictly shouldn't be.  However- using the Ch1 xforms to map them to v2/v3 requires
-using the transforms beyond the area for which they are defined!  They may not be
-entirely reliable outside the Ch1 footprint.
-
-So implement in here both the CDP-6 approach and a commissioning-like approach?
-Commissioning should do alpha-beta to v2,v3 with local transform
-and center around that channel's centroid
+Add additional tweak-ups so that that pattern is centered for a given channel.
 
 Author: David R. Law (dlaw@stsci.edu)
 
@@ -31,6 +27,7 @@ REVISION HISTORY:
 15-Apr-2019  Adapt from old IDL routines (D. Law; dlaw@stsci.edu)
 05-Aug-2020  Remove dither flips for mirisim per ticket MIRI-677 (D. Law)
 08-Jun-2021  Fold JDox figure creation into these functions instead of notebook (D. Law)
+27-May-2022  Update for FLT-1 distortion (D. Law)
 """
 
 import matplotlib as mpl
@@ -128,98 +125,6 @@ def recenterRP(pat_v2,pat_v3,siaf):
 
 #############################
 
-# Generate the CDP6 Ch1 point-source patterns
-
-def makepattern_cdp6_ch1():
-    pixsiz1=0.196
-    pixsiz=0.196
-    slicesiz1=0.176
-    slicesiz=0.176
-
-    along=10.5*pixsiz
-    ashort=0.5*pixsiz
-    astart=-5.5*pixsiz1
-    blong=5.5*slicesiz1
-    bshort=0.5*slicesiz
-    bstart=3*slicesiz1
-
-    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
-    # Transform assuming input in Ch1A alpha-beta
-    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
-
-    return pat_v2,pat_v3
-    
-#############################
-
-# Generate the CDP6 Ch2 point-source patterns
-
-def makepattern_cdp6_ch2():
-    pixsiz1=0.196
-    pixsiz=0.196
-    slicesiz1=0.176
-    slicesiz=0.277
-
-    along=10.5*pixsiz
-    ashort=0.5*pixsiz
-    astart=-5.5*pixsiz1
-    blong=16.5*slicesiz1
-    bshort=0.5*slicesiz
-    bstart=9*slicesiz1
-
-    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
-    # Transform assuming input in Ch1A alpha-beta
-    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
-
-    return pat_v2,pat_v3
-
-#############################
-
-# Generate the CDP6 Ch3 point-source patterns
-
-def makepattern_cdp6_ch3():
-    pixsiz1=0.196
-    pixsiz=0.244
-    slicesiz1=0.176
-    slicesiz=0.387
-
-    along=16.5*pixsiz
-    ashort=0.5*pixsiz
-    astart=-12.5*pixsiz1
-    blong=16.5*slicesiz1
-    bshort=0.5*slicesiz
-    bstart=12.6*slicesiz1
-
-    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
-    # Transform assuming input in Ch1A alpha-beta
-    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
-
-    return pat_v2,pat_v3
-
-#############################
-
-# Generate the CDP6 Ch4 point-source patterns
-
-def makepattern_cdp6_ch4():
-    pixsiz1=0.196
-    pixsiz=0.273
-    slicesiz1=0.176
-    slicesiz=0.645
-
-    along=17.5*pixsiz
-    ashort=0.5*pixsiz
-    astart=-10*pixsiz1
-    blong=27.5*slicesiz1
-    bshort=0.5*slicesiz
-    bstart=18*slicesiz1
-
-    pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
-    # Transform assuming input in Ch1A alpha-beta
-    pat_v2,pat_v3=mrst.abtov2v3(pat_a,pat_b,'1A')
-
-    return pat_v2,pat_v3
-
-#############################
-
 # Generate the commissioning Ch1 point-source patterns
 # SIAF structures for the 3 bands must be passed in
 
@@ -238,10 +143,10 @@ def makepattern_ch1(siafA,siafB,siafC):
     slicesiz=slicewidth[0]# Ch1
 
     along=10.5*pixsiz
-    ashort=0.5*pixsiz
+    ashort=1.5*pixsiz
     astart=0
     blong=5.5*slicesiz1
-    bshort=0.5*slicesiz# consider making this 1.5 to help out imager
+    bshort=1.5*slicesiz
     bstart=0
 
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
@@ -274,10 +179,10 @@ def makepattern_ch2(siafA,siafB,siafC):
     slicesiz=slicewidth[1]# Ch2
 
     along=10.5*pixsiz
-    ashort=0.5*pixsiz
+    ashort=1.5*pixsiz
     astart=0
-    blong=16.5*slicesiz1
-    bshort=0.5*slicesiz
+    blong=8.5*slicesiz
+    bshort=1.5*slicesiz
     bstart=0
 
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
@@ -308,11 +213,11 @@ def makepattern_ch3(siafA,siafB,siafC):
     slicesiz1=slicewidth[0]# Ch1
     slicesiz=slicewidth[2]# Ch3
 
-    along=16.5*pixsiz # may need to reduce this!
-    ashort=0.5*pixsiz
+    along=10.5*pixsiz
+    ashort=1.5*pixsiz
     astart=0
     blong=16.5*slicesiz1
-    bshort=0.5*slicesiz
+    bshort=1.5*slicesiz
     bstart=0
 
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
@@ -343,11 +248,11 @@ def makepattern_ch4(siafA,siafB,siafC):
     slicesiz1=slicewidth[0]# Ch1
     slicesiz=slicewidth[3]# Ch4
 
-    along=17.5*pixsiz
-    ashort=0.5*pixsiz
+    along=12.5*pixsiz
+    ashort=1.5*pixsiz
     astart=0
-    blong=27.5*slicesiz1
-    bshort=0.5*slicesiz
+    blong=5.5*slicesiz
+    bshort=1.5*slicesiz
     bstart=0
 
     pat_a,pat_b=makepattern_generic(astart,along,ashort,bstart,blong,bshort)
@@ -373,7 +278,7 @@ def makepattern_ext_all(siafA,siafB,siafC):
 
     # Ch3 and Ch4 are well-sampled in the pixel direction already, so optimize the along-slice
     # offset to be half-integer in Ch1 and Ch2
-    da=pixsize[0]/2.# Ch1
+    da=pixsize[0]*3/2.# Ch1
     # Use the mathematically related slice widths in each channel to construct a half-integer
     # offset for all channels
     db=slicewidth[0]*5.5# Ch1
@@ -737,7 +642,7 @@ def qaplot_ptsourceloc(v2,v3,allsiaf,outdir=''):
             
     plt.xlabel('V2 (arcsec)')
     plt.ylabel('V3 (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.legend()
     
     plt.savefig(filename)
@@ -804,7 +709,7 @@ def qaplot_extsourceloc(v2,v3,allsiaf,outdir=''):
             
     plt.xlabel('V2 (arcsec)')
     plt.ylabel('V3 (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.legend()
     
     plt.savefig(filename)
@@ -892,7 +797,7 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.text(1,5,'ALL, 4-PT, point source')
     plt.legend()
 
@@ -973,7 +878,7 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.text(7,7,'Ch4, 2-PT, point source')
     plt.legend()
 
@@ -1054,7 +959,7 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.text(5,5,'ALL, 2-PT, extended source')
     plt.legend()
 
@@ -1143,7 +1048,7 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.text(5,5,'ALL, 4-PT, extended source')
     plt.legend()
 
@@ -1224,7 +1129,7 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.text(5,5,'Ch3, 2-PT, extended source')
     plt.legend()
 
@@ -1313,7 +1218,7 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Pre-flight ('+nowstring+')')
+    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
     plt.text(5,5,'Ch3, 4-PT, extended source')
     plt.legend()
 

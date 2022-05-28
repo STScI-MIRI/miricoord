@@ -3,12 +3,12 @@
 Code to create CRDS reference files for the distortion of the
 MIRI MRS using reference files delivered with FLT-1:
 
-MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits
-MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits
-MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits
-MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits
-MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits
-MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits
+MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.00.fits
+MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.00.fits
+MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.00.fits
+MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.00.fits
+MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.00.fits
+MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits
 
 MIRI MRS uses 4 reference files of type:
 
@@ -45,6 +45,7 @@ REVISION HISTORY:
 15-Jul-2019  Bugfix to slice mask in CDP version 8B.05.01 (D. Law)
 07-Dec-2020  Add cross-dichroic configurations (D. Law)
 04-Apr-2022  Update for FLT-1, add fixes for wavelength tearing (D. Law)
+26-May-2022  FLT-1 real data from MIR-013 (D. Law)
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -89,29 +90,30 @@ def create_flt1_all(outdir, **kwargs):
     xbands='12AB','12AC','12BA','12BC','12CA','12CB','34AB','34AC','34BA','34BC','34CA','34CB'
     nxbands=len(xbands)
     for i in range(nxbands):
+        continue
         create_flt1_setxfiles(xbands[i],outdir,**kwargs)
         
 #############################
 
 # Function to automatically figure out the input/output required to make
-# a CDP-8b reference file for a particular detector band (e.g., 12A)
+# a FLT-1 reference file for a particular detector band (e.g., 12A)
 
 def create_flt1_setfiles(detband,outdir, **kwargs):
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    rootdir=os.path.join(rootdir,'data/fits/cdp8b/')
+    rootdir=os.path.join(rootdir,'data/fits/flt1/')
 
     if (detband == '12A'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.00.fits')
     elif (detband == '34A'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.00.fits')
     elif (detband == '12B'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.00.fits')
     elif (detband == '34B'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.00.fits')
     elif (detband == '12C'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits')
     elif (detband == '34C'):
-        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+        fname=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.00.fits')
 
     distfile=outdir+'jwst_miri_mrs'+detband+'_distortion_flt1.asdf'
     regfile=outdir+'jwst_miri_mrs'+detband+'_regions_flt1.asdf'
@@ -131,48 +133,48 @@ def create_flt1_setfiles(detband,outdir, **kwargs):
 
 def create_flt1_setxfiles(detxband,outdir,**kwargs):
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    rootdir=os.path.join(rootdir,'data/fits/cdp8b/')
+    rootdir=os.path.join(rootdir,'data/fits/flt1/')
 
     if (detxband == '12AB'):
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.00.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.00.fits')
     elif (detxband == '12AC'):
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.00.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits')
     elif (detxband == '12BA'):
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.00.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.00.fits')
     elif (detxband == '12BC'):
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.00.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits')
     elif (detxband == '12CA'):
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.00.fits')
     elif (detxband == '12CB'):
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits')
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_8B.05.01.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.00.fits')
 
     # Note that we are going to SWAP fname1 and fname2 for Ch34; this is because later code will
     # assume that we have things in the order of Ch3-Ch4 and fname1-fname2 whereas the name
     # '34AB' means 3B+4A
     elif (detxband == '34AB'):
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.00.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.00.fits')
     elif (detxband == '34AC'):
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.00.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.00.fits')
     elif (detxband == '34BA'):
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.00.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.00.fits')
     elif (detxband == '34BC'):
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.00.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.00.fits')
     elif (detxband == '34CA'):
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.00.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.00.fits')
     elif (detxband == '34CB'):
-        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_8B.05.01.fits')
-        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_8B.05.01.fits')
+        fname2=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.00.fits')
+        fname1=os.path.join(rootdir,'MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.00.fits')
 
     distfile=outdir+'jwst_miri_mrs'+detxband+'_distortion_flt1.asdf'
     regfile=outdir+'jwst_miri_mrs'+detxband+'_regions_flt1.asdf'
@@ -201,7 +203,7 @@ def create_flt1_onereference(fname, ref, **kwargs):
          'wavelengthrange': 'jwst_miri_wavelengthrange_0001.asdf'}
     Examples
     --------
-    >>> create_flt1_references('MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_8B.05.01.fits', ref)
+    >>> create_flt1_references('MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.00.fits', ref)
     """
     with fits.open(fname) as f:
         channel = f[0].header['CHANNEL']
@@ -269,9 +271,9 @@ def create_flt1_onereference(fname, ref, **kwargs):
     bmodel2 = create_beta_models(b0_ch2, bdel_ch2, int(channel[1]), len(alpha2))
 
     bmodel1.update(bmodel2)
-    useafter = "2000-01-01T00:00:00"
-    author =  'David R. Law, Polychronis Patapis, Adrian M. Glauser'  #Author of the data
-    description = 'MIRI MRS Flt1 (8B.05.01) distortion reference data.'
+    useafter = "2022-05-01T00:00:00"
+    author =  'David R. Law, Polychronis Patapis'  #Author of the data
+    description = 'MIRI MRS FLT1 (9B.05.00) distortion reference data.'
 
     create_distortion_file(reftype='distortion', detector=detector, band=band, channel=channel, channels=channels,
                            data=(amodel1, bmodel1, xmodel1, ymodel1, bzero, bdel, ab_v23, v23_ab), name=ref['distortion'],
@@ -402,9 +404,9 @@ def create_flt1_onexreference(fname1, fname2, ref, **kwargs):
     bmodel2 = create_beta_models(b0_ch2, bdel_ch2, int(channel[1]), len(alpha2))
 
     bmodel1.update(bmodel2)
-    useafter = "2000-01-01T00:00:00"
-    author =  'David R. Law, Polychronis Patapis, Adrian M. Glauser'  #Author of the data
-    description = 'MIRI MRS Flt1 (8B.05.01) distortion reference data.'
+    useafter = "2022-05-01T00:00:00"
+    author =  'David R. Law, Polychronis Patapis'  #Author of the data
+    description = 'MIRI MRS FLT1 (9B.05.00) distortion reference data.'
 
     create_distortion_file(reftype='distortion', detector=detector, band=band, channel=channel, channels=channels,
                            data=(amodel1, bmodel1, xmodel1, ymodel1, bzero, bdel, ab_v23, v23_ab), name=ref['distortion'],
@@ -435,14 +437,14 @@ def create_reffile_header(model, detector, band, channel, author, useafter,
     model.meta.description = description
     model.meta.author = author
     model.meta.useafter = useafter
-    model.meta.pedigree = 'GROUND'
+    model.meta.pedigree = 'INFLIGHT 2022-05-22 2022-05-22'
     model.meta.instrument.name = "MIRI"
     model.meta.instrument.detector = detector
     model.meta.instrument.channel = channel
     model.meta.instrument.band = band
     model.meta.exposure.type = "MIR_MRS"
 
-    entry = HistoryEntry({'description': "DOCUMENT: MIRI-TN-00001-ETH_Iss2-1_Calibrationproduct_MRS_d2c.  Updated regions file from CDP-8B.05.01", 'time': datetime.datetime.utcnow()})
+    entry = HistoryEntry({'description': "DOCUMENT: First in-flight distortion file created using data from MIR-013 (APT 1029 Obs 1-3)", 'time': datetime.datetime.utcnow()})
     software = Software({'name': 'miricoord', 'author': 'D.Law', 
                          'homepage': 'https://github.com/STScI-MIRI/miricoord', 'version': "master"})
     entry['software'] = software
