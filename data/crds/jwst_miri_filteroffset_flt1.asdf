@@ -8,10 +8,11 @@ asdf_library: !core/software-1.0.0 {author: The ASDF Developers, homepage: 'http
 history:
   entries:
   - !core/history_entry-1.0.0
-    description: New version created from MIR-007 commissioning data
+    description: First in-flight distortion created from MIR-007 (APT 1024) and adjusted
+      to boresight of MIR-013 (APT 1029, Obs 1-3)
     software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
       name: miricoord, version: master}
-    time: 2022-05-26 19:12:15.190553
+    time: 2022-05-28 22:39:10.921803
   extensions:
   - !core/extension_metadata-1.0.0
     extension_class: asdf.extension.BuiltinExtension
@@ -34,7 +35,7 @@ filters:
 - {column_offset: -0.07, filter: FND, pupil: N/A, row_offset: -0.26}
 meta:
   author: Alistair Glasse, Mattia Libralato, David R. Law
-  date: '2022-05-26T19:12:15.260'
+  date: '2022-05-28T22:39:10.990'
   description: FLT1 delivery
   exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|,
     type: MIR_IMAGE}
@@ -46,5 +47,5 @@ meta:
   reftype: filteroffset
   telescope: JWST
   title: MIRI imager filter offset - FLT1
-  useafter: '2000-01-01T00:00:00'
+  useafter: '2022-05-01T00:00:00'
 ...
