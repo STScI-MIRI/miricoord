@@ -83,7 +83,6 @@ def create_flt1_all(outdir, **kwargs):
     detbands='12A','12B','12C','34A','34B','34C'
     nbands=len(detbands)
     for i in range(nbands):
-        continue
         create_flt1_setfiles(detbands[i],outdir,**kwargs)
 
     print('Creating cross-dichroic reference files')
