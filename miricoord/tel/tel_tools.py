@@ -691,6 +691,7 @@ def check_visit_pointing(visitfile,scira=0.,scidec=0.):
             if re.search('FILTER',entry):
                 values=str.split(entry,'=')
                 filter=str.strip(values[1])
+                filter=(str.split(filter,';'))[0]# Remove any semicolon
 
     gsv2,gsv3=mt.Idealtov2v3(gsxsci,gsysci,fgsaper,instr='FGS')
     v2,v3,_=jwst_radectov2v3([scira],[scidec],v2ref=gsv2,v3ref=gsv3,raref=gsra,decref=gsdec,rollref=GSPAV3)
