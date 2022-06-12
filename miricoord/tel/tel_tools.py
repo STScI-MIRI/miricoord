@@ -668,8 +668,12 @@ def check_visit_pointing(visitfile,scira=0.,scidec=0.):
         fgsaper = 'FGS1_FULL_OSS'
     if (fgsdet == 'GUIDER2'):
         fgsaper = 'FGS2_FULL_OSS'
-    aper = siaf[fgsaper]
-    fgsang = aper.V3IdlYAngle
+        print('Warning: FGS-2 in use, using V3IdlYAngle for FGS-1 (see JSOCINT-662)')
+
+    # Note that regardless of whether FGS-1 or FGS-2 is being used, the gspa
+    # commanded in a visit file must always be the PA appropriate for the FGS-1
+    # detector since ACS only knows about FGS-1 relation to J frame
+    fgsang = siaf['FGS1_FULL_OSS'].V3IdlYAngle
     GSPAV3=gspa-fgsang
 
     # Find where MIRTAMAIN or MIRMAIN are commanded
