@@ -21,6 +21,7 @@ REVISION HISTORY:
 04-Dec-2020  Add reverse transform from ideal to v2v3 (D. Law)
 04-Apr-2022  Start adding flt1 model (D. Law)
 27-May-2022  Add FLT-1 (D. Law)
+14-Jun-2022  Add FLT-2 (D. Law)
 """
 
 import os as os
@@ -37,7 +38,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is flt1
+# Set the tools version.  Default is flt2
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -49,7 +50,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_tools_flt1 as tv
+        import miricoord.mrs.toolversions.mrs_tools_flt2 as tv
+    elif (version == 'flt2'):
+        import miricoord.mrs.toolversions.mrs_tools_flt2 as tv
     elif (version == 'flt1'):
         import miricoord.mrs.toolversions.mrs_tools_flt1 as tv
     elif (version == 'cdp6'):
