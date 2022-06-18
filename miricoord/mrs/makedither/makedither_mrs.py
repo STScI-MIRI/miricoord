@@ -423,6 +423,11 @@ def writeresults_prd(dxidl,dyidl,outdir=''):
         print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-47,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
+    print('SCAN-CALIBRATION',file=open(outfile,"a"))
+    for ii in range(52:):
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-51,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))    
+
     # Log the operation is complete
     print('Successfully wrote PRD dithers file to ',relfile)
     
@@ -573,21 +578,21 @@ def writeresults_full(index,ch,v2,v3,dxidl,dyidl,outdir=''):
 #############################
 
 # Make assorted plots for JDox
-def make_jdox(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir='./'):
-    qaplot_ptsourceloc(v2_all,v3_all,allsiaf,outdir)
-    qaplot_extsourceloc(v2_all,v3_all,allsiaf,outdir)
-    qaplot_ps4all(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
-    qaplot_ps2ch4(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
-    qaplot_ext2all(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
-    qaplot_ext4all(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
-    qaplot_ext2ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
-    qaplot_ext4ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,outdir)
+def make_jdox(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir='./'):
+    qaplot_ptsourceloc(v2_all,v3_all,allsiaf,vertxt,outdir)
+    qaplot_extsourceloc(v2_all,v3_all,allsiaf,vertxt,outdir)
+    qaplot_ps4all(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
+    qaplot_ps2ch4(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
+    qaplot_ext2all(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
+    qaplot_ext4all(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
+    qaplot_ext2ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
+    qaplot_ext4ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
 
 #############################
 
 # Plot showing the location of the point-source dithers
 
-def qaplot_ptsourceloc(v2,v3,allsiaf,outdir=''):
+def qaplot_ptsourceloc(v2,v3,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -642,7 +647,7 @@ def qaplot_ptsourceloc(v2,v3,allsiaf,outdir=''):
             
     plt.xlabel('V2 (arcsec)')
     plt.ylabel('V3 (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.legend()
     
     plt.savefig(filename)
@@ -653,7 +658,7 @@ def qaplot_ptsourceloc(v2,v3,allsiaf,outdir=''):
 
 # Plot showing the location of the extended-source dithers
 
-def qaplot_extsourceloc(v2,v3,allsiaf,outdir=''):
+def qaplot_extsourceloc(v2,v3,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -709,7 +714,7 @@ def qaplot_extsourceloc(v2,v3,allsiaf,outdir=''):
             
     plt.xlabel('V2 (arcsec)')
     plt.ylabel('V3 (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.legend()
     
     plt.savefig(filename)
@@ -720,7 +725,7 @@ def qaplot_extsourceloc(v2,v3,allsiaf,outdir=''):
 
 # Plot showing field coverage of a 4-pt ALL point-source dither
 
-def qaplot_ps4all(v2,v3,dx,dy,allsiaf,outdir=''):
+def qaplot_ps4all(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -797,7 +802,7 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(1,5,'ALL, 4-PT, point source')
     plt.legend()
 
@@ -809,7 +814,7 @@ def qaplot_ps4all(v2,v3,dx,dy,allsiaf,outdir=''):
 
 # Plot showing field coverage of a 2-pt Ch4 point-source dither
 
-def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,outdir=''):
+def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -878,7 +883,7 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(7,7,'Ch4, 2-PT, point source')
     plt.legend()
 
@@ -890,7 +895,7 @@ def qaplot_ps2ch4(v2,v3,dx,dy,allsiaf,outdir=''):
 
 # Plot showing field coverage of a 2-pt ALL extended-source dither
 
-def qaplot_ext2all(v2,v3,dx,dy,allsiaf,outdir=''):
+def qaplot_ext2all(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -959,7 +964,7 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(5,5,'ALL, 2-PT, extended source')
     plt.legend()
 
@@ -971,7 +976,7 @@ def qaplot_ext2all(v2,v3,dx,dy,allsiaf,outdir=''):
 
 # Plot showing field coverage of a 4-pt ALL extended-source dither
 
-def qaplot_ext4all(v2,v3,dx,dy,allsiaf,outdir=''):
+def qaplot_ext4all(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -1048,7 +1053,7 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(5,5,'ALL, 4-PT, extended source')
     plt.legend()
 
@@ -1060,7 +1065,7 @@ def qaplot_ext4all(v2,v3,dx,dy,allsiaf,outdir=''):
 
 # Plot showing field coverage of a 2-pt Ch3 extended-source dither
 
-def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,outdir=''):
+def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -1129,7 +1134,7 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(5,5,'Ch3, 2-PT, extended source')
     plt.legend()
 
@@ -1141,7 +1146,7 @@ def qaplot_ext2ch3(v2,v3,dx,dy,allsiaf,outdir=''):
 
 # Plot showing field coverage of a 4-pt Ch3 extended-source dither
 
-def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,outdir=''):
+def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     # Set the default output data directory if it was not provided
     if (outdir == ''):
         data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
@@ -1218,7 +1223,7 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,outdir=''):
     
     plt.xlabel('$\Delta$ R.A. (arcsec)')
     plt.ylabel('$\Delta$ Decl. (arcsec)')
-    plt.title('MRS Dithers: Flight FLT-1 ('+nowstring+')')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(5,5,'Ch3, 4-PT, extended source')
     plt.legend()
 
