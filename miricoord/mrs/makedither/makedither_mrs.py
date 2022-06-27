@@ -424,7 +424,7 @@ def writeresults_prd(dxidl,dyidl,outdir=''):
     print('',file=open(outfile,"a"))
 
     print('SCAN-CALIBRATION',file=open(outfile,"a"))
-    for ii in range(52:):
+    for ii in range(52,len(dxidl)):
         print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-51,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))    
 
