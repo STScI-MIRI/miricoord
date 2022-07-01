@@ -3,7 +3,7 @@ from glob import glob
 
 setup(
    name='miricoord',
-   version='1.0.0',
+   version='1.1.0',
    description='MIRI coordinate transforms',
    author='David R. Law',
    author_email='dlaw@stsci.edu',
@@ -15,6 +15,8 @@ setup(
        ('data/fits/cdp7',glob('data/fits/cdp7/*')),
        ('data/fits/cdp7beta3',glob('data/fits/cdp7beta3/*')),
        ('data/fits/cdp8b',glob('data/fits/cdp8b/*')),
+       ('data/fits/flt1',glob('data/fits/flt1/*')),
+       ('data/fits/flt2',glob('data/fits/flt2/*')),
    ],
    include_package_data=True,
    install_requires=['jwst', 'pysiaf', 'jupyter', 'matplotlib'],
