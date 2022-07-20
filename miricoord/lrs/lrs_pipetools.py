@@ -24,6 +24,7 @@ Author: David R. Law (dlaw@stsci.edu)
 
 REVISION HISTORY:
 17-Dec-2018  Written by David Law (dlaw@stsci.edu)
+19-Jul-2022  Add FLT-1 (D. Law)
 """
 
 import os as os
@@ -38,7 +39,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is CDP-7 (there is no CDP-7b)
+# Set the tools version.  Default is FLT-1
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -50,7 +51,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.lrs.toolversions.lrs_pipetools_cdp7 as tv
+        import miricoord.lrs.toolversions.lrs_pipetools_flt1 as tv
+    elif (version == 'flt1'):
+        import miricoord.lrs.toolversions.lrs_pipetools_flt1 as tv
     elif (version == 'cdp7'):
         import miricoord.lrs.toolversions.lrs_pipetools_cdp7 as tv
     else:
