@@ -702,6 +702,7 @@ def check_visit_pointing(visitfile,scira=0.,scidec=0.):
 
     # If a MIRI filter was found, apply boresight correction to what the commanded
     # v2,v3 position would have been if F770W were in use
+    pdb.set_trace()
     if filter:
         x,y=mt.v2v3toxy(v2,v3,filter)
         v2_770,v3_770=mt.xytov2v3(x,y,'F770W')
