@@ -17,6 +17,7 @@ setup(
        ('data/fits/cdp8b',glob('data/fits/cdp8b/*')),
        ('data/fits/flt1',glob('data/fits/flt1/*')),
        ('data/fits/flt2',glob('data/fits/flt2/*')),
+       ('data/fits/flt3',glob('data/fits/flt3/*')),
    ],
    include_package_data=True,
    install_requires=['jwst', 'pysiaf', 'jupyter', 'matplotlib'],
