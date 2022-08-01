@@ -49,29 +49,29 @@ def version():
 # Set the relevant FITS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
     if (channel == '1A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.08.fits'
     elif (channel == '1B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.08.fits'
     elif (channel == '1C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.08.fits'
     elif (channel == '2A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_9B.05.08.fits'
     elif (channel == '2B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_9B.05.08.fits'
     elif (channel == '2C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_9B.05.08.fits'
     elif (channel == '3A'):
-        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.08.fits'
     elif (channel == '3B'):
-        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.08.fits'
     elif (channel == '3C'):
-        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.08.fits'
     elif (channel == '4A'):
-        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_9B.05.08.fits'
     elif (channel == '4B'):
-        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_9B.05.08.fits'
     elif (channel == '4C'):
-        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.07.fits'
+        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_9B.05.08.fits'
 
     # Try looking for the file in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -471,6 +471,7 @@ def abltoxy(alin,bein,lamin,channel,**kwargs):
             coind=1+(i*5)+j
             thexmatrix[:,coind]=xcoeff.field(coind)*(((trimlam[index0]-xcoeff.field(0))**i)*(trimal[index0]**j))
             theymatrix[:,coind]=ycoeff.field(coind)*(((trimlam[index0]-ycoeff.field(0))**i)*(trimal[index0]**j))
+
     # Sum the contributions from each column in the big matrices
     x[index0]=np.sum(thexmatrix,axis=1)    
     y[index0]=np.sum(theymatrix,axis=1)
