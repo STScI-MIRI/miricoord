@@ -41,8 +41,8 @@ def version():
 
 # Set the relevant FITS distortion file
 def get_fitsreffile():
-    base_dist='data/crds/jwst_miri_imager_distortion_flt1.asdf'
-    base_off='data/crds/jwst_miri_filteroffset_flt1.asdf'
+    base_dist='data/crds/flt1/jwst_miri_imager_distortion_flt1.asdf'
+    base_off='data/crds/flt1/jwst_miri_filteroffset_flt1.asdf'
     
     # Try looking for the file in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

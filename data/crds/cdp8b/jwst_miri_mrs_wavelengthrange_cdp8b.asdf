@@ -1,0 +1,51 @@
+#ASDF 1.0.0
+#ASDF_STANDARD 1.3.0
+%YAML 1.1
+%TAG ! tag:stsci.edu:asdf/
+--- !core/asdf-1.1.0
+asdf_library: !core/software-1.0.0 {author: Space Telescope Science Institute, homepage: 'http://github.com/spacetelescope/asdf',
+  name: asdf, version: 2.4.0.dev1739}
+history:
+  entries:
+  - !core/history_entry-1.0.0
+    description: 'DOCUMENT: MIRI-TN-00001-ETH_Iss2-1_Calibrationproduct_MRS_d2c.  New
+      files created from CDP-8b'
+    software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
+      name: coordinates, version: master}
+    time: 2019-04-29 17:38:08.709542
+  extensions:
+  - !core/extension_metadata-1.0.0
+    extension_class: astropy.io.misc.asdf.extension.AstropyAsdfExtension
+    software: {name: astropy, version: 3.2.dev24057}
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension.BuiltinExtension
+    software: {name: asdf, version: 2.4.0.dev1739}
+meta:
+  author: David R. Law, Polychronis Patapis, Adrian M. Glauser
+  date: '2019-04-29T13:38:08.705'
+  description: MIRI MRS CDP8b distortion reference data.
+  exposure: {type: MIR_MRS}
+  filename: jwst_miri_mrs_wavelengthrange_cdp8b.asdf
+  instrument: {band: N/A, channel: N/A, detector: N/A, name: MIRI}
+  model_type: WavelengthrangeModel
+  pedigree: GROUND
+  reftype: wavelengthrange
+  telescope: JWST
+  useafter: '2000-01-01T00:00:00'
+  wavelength_units: !unit/unit-1.0.0 um
+wavelengthrange:
+- [4.68, 5.97]
+- [5.24, 6.87]
+- [6.2, 7.9]
+- [7.27, 9.03]
+- [8.43, 10.39]
+- [9.76, 11.97]
+- [11.29, 13.75]
+- [13.08, 15.86]
+- [15.14, 18.29]
+- [17.4, 21.2]
+- [20.31, 24.68]
+- [23.72, 28.75]
+waverange_selector: [1SHORT, 1MEDIUM, 1LONG, 2SHORT, 2MEDIUM, 2LONG, 3SHORT, 3MEDIUM,
+  3LONG, 4SHORT, 4MEDIUM, 4LONG]
+...

@@ -74,7 +74,7 @@ def get_fitsreffile(channel):
 
     # Try looking for the files in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    rootdir=os.path.join(rootdir,'data/crds/')
+    rootdir=os.path.join(rootdir,'data/crds/flt3/')
     refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
           'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
     if os.path.exists(os.path.join(rootdir,distfile)):
@@ -82,7 +82,7 @@ def get_fitsreffile(channel):
 
     # If that didn't work, look in the system path
     rootdir=sys.prefix
-    rootdir=os.path.join(rootdir,'data/crds/')
+    rootdir=os.path.join(rootdir,'data/crds/flt3/')
     refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
           'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
     if os.path.exists(os.path.join(rootdir,distfile)):

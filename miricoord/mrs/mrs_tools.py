@@ -22,6 +22,8 @@ REVISION HISTORY:
 04-Apr-2022  Start adding flt1 model (D. Law)
 27-May-2022  Add FLT-1 (D. Law)
 14-Jun-2022  Add FLT-2 (D. Law)
+01-Aug-2022  Add FLT-3 (D. Law)
+25-Aug-2022  Add FLT-4 (D. Law)
 """
 
 import os as os
@@ -38,7 +40,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is flt3
+# Set the tools version.  Default is flt4
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -50,7 +52,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_tools_flt3 as tv
+        import miricoord.mrs.toolversions.mrs_tools_flt4 as tv
+    elif (version == 'flt4'):
+        import miricoord.mrs.toolversions.mrs_tools_flt4 as tv
     elif (version == 'flt3'):
         import miricoord.mrs.toolversions.mrs_tools_flt3 as tv
     elif (version == 'flt2'):
