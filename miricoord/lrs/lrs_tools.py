@@ -22,6 +22,7 @@ REVISION HISTORY:
 17-Dec-2018  Written by David Law (dlaw@stsci.edu)
 06-Feb-2019  Change default to CDP-7 (D. Law)
 19-Jul-2022  Add FLT-1 (D. Law)
+03-Oct-2022  Add FLT-2 (D. Law)
 """
 
 import os as os
@@ -33,7 +34,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is FLT-1
+# Set the tools version.  Default is FLT-2
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -45,7 +46,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.lrs.toolversions.lrs_tools_flt1 as tv
+        import miricoord.lrs.toolversions.lrs_tools_flt2 as tv
+    elif (version == 'flt2'):
+        import miricoord.lrs.toolversions.lrs_tools_flt2 as tv
     elif (version == 'flt1'):
         import miricoord.lrs.toolversions.lrs_tools_flt1 as tv
     elif (version == 'cdp7'):
@@ -72,14 +75,14 @@ def version():
 #############################
 
 # Get the relevant FITS wavelengths file
-def get_fitsreffile():
+def get_fitsreffile(stype):
     # Determine whether the CDP toolversion has been set.  If not, set to default.
     try:
         sys.getrefcount(tv)
     except:
         set_toolversion('default')
         
-    reffile=tv.get_fitsreffile()
+    reffile=tv.get_fitsreffile(stype)
     return reffile
 
 #############################

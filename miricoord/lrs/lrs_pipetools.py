@@ -25,6 +25,7 @@ Author: David R. Law (dlaw@stsci.edu)
 REVISION HISTORY:
 17-Dec-2018  Written by David Law (dlaw@stsci.edu)
 19-Jul-2022  Add FLT-1 (D. Law)
+03-Oct-2022  Add FLT-2 (D. Law)
 """
 
 import os as os
@@ -39,7 +40,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is FLT-1
+# Set the tools version.  Default is FLT-2
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -51,7 +52,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.lrs.toolversions.lrs_pipetools_flt1 as tv
+        import miricoord.lrs.toolversions.lrs_pipetools_flt2 as tv
+    elif (version == 'flt2'):
+        import miricoord.lrs.toolversions.lrs_pipetools_flt2 as tv
     elif (version == 'flt1'):
         import miricoord.lrs.toolversions.lrs_pipetools_flt1 as tv
     elif (version == 'cdp7'):
