@@ -65,7 +65,36 @@ def xytov2v3l(x,y,file):
     sl=np.nanmedian(slall,axis=1)
     
     return v2,v3,lam,sl
-        
+
+#############################
+
+# Convert x,y pixel values to v2,v3,lam for a given input file
+def v2v3ltoxy(v2,v3,lam,file):
+    im=datamodels.ImageModel(file)
+
+    nslice=30
+    # Big structure to save all the returned values
+    xall=np.zeros([len(v2),nslice])
+    yall=np.zeros([len(v2),nslice])
+    slall=np.zeros([len(v2),nslice])
+    for ii in range(0,nslice):
+        xform=(nirspec.nrs_wcs_set_input(im,ii)).get_transform('v2v3','detector')
+        xall[:,ii],yall[:,ii]=xform(v2,v3,lam)
+        slall[:,ii]=ii
+
+    # slice all is nan where xall is nan
+    x_1d=xall.reshape(-1)
+    sl_1d=slall.reshape(-1)
+    finite=(np.isfinite(x_1d))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        sl_1d[indx]=np.nan
+
+    x=np.nanmedian(xall,axis=1)
+    y=np.nanmedian(yall,axis=1)
+    sl=np.nanmedian(slall,axis=1)
+    
+    return x,y,sl
     
 #############################
 
