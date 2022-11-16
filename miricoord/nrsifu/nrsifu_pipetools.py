@@ -95,10 +95,42 @@ def v2v3ltoxy(v2,v3,lam,file):
     sl=np.nanmedian(slall,axis=1)
     
     return x,y,sl
-    
+
 #############################
 
-# Make a slice number map
+# Convert x,y pixel values to slicer coordinates for a given input file
+def xytoslicer(x,y,file):
+    im=datamodels.ImageModel(file)
+
+    nslice=30
+    # Big structure to save all the returned values
+    new1all=np.zeros([len(x),nslice])
+    new2all=np.zeros([len(x),nslice])
+    lamall=np.zeros([len(x),nslice])
+    slall=np.zeros([len(x),nslice])
+    for ii in range(0,nslice):
+        xform=(nirspec.nrs_wcs_set_input(im,ii)).get_transform('detector','slicer')
+        new1all[:,ii],new2all[:,ii],lamall[:,ii]=xform(x,y)
+        slall[:,ii]=ii
+
+    # slice all is nan where new1all is nan
+    new1_1d=new1all.reshape(-1)
+    sl_1d=slall.reshape(-1)
+    finite=(np.isfinite(new1_1d))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        sl_1d[indx]=np.nan
+
+    new1=np.nanmedian(new1all,axis=1)
+    new2=np.nanmedian(new2all,axis=1)
+    lam=np.nanmedian(lamall,axis=1)
+    sl=np.nanmedian(slall,axis=1)
+    
+    return new1,new2,lam,sl
+
+#############################
+
+# Make a slice number, v2, v3, and wavelength map
 def sliceimage(file):
     # Define 0-indexed base x and y pixel number (2048x2048 grid)
     basex,basey = np.meshgrid(np.arange(2048),np.arange(2048))
@@ -107,16 +139,84 @@ def sliceimage(file):
     basey=basey.reshape(-1)
     v2,v3,lam,sl=xytov2v3l(basex,basey,file)
 
-    mockimg=np.zeros([2048,2048])
-    mock1d=mockimg.reshape(-1)
-    mock1d[:]=sl
-
-    finite=(np.isfinite(mock1d))
+    mockimg_sl=np.zeros([2048,2048])
+    mock1d_sl=mockimg_sl.reshape(-1)
+    mock1d_sl[:]=sl
+    finite=(np.isfinite(mock1d_sl))
     indx=(np.where(finite == False))[0]
     if (len(indx) > 0):
-        mock1d[indx]=-1
-    
-    return mockimg
+        mock1d_sl[indx]=-1
+
+    mockimg_v2=np.zeros([2048,2048])
+    mock1d_v2=mockimg_v2.reshape(-1)
+    mock1d_v2[:]=v2
+    finite=(np.isfinite(mock1d_v2))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_v2[indx]=-1
+        
+    mockimg_v3=np.zeros([2048,2048])
+    mock1d_v3=mockimg_v3.reshape(-1)
+    mock1d_v3[:]=v3
+    finite=(np.isfinite(mock1d_v3))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_v3[indx]=-1
+
+    mockimg_la=np.zeros([2048,2048])
+    mock1d_la=mockimg_la.reshape(-1)
+    mock1d_la[:]=lam
+    finite=(np.isfinite(mock1d_la))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_la[indx]=-1
+        
+    return mockimg_sl,mockimg_v2,mockimg_v3,mockimg_la
+
+#############################
+
+# Make a slice number, new1, new2, and wavelength map
+def sliceimage2(file):
+    # Define 0-indexed base x and y pixel number (2048x2048 grid)
+    basex,basey = np.meshgrid(np.arange(2048),np.arange(2048))
+    # Convert to 1d vectors
+    basex=basex.reshape(-1)
+    basey=basey.reshape(-1)
+    new1,new2,lam,sl=xytoslicer(basex,basey,file)
+
+    mockimg_sl=np.zeros([2048,2048])
+    mock1d_sl=mockimg_sl.reshape(-1)
+    mock1d_sl[:]=sl
+    finite=(np.isfinite(mock1d_sl))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_sl[indx]=-1
+
+    mockimg_new1=np.zeros([2048,2048])
+    mock1d_new1=mockimg_new1.reshape(-1)
+    mock1d_new1[:]=new1
+    finite=(np.isfinite(mock1d_new1))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_new1[indx]=-1
+        
+    mockimg_new2=np.zeros([2048,2048])
+    mock1d_new2=mockimg_new2.reshape(-1)
+    mock1d_new2[:]=new2
+    finite=(np.isfinite(mock1d_new2))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_new2[indx]=-1
+
+    mockimg_la=np.zeros([2048,2048])
+    mock1d_la=mockimg_la.reshape(-1)
+    mock1d_la[:]=lam
+    finite=(np.isfinite(mock1d_la))
+    indx=(np.where(finite == False))[0]
+    if (len(indx) > 0):
+        mock1d_la[indx]=-1
+        
+    return mockimg_sl,mockimg_new1,mockimg_new2,mockimg_la
 
 #############################
 
