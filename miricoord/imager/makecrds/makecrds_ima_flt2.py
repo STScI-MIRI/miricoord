@@ -132,19 +132,15 @@ def make_filter_offset(distfile, outname, subarray):
     if (subarray == 'MASK1065'):
         extname = 'BoresightCORON1065'
         subvalues = "MASK1065"
-        psubvalues = "MASK1065"
     elif (subarray == 'MASK1140'):
         extname = 'BoresightCORON1140'
         subvalues = "MASK1140"
-        psubvalues = "MASK1140"
     elif (subarray == 'MASK1550'):
         extname = 'BoresightCORON1550'
         subvalues = "MASK1550"
-        psubvalues = "MASK1550"
     elif (subarray == 'MASKLYOT'):
         extname = 'BoresightCORONLYOT'
         subvalues = "MASKLYOT"
-        psubvalues = "MASKLYOT"
     else:
         extname = 'Boresight offsets'
         subvalues = "FULL"
@@ -164,8 +160,9 @@ def make_filter_offset(distfile, outname, subarray):
     model.meta.title = "MIRI imager filter offset - FLT2"
     model.meta.description = "FLT2 delivery"
     model.meta.input_units = "pixels"
-    model.meta.instrument.subarray = subvalues
-    model.meta.p_subarray = psubvalues
+    model.meta.subarray.name = subvalues
+    if (subvalues == "FULL"):
+        model.meta.subarray.p_subarray = psubvalues
 
     for item in data:
         model.filters = d
