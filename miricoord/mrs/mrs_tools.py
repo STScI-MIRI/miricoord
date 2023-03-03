@@ -52,7 +52,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_tools_flt4 as tv
+        import miricoord.mrs.toolversions.mrs_tools_flt5 as tv
+    elif (version == 'flt5'):
+        import miricoord.mrs.toolversions.mrs_tools_flt5 as tv
     elif (version == 'flt4'):
         import miricoord.mrs.toolversions.mrs_tools_flt4 as tv
     elif (version == 'flt3'):
@@ -310,7 +312,7 @@ def betaimage(channel):
 # Create an image in a given channel of the pixel area in arcsec.
 # Either in alpha-beta or v2-v3 frame.
 
-def pixarea(band,frame='ab'):
+def pixarea(band,frame='ab', **kwargs):
     # Determine whether the CDP toolversion has been set.  If not, set to default.
     try:
         sys.getrefcount(tv)
@@ -325,7 +327,7 @@ def pixarea(band,frame='ab'):
     basey=basey.reshape(-1)
     
     # Convert to base alpha,beta,lambda at pixel center
-    values=xytoabl(basex,basey,band)
+    values=xytoabl(basex,basey,band,**kwargs)
     alpha,beta=values['alpha'],values['beta']
     lam,slicenum=values['lam'],values['slicenum']
 
@@ -339,16 +341,16 @@ def pixarea(band,frame='ab'):
     swidth=slicewidth(band)
     
     # Convert to  alpha,beta,lambda at pixel lower-left
-    valuesll=xytoabl(basex-0.4999,basey-0.4999,band)
+    valuesll=xytoabl(basex-0.4999,basey-0.4999,band,**kwargs)
     alphall,betall=valuesll['alpha'],valuesll['beta']-swidth/2.
     # Convert to  alpha,beta,lambda at pixel upper-right
-    valuesur=xytoabl(basex+0.4999,basey+0.4999,band)
+    valuesur=xytoabl(basex+0.4999,basey+0.4999,band,**kwargs)
     alphaur,betaur=valuesur['alpha'],valuesur['beta']+swidth/2.
     # Convert to  alpha,beta,lambda at pixel upper-left
-    valuesul=xytoabl(basex-0.4999,basey+0.4999,band)
+    valuesul=xytoabl(basex-0.4999,basey+0.4999,band,**kwargs)
     alphaul,betaul=valuesul['alpha'],valuesul['beta']+swidth/2.
     # Convert to  alpha,beta,lambda at pixel lower-right
-    valueslr=xytoabl(basex+0.4999,basey-0.4999,band)
+    valueslr=xytoabl(basex+0.4999,basey-0.4999,band,**kwargs)
     alphalr,betalr=valueslr['alpha'],valueslr['beta']-swidth/2.
 
     # Convert to v2,v3 at pixel corners
