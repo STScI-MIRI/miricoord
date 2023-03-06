@@ -423,10 +423,15 @@ def writeresults_prd(dxidl,dyidl,outdir=''):
         print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-47,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
     print('',file=open(outfile,"a"))
 
-    print('SCAN-CALIBRATION',file=open(outfile,"a"))
-    for ii in range(52,len(dxidl)):
+    print('DEDICATED-BG',file=open(outfile,"a"))
+    for ii in range(52,56):
         print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-51,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
-    print('',file=open(outfile,"a"))    
+    print('',file=open(outfile,"a"))
+    
+    print('SCAN-CALIBRATION',file=open(outfile,"a"))
+    for ii in range(56,len(dxidl)):
+        print("{0:<3}{1:>10.6f}       {2:>10.6f}".format(ii-55,dxidl[ii],dyidl[ii]),file=open(outfile,"a"))
+    print('',file=open(outfile,"a"))
 
     # Log the operation is complete
     print('Successfully wrote PRD dithers file to ',relfile)
