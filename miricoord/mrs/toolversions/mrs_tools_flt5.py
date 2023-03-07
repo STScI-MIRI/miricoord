@@ -51,17 +51,17 @@ def version():
 # Set the relevant FITS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
     if (channel == '1A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5draft.02.fits'
     elif (channel == '1B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5draft.02.fits'
     elif (channel == '1C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5draft.02.fits'
     elif (channel == '2A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5draft.02.fits'
     elif (channel == '2B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5draft.02.fits'
     elif (channel == '2C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5draft.02.fits'
     elif (channel == '3A'):
         file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_flt5draft.fits'
     elif (channel == '3B'):
