@@ -24,6 +24,7 @@ REVISION HISTORY:
 14-Jun-2022  Add FLT-2 (D. Law)
 01-Aug-2022  Add FLT-3 (D. Law)
 25-Aug-2022  Add FLT-4 (D. Law)
+13-Mar-2023  Add FLT-5 (D. Law)
 """
 
 import os as os
@@ -40,7 +41,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is flt4
+# Set the tools version.  Default is flt5
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:

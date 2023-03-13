@@ -29,7 +29,7 @@ REVISION HISTORY:
 13-Jun-2022  Flight updates to distortion and wavecal FLT-2 (D. Law)
 01-Aug-2022  FLT-3 updates based on calibration scan APT 1524 (D. Law)
 25-Aug-2022  FLT-4 updates using new wavelength calibration (D. Law)
-02-Feb-2023  FLT-5 updates using Jupiter/Saturn wavecal info (D. Law)
+13-Mar-2023  FLT-5 updates using distortion updates plus Jupiter/Saturn wavecal info (D. Law)
 """
 
 import os as os
@@ -51,29 +51,29 @@ def version():
 # Set the relevant FITS distortion file based on channel (e.g., '1A')
 def get_fitsreffile(channel):
     if (channel == '1A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5.fits'
     elif (channel == '1B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5.fits'
     elif (channel == '1C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5.fits'
     elif (channel == '2A'):
-        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12SHORT_DISTORTION_flt5.fits'
     elif (channel == '2B'):
-        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12MEDIUM_DISTORTION_flt5.fits'
     elif (channel == '2C'):
-        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFUSHORT_12LONG_DISTORTION_flt5.fits'
     elif (channel == '3A'):
-        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_flt5.fits'
     elif (channel == '3B'):
-        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_flt5.fits'
     elif (channel == '3C'):
-        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_flt5.fits'
     elif (channel == '4A'):
-        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFULONG_34SHORT_DISTORTION_flt5.fits'
     elif (channel == '4B'):
-        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFULONG_34MEDIUM_DISTORTION_flt5.fits'
     elif (channel == '4C'):
-        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_flt5draft.fits'
+        file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_flt5.fits'
 
     # Try looking for the file in the expected location
     rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -625,114 +625,114 @@ def v2v3toab(v2in,v3in,channel):
 #############################
 
 # MRS test reference data
-# Created by DRL 8/27/22
+# Created by DRL 3/13/23
 mrs_ref_data = {
     '1A': {'x': np.array([ 76., 354.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
-           'alpha': np.array([ 0.05652259, -0.02172324]),
+           'alpha': np.array([ 0.03288179, -0.04858892]),
            'beta': np.array([-0.17721014, -1.24047101]),
-           'lam': np.array([5.35064324, 5.51512728]),
-           'v2': np.array([-503.29746209, -503.22870775]),
-           'v3': np.array([-318.83188393, -317.76709904]),
+           'lam': np.array([5.35072375, 5.51518959]),
+           'v2': np.array([-503.31228069, -503.23710401]),
+           'v3': np.array([-318.83616491, -317.77244046]),
            },    
     '1B': {'x': np.array([ 76., 355.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
-           'alpha': np.array([-0.01337304,  0.09966433]),
+           'alpha': np.array([-0.00813124,  0.11273202]),
            'beta': np.array([-0.17720418, -1.24042924]),
-           'lam': np.array([6.17966294, 6.3699934]),
-           'v2': np.array([-503.3194386 , -503.06063586]),
-           'v3': np.array([-318.93844309, -317.91038277]),
+           'lam': np.array([6.17975843, 6.3700669]),
+           'v2': np.array([-503.32405292, -503.05104995]),
+           'v3': np.array([-318.93987362, -317.90521187]),
            },
     '1C': {'x': np.array([ 78., 356.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
-           'alpha': np.array([ 0.02716106, -0.03223556]),
+           'alpha': np.array([0.01739197, -0.03471344]),
            'beta': np.array([-0.17720219, -1.24041531]),
-           'lam': np.array([7.13255028, 7.35192278]),
-           'v2': np.array([-503.23735106, -503.14692946]),
-           'v3': np.array([-318.6744475 , -317.61254812]),
+           'lam': np.array([7.13267221, 7.35206312]),
+           'v2': np.array([-503.25999331, -503.15802722]),
+           'v3': np.array([-318.67156198, -317.61196797]),
            },
     '2A': {'x': np.array([574., 719.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
-           'alpha': np.array([0.02861321, 0.02479319]),
-           'beta': np.array([ 0.27971819, -1.39859093]),
-           'lam': np.array([8.16027904, 8.44558351]),
-           'v2': np.array([-503.47960111, -503.22973293]),
-           'v3': np.array([-319.56852362, -317.90174408]),
+           'alpha': np.array([-0.01375816,  0.01379452]),
+           'beta': np.array([0.27971819, -1.39859093]),
+           'lam': np.array([8.16026434, 8.44559456]),
+           'v2': np.array([-503.49521111, -503.22971886]),
+           'v3': np.array([-319.5626039 , -317.90519805]),
            },
     '2B': {'x': np.array([570., 715.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.03627037, -0.02182506]),
-           'beta': np.array([ 0.27972605, -1.39863026]),
-           'lam': np.array([9.42386347, 9.75370525]),
-           'v2': np.array([-503.61458268, -503.34756331]),
-           'v3': np.array([-319.84139588, -318.18458161]),
+           'beta': np.array([0.27972605, -1.39863026]),
+           'lam': np.array([9.42392473, 9.75379887]),
+           'v2': np.array([-503.62257204, -503.35555267]),
+           'v3': np.array([-319.83891641, -318.18210214]),
            },
     '2C': {'x': np.array([573., 718.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
-           'alpha': np.array([-0.07776634, -0.07206809]),
-           'beta': np.array([ 0.27972212, -1.3986106 ]),
-           'lam': np.array([10.8844322 , 11.26497535]),
-           'v2': np.array([-503.5031163, -503.2447688]),
-           'v3': np.array([-319.76272527, -318.10638339]),
+           'alpha': np.array([-0.11900143, -0.09122651]),
+           'beta': np.array([0.27972212, -1.3986106]),
+           'lam': np.array([10.88463473, 11.26511667]),
+           'v2': np.array([-503.51387901, -503.2477601]),
+           'v3': np.array([-319.76651401, -318.1091811]),
            },
     '3A': {'x': np.array([918., 827.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.14851662, -0.12738753]),
-           'beta': np.array([ 0.58472067, -1.754162  ]),
-           'lam': np.array([12.55547495, 12.21787111]),
-           'v2': np.array([-504.22150481, -504.00927702]),
-           'v3': np.array([-319.56474306, -317.23711586]),
+           'beta': np.array([0.58472067, -1.754162]),
+           'lam': np.array([12.55571408, 12.21800272]),
+           'v2': np.array([-504.21025795, -503.99803016]),
+           'v3': np.array([-319.55403366, -317.22640645]),
            },
     '3B': {'x': np.array([919., 827.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.18606572,  0.06403284]),
-           'beta': np.array([ 0.58472067, -1.754162  ]),
-           'lam': np.array([14.50846391, 14.11789597]),
-           'v2': np.array([-504.31417369, -503.86909215]),
-           'v3': np.array([-319.75596021, -317.4576509]),
+           'beta': np.array([0.58472067, -1.754162]),
+           'lam': np.array([14.50875113, 14.11805503]),
+           'v2': np.array([-504.3002668 , -503.85518526]),
+           'v3': np.array([-319.75781792, -317.45950861]),
            },
     '3C': {'x': np.array([917., 826.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.08360864, -0.09362804]),
-           'beta': np.array([ 0.58472067, -1.754162  ]),
+           'beta': np.array([0.58472067, -1.754162]),
            'lam': np.array([16.76050529, 16.30953938]),
-           'v2': np.array([-504.09151351, -503.88790822]),
-           'v3': np.array([-319.75011328, -317.42063758]),
+           'v2': np.array([-504.08533011, -503.88172482]),
+           'v3': np.array([-319.75038724, -317.42091154]),
            },
     '4A': {'x': np.array([195., 232.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.18098345, -0.08642445]),
-           'beta': np.array([ 2.29613309, -1.64009507]),
+           'beta': np.array([2.29613309, -1.64009507]),
            'lam': np.array([19.46632903, 18.766802]),
-           'v2': np.array([-503.28721542, -502.54188268]),
-           'v3': np.array([-321.96952278, -318.11479544]),
+           'v2': np.array([-503.2930293 , -502.54769655]),
+           'v3': np.array([-321.97415917, -318.11943183]),
            },
     '4B': {'x': np.array([192., 229.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.03437878, -0.07182671]),
-           'beta': np.array([ 2.29613654, -1.64009753]),
+           'beta': np.array([2.29613654, -1.64009753]),
            'lam': np.array([22.74119887, 21.9272137]),
-           'v2': np.array([-503.28885231, -502.63240122]),
-           'v3': np.array([-321.66352013, -318.09815946]),
+           'v2': np.array([-503.29190489, -502.63545381]),
+           'v3': np.array([-321.67132896, -318.1059683]),
            },
     '4C': {'x': np.array([194., 231.]),
            'y': np.array([512., 700.]),
            's': np.array([10,4]),
            'alpha': np.array([-0.08228878, -0.0200367]),
-           'beta': np.array([ 2.29611932, -1.64008523]),
+           'beta': np.array([2.29611932, -1.64008523]),
            'lam': np.array([26.59809744, 25.64596776]),
-           'v2': np.array([-503.39221343, -502.66650835]),
-           'v3': np.array([-321.76840195, -317.87523125]),
+           'v2': np.array([-503.32421646, -502.59851138]),
+           'v3': np.array([-321.90576753, -318.01259682]),
            }
 }

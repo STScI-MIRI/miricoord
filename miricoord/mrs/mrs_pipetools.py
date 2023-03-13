@@ -19,6 +19,7 @@ REVISION HISTORY:
 14-Jun-2022  Add FLT-2 (D. Law)
 01-Aug-2022  Add FLT-3 (D. Law)
 27-Aug-2022  Add FLT-4 (D. Law)
+13-Mar-2023  Add FLT-5 (D. Law)
 """
 
 import os as os
@@ -33,7 +34,7 @@ from numpy.testing import assert_allclose
 
 #############################
 
-# Set the tools version.  Default is FLT-4
+# Set the tools version.  Default is FLT-5
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -45,7 +46,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_pipetools_flt4 as tv
+        import miricoord.mrs.toolversions.mrs_pipetools_flt5 as tv
     elif (version == 'cdp6'):
         import miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
     elif (version == 'cdp8b'):
@@ -58,6 +59,8 @@ def set_toolversion(version):
         import miricoord.mrs.toolversions.mrs_pipetools_flt3 as tv
     elif (version == 'flt4'):
         import miricoord.mrs.toolversions.mrs_pipetools_flt4 as tv
+    elif (version == 'flt5'):
+        import miricoord.mrs.toolversions.mrs_pipetools_flt5 as tv
     else:
         print('Invalid tool version specified!')
 
