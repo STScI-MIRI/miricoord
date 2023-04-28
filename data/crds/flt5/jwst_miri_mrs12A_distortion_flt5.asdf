@@ -1,0 +1,4132 @@
+#ASDF 1.0.0
+#ASDF_STANDARD 1.5.0
+%YAML 1.1
+%TAG ! tag:stsci.edu:asdf/
+--- !core/asdf-1.1.0
+asdf_library: !core/software-1.0.0 {author: The ASDF Developers, homepage: 'http://github.com/asdf-format/asdf',
+  name: asdf, version: 2.14.3}
+history:
+  entries:
+  - !core/history_entry-1.0.0
+    description: MRS wavelength and spatial distortion.  FLT5 updates spatial distortion
+      (many programs) and wavelength calibration (based on programs 1246/1247 observations
+      of Jupiter/Saturn)
+    software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
+      name: miricoord, version: master}
+    time: 2023-04-27 15:11:21.725734
+  extensions:
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension.BuiltinExtension
+    software: !core/software-1.0.0 {name: asdf, version: 2.14.3}
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension._manifest.ManifestExtension
+    extension_uri: asdf://asdf-format.org/core/extensions/core-1.5.0
+    software: !core/software-1.0.0 {name: asdf-astropy, version: 0.3.0}
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension._manifest.ManifestExtension
+    extension_uri: asdf://asdf-format.org/transform/extensions/transform-1.5.0
+    software: !core/software-1.0.0 {name: asdf-astropy, version: 0.3.0}
+abv2v3_model:
+  channel_band: [1SHORT, 2SHORT]
+  model:
+  - !transform/compose-1.2.0
+    forward:
+    - &id002 !transform/remap_axes-1.3.0
+      inputs: [x0, x1]
+      mapping: [0, 1, 0, 1]
+      outputs: [x0, x1, x2, x3]
+    - !transform/concatenate-1.2.0
+      forward:
+      - !transform/polynomial-1.2.0
+        coefficients: !core/ndarray-1.0.0
+          source: 114
+          datatype: float64
+          byteorder: little
+          shape: [5, 5]
+        domain:
+        - &id001 [-1, 1]
+        - *id001
+        inputs: [x, y]
+        name: ab_v23
+        outputs: [z]
+        window:
+        - *id001
+        - *id001
+      - !transform/polynomial-1.2.0
+        coefficients: !core/ndarray-1.0.0
+          source: 115
+          datatype: float64
+          byteorder: little
+          shape: [5, 5]
+        domain:
+        - *id001
+        - *id001
+        inputs: [x, y]
+        name: ab_v23
+        outputs: [z]
+        window:
+        - *id001
+        - *id001
+      inputs: [x0, y0, x1, y1]
+      outputs: [z0, z1]
+    inputs: [x0, x1]
+    inverse: !transform/compose-1.2.0
+      forward:
+      - *id002
+      - !transform/concatenate-1.2.0
+        forward:
+        - !transform/polynomial-1.2.0
+          coefficients: !core/ndarray-1.0.0
+            source: 116
+            datatype: float64
+            byteorder: little
+            shape: [5, 5]
+          domain:
+          - *id001
+          - *id001
+          inputs: [x, y]
+          name: v23_ab
+          outputs: [z]
+          window:
+          - *id001
+          - *id001
+        - !transform/polynomial-1.2.0
+          coefficients: !core/ndarray-1.0.0
+            source: 117
+            datatype: float64
+            byteorder: little
+            shape: [5, 5]
+          domain:
+          - *id001
+          - *id001
+          inputs: [x, y]
+          name: v23_ab
+          outputs: [z]
+          window:
+          - *id001
+          - *id001
+        inputs: [x0, y0, x1, y1]
+        outputs: [z0, z1]
+      inputs: [x0, x1]
+      outputs: [z0, z1]
+    outputs: [z0, z1]
+  - !transform/compose-1.2.0
+    forward:
+    - *id002
+    - !transform/concatenate-1.2.0
+      forward:
+      - !transform/polynomial-1.2.0
+        coefficients: !core/ndarray-1.0.0
+          source: 118
+          datatype: float64
+          byteorder: little
+          shape: [5, 5]
+        domain:
+        - *id001
+        - *id001
+        inputs: [x, y]
+        name: ab_v23
+        outputs: [z]
+        window:
+        - *id001
+        - *id001
+      - !transform/polynomial-1.2.0
+        coefficients: !core/ndarray-1.0.0
+          source: 119
+          datatype: float64
+          byteorder: little
+          shape: [5, 5]
+        domain:
+        - *id001
+        - *id001
+        inputs: [x, y]
+        name: ab_v23
+        outputs: [z]
+        window:
+        - *id001
+        - *id001
+      inputs: [x0, y0, x1, y1]
+      outputs: [z0, z1]
+    inputs: [x0, x1]
+    inverse: !transform/compose-1.2.0
+      forward:
+      - *id002
+      - !transform/concatenate-1.2.0
+        forward:
+        - !transform/polynomial-1.2.0
+          coefficients: !core/ndarray-1.0.0
+            source: 120
+            datatype: float64
+            byteorder: little
+            shape: [5, 5]
+          domain:
+          - *id001
+          - *id001
+          inputs: [x, y]
+          name: v23_ab
+          outputs: [z]
+          window:
+          - *id001
+          - *id001
+        - !transform/polynomial-1.2.0
+          coefficients: !core/ndarray-1.0.0
+            source: 121
+            datatype: float64
+            byteorder: little
+            shape: [5, 5]
+          domain:
+          - *id001
+          - *id001
+          inputs: [x, y]
+          name: v23_ab
+          outputs: [z]
+          window:
+          - *id001
+          - *id001
+        inputs: [x0, y0, x1, y1]
+        outputs: [z0, z1]
+      inputs: [x0, x1]
+      outputs: [z0, z1]
+    outputs: [z0, z1]
+alpha_model:
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 76
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 77
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 78
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 79
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 80
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 81
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 82
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 83
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 84
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 85
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 86
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 87
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 88
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 89
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 90
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 91
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 92
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 93
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 94
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 95
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 96
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 97
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 98
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 99
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 100
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 101
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 102
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 103
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 104
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 105
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 106
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 107
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 108
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 109
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 110
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 111
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 112
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    - !transform/shift-1.2.0
+      inputs: [x]
+      offset: -0.0
+      outputs: [y]
+    inputs: [x0, x]
+    outputs: [x0, y]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 113
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: det2local
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x0, x]
+  outputs: [z]
+bdel:
+  channel_band: [1SHORT, 2SHORT]
+  delta_beta: [0.177210143797, 0.279718186333]
+beta_model:
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.77210143797
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.594891294173
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.417681150376
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.240471006579
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.063260862782
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.886050718985
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.7088405751879998
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.5316304313909999
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.3544202875939999
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.17721014379699995
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.0
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.17721014379700017
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.35442028759400035
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.5316304313910001
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.7088405751880003
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.886050718985
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.0632608627820002
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.2404710065790003
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.417681150376
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.5948912941730002
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.77210143797
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -2.23774549066
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.958027304327
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.678309117994
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.3985909316610001
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -1.118872745328
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.839154558995
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.5594363726620002
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: -0.27971818632900014
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 3.999911513119514e-12
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.27971818633699996
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.55943637267
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 0.8391545590030001
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.1188727453359997
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.3985909316689997
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.6783091180019998
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 1.9580273043350003
+- !transform/constant-1.4.0
+  dimensions: 1
+  inputs: [x]
+  name: det2local
+  outputs: [y]
+  value: 2.237745490668
+bzero:
+  beta_zero: [-1.77210143797, -2.23774549066]
+  channel_band: [1SHORT, 2SHORT]
+meta:
+  author: David R. Law, Polychronis Patapis, Yannis Argyriou
+  date: '2023-04-27T15:11:21.702'
+  description: MIRI MRS Distortion Maps
+  exposure: {type: MIR_MRS}
+  filename: jwst_miri_mrs12A_distortion_flt5.asdf
+  input_units: !unit/unit-1.0.0 pixel
+  instrument: {band: SHORT, channel: '12', detector: MIRIFUSHORT, name: MIRI}
+  model_type: DistortionMRSModel
+  output_units: !unit/unit-1.0.0 arcsec
+  pedigree: INFLIGHT 2022-06-08 2022-06-08
+  reftype: distortion
+  telescope: JWST
+  useafter: '2022-05-01T00:00:00'
+slices: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115,
+  116, 117, 118, 119, 120, 121, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
+  211, 212, 213, 214, 215, 216, 217]
+x_model:
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.312428116626493
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 0
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.318220320442174
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 1
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.323107345790192
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 2
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.326107052251647
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 3
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.328257831520632
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 4
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.3294655346358395
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 5
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.330053276747605
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 6
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.329269829389335
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 7
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.327810884784217
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 8
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.325015119006538
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 9
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.320981440955081
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 10
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.306978895358977
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 11
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.311737866188091
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 12
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.315449763042752
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 13
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.318408782432899
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 14
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.3212034767145315
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 15
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.321857246770227
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 16
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.321777442022297
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 17
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.319840271073785
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 18
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.317046134680555
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 19
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -5.3138834176819465
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 20
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.148403140229117
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 21
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.157436981470301
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 22
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.163404803480718
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 23
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.166040670515175
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 24
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.166046423540823
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 25
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.163744822146164
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 26
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.158407362335382
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 27
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.151173709143384
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 28
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.142634369011219
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 29
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.123927509138621
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 30
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.132558574480498
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 31
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.136985401737642
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 32
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.138308320644304
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 33
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.136866170038719
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 34
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.13281569412429
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 35
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.126868489479323
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 36
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_x
+      offset: -8.11850773066141
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 37
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_x
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+y_model:
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.312428116626493
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 38
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.318220320442174
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 39
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.323107345790192
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 40
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.326107052251647
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 41
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.328257831520632
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 42
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.3294655346358395
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 43
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.330053276747605
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 44
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.329269829389335
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 45
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.327810884784217
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 46
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.325015119006538
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 47
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.320981440955081
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 48
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.306978895358977
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 49
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.311737866188091
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 50
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.315449763042752
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 51
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.318408782432899
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 52
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.3212034767145315
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 53
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.321857246770227
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 54
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.321777442022297
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 55
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.319840271073785
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 56
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.317046134680555
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 57
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -5.3138834176819465
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 58
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.148403140229117
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 59
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.157436981470301
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 60
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.163404803480718
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 61
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.166040670515175
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 62
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.166046423540823
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 63
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.163744822146164
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 64
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.158407362335382
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 65
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.151173709143384
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 66
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.142634369011219
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 67
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.123927509138621
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 68
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.132558574480498
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 69
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.136985401737642
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 70
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.138308320644304
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 71
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.136866170038719
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 72
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.13281569412429
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 73
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.126868489479323
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 74
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+- !transform/compose-1.2.0
+  forward:
+  - !transform/concatenate-1.2.0
+    forward:
+    - !transform/shift-1.2.0
+      inputs: [x]
+      name: shift_y
+      offset: -8.11850773066141
+      outputs: [y]
+    - !transform/identity-1.2.0
+      inputs: [x0]
+      outputs: [x0]
+    inputs: [x, x0]
+    outputs: [y, x0]
+  - !transform/polynomial-1.2.0
+    coefficients: !core/ndarray-1.0.0
+      source: 75
+      datatype: float64
+      byteorder: little
+      shape: [9, 9]
+    domain:
+    - *id001
+    - *id001
+    inputs: [x, y]
+    name: polynomial_y
+    outputs: [z]
+    window:
+    - *id001
+    - *id001
+  inputs: [x, x0]
+  outputs: [z]
+...
+ÓBLK 0              ˆ      ˆ      ˆí±Ô¸cE©å,f<\jØƒh“~@ä?EÍ‘,@ÀBP"2î­¿ QçmXÕT?  :şÑ?                                £Å ¥‚ @Ú¸V
+¡«¿ ü5é¸|?0§÷b›à1?€¥÷ïáÿA¿                                dvXÈb5ÀGHJKº¿}p­Ó…Â?ÒÚ¾u†Oq¿ „²ò­–f¿                                 !8$¿À–j)ÍÓ}§?Hò‹ºWv?õåP×Şq¿ö²ôju?                                ”©˜øfÀËdÑ¼Àî?U=%¾=	á¿6¬dL»Ñ…?âåÄûä?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆùrİ7ò´ë—@¥-Ê?] Ï±u}È¿{@èJı¸š—@€ÆWõ¤¯¿ »[ONJc? @5ñí.?                                Ym¸™ @‹uÅA-Æ¸¿—·ñÉt¿ôÙQnûâf?€E]Y¿                                ßˆGò«4À,½Œå?<RÎ¼ñ?ÎÁæ"\M®¿à]BDp@€¿                                ½>Ã2şÀe+‹8á?++^Ô¶úØ?²¾TÉ¤¿¼C>€İ“?                                ù´¯_ê¿Á:0ºoÀÒ˜ï@ÀS~´…‚Õ?¼î³e£?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆe»%(?ı²äH 3e=NÇµóx@s_ÈQú@ ¼ZL1®l? àøg($¿  Dñ¹q'¿                                @¥BŞÊı?ª$N\›³¿HnW¾å|¿Xò¡Òa¿€Š[LxWe¿                                İ×7®›3À)H¿š¥´Ş?ˆ-Ş²«µ¿®£ót?Àñ»ÌÀbz?                                R«q»c´ÀB,şÙÌ?ÏÙÜJéÅ?òY­µD[‰?êÓpXÂ”?                                ~]Û¥×Àÿv¶?¹ ÀE8óÑÓæÒ¿ãÌº× “¿t†ÿô¢¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÌŠ#•¼ùVWÒ°5ÒQÑ¹#—T*v@Š"M‰Œt@ ~ƒ^¯˜¿ €PR
+? €d+{(¿                                U-v§w–ş?T^hVËß“¿d¸SSŠİ€?@8ôî¯1¿ \˜''?¿                                #³+0ı3À¤w×Öî¡Õ¿ò¬‘šôÚÁ¿9ùFæó{?€üEøÔıo?                                ­‘”‰À)›92£¿ÌÜá7”{? Gß™¿—å^
+7m?                                Šzo	6À.`‡%ÿ?f\ú‰ïØ×? MÖo´˜¿y°Á>ß¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆËÊŞ˜ï+`Ma<XÖ31ƒˆ2WTs@8Ôl:¤@ sŠ¬S¿ Ğš¢°É&¿  dBÁ)¿                                ?[À–2(ü?Û!3hÏDw?8ÊÑ²à¦r?< à×2¿€òuh<¿^¿                                ¬ïBşZq2ÀÂ¬ÖšÙÃ¿”ÿªÎRã¿$ÜK±¶0„? Ö?²„°F?                                3ß6·çëÀ.=òíŸÑ¿"° 5†¨?ƒØDªÄüW?ĞÒØ%F’?                                ü˜šó Àíİëí?za ©ğ
+@Ëò˜˜è¥¿`tCóíQ¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆıŞUôøâ<¼kÀá©£™º¾b£å{p@ ¸÷ÈåÍ@€¿…½a4˜¿  JæCç>  ÜUî[ö¾                                `zªß4‰ü?Ñ»Ãcœœ¿<ø‰°ó¸€?€o¯„)!¿ s „yG¿                                ¡°~pH“3À€¥+9³*Ÿ?Ä4óH5Î?ğş/M:KQ? ¾uÙ_¿                                 z´eXüÀµò±¨¥¿?01ñÑò¬Š¿Ü›‚{}BZ¿˜Ñ‡2ñ&q?                                «biS”À‚kksÃ¿T«ù–ö¿dQc5gq?êMO³S4•?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ…’4”­2+’£ÒÜãÀ¯¯çsÑZ0k@¸… § 4@ ÑU/Ÿ°¿äÛœa¼T?  @š8Í¿                                 ¢B%c®û?6ªWš´ƒŒ?ŞÎî¤?p–o è÷5¿ v&IU@¿                                Ó©…58Ô3À‡GCføï¿ˆÖÊQŒæ?S‘AıÕ­…¿€£¥œATw¿                                J ™vÀb†MÓ¤œ¿?Ìmd«Ü“Ñ¿(J|"	.t¿i+ÏL‡?                                *UX!•aŞ?ÇºØËT™@°¾L­À‘–Í?V1h«.±?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÎñÀˆ/b+İkl•<_{Ô3YáYe@3ÓÊ¶Ú4@€-,72Ü”¿ ŞöPô»+?   pÖ0%?                                ƒhdB‡ú?ÂEÜÁ4R?˜·–P¿°BßùŞ? Â‚,zù+¿                                °Íiø2À¶õ€®¾Í?`4ÂÆ»¿?^¸q’h¿€÷jœèb¿                                z	ö­€¯À|	fšÎV?“Œ¤VÜ½?vGä¬¼±D¿,¡m@k?                                @-Úwd*ÿ¿µ×
+‹²dõ¿ÈZí¿†¶_ü"‘? Zä¶¼T?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ©‡~¹OhüDíìßÑæİMhâÉì^@¾©Fº|j@@XPçí­¿àÿó“óÖQ? €/‰?	'?                                9#ø8?aû?ïHPîğ
+¦?,í$SeÉ²¿@¯‡á0˜A?`şùà…d¿                                şÙú´“3ÀâÏæÙÍ­¿?xİü?ëLğ?›½Œ±•—¿ $</‰WD¿                                CÃ¤yìÀSùDjÆÓ¿ÇrñªYâ?Ü¿öN¦¶u¿†.şÊ%%˜?                                9ÆïXãè @2Ìf:é¿}¬ÀD*ÀÕ’¶2t»?d²¯…toˆ¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ£!Ù{p~Hp,,1ZÿÁò,cïòR@œŒz+a©@ -M5Xš‰?@]X2¿ €ÌıåûE¿                                ‹|$£ÿø?–ºZf/œ?ÈN¤Vfís? ®¦)´?ÿ> üª;ÁEY¿                                ¯-ÍíÒT2ÀÙF¡B<È?U}}[å¿s±ŒÅĞ‡?€%€—
+?                                êP©Û` À+dc`RW{¿XúÄn\k¥?FøŸ¼µg¿FO„,ã‹?                                åN^‚@¹Ÿ?·òFªõ¿¼Z¬›–	@¨åá$ì°¿®×ª`ª»¯¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ÷ •YB2¶,‹ õk+Ë;¤4uƒí;@œ²“U¾@  LŠüéR? 1[ciúE¿ °~"²bS¿                                WÍ`@éõ?L‰l§?äÆ‹D1®?\@æ©GM¿àŸL˜½şc¿                                G©‚w®½1Àƒ^Ï™Ób°¿ôwèšPç¿”DOaZB˜?€[b~f›?                                vœÁ,QÀÇÑà›ãa¢¿b8Ê‹â¿êWEZ Éh?ğ#Î,Y‘?                                ïÔmĞ(â¿…Øâ˜5îÈ¿ËE¼TA\@èèşÁ÷ì½¿0·Úî²¼¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆeMiëƒy"ˆ„­(&˜ä­hºë}@×¥Í{6Ò@ sB€–X ¿ -YM«q+? €Aˆ&¿                                og²iY @f©:/Ô±¿âäyÕ^È–¿¸ko2®G¿@f;—CY¿                                œ}[¢4À†šÃb§?)òf;Ä?¹ènİÌØa? $ÿ$ÚÅz?                                }‰55ŠÀ¹øØ8Ø+?ÉïpÃ?a‹,ËÀeh?æÕŞDLª€?                                °î>¨`Àƒy‡áWæÖ¿LvörÓò¿Úğ½õ,`?B¿îL®…¢¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆü¶>Ø-¶|±ÆÂµ?qgÜÁ•_z@@\Iu @ 4İ/no¿ pÈ;¾Î? €*^±B¿                                bºojWÿ?H¸ÜòOİ­¿€X;‹%3¿n¦BÑP¿ ˜l×'£Y¿                                IÆˆs3ÀQ˜‹‹¹?¢óø&O@¶¿*|=¦Ö[?àÙ“Åît?                                JíÈ,Ä*À›»I“«H°?NöÿÜ·?†¾ßÔ²ak?ÚpÛÔc`Š?                                Ìcä À$¥¯Nê¿Òã1\í Ì¿ŸNQ#{İz?Şˆ¬¢¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆnòk¾*=íì‘~ò"ÀN='à+w@w@ãÚ`@ Ü×k¤¿€}†Ò"E? €>×Äá¿                                "~†qÿ?È8)Ò‡jš¿HG4-uC¿Ğ¹M«FG¿ À&ÚóK¿                                &VíD ë3À‘¦O}¹¨Ë¿wİy±!FÁ?ôC›”¡Ív¿ QSì`rt?                                ,#Ã`´rÀ1”m—¹®¿äG¯òWK²?£EıÉr?PÏúDÔY?                                ¨+vh€–À…­ĞMÀ·ï?gk‡òÒí¿zç>~~£?ŒUdš ¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÏ’áœÇ….³”$,ˆ`Ã¯¬Æ(ò½t@²’vŸ@@×4Î>¢¿ ìÄÓŞV<?  ‰®bâ¿                                $e›ı?)P€d#AB¿ ±úùN¿ ¸Ù— ¿ ’ıôA¿                                8 K!/3Àõ® ¬‡Í¿°à ‹w¬Ë¿*•uŠy? xšôëvW?                                n´/[lÀj48|ŠÆ¿ÕHr¶z‹‘?3ã([Q¿ùÅ|—{?                                /;7¶:¡À:À–wø]ğ?tîÉ<Xí?©´_)Ãi‘¿PĞ26‰¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆto$ğkV¯‡˜ì^n¹2/_(2åq@¯K«^¤@ P…¿5}? jü„Q'?  Äúê»!?                                ˜{Êûü?ÍLÒv_Ÿ¿œ¢?KÛ–?lá†öC 1? ÅõÍ‡1¿                                GÆ2óÄ3À)}K©T´Ç?˜p$¡Wã’¿˜8TwŠŒg¿€ëü(€p¿                                éZ£Œ9À°µ3áÙ½³?Qßt¶Ì¿1Êø„`¿ išr¡şg?                                ‘XÊoÀÇÅÆÜãÌğ¿×š#SÖóÙ¿óm©$ğøy?ìÆ±%<•?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ!.Œ+S3FÁ·ú‚V´>£+ÏÎl	n@Ğ¾À@ öªÏ;…¿ ´"Éi;¿ `æÑTÆ1¿                                ‹Á©Ç =ş?
+’ŞÇÆŸ¿Jİ®£¡–¿€‘6´·>¿@©N„gG¿                                ñ…5ê44ÀfıÁ=å?ŞëÎ@Óß?]VHa€? ˜›où ?¿                                )å¢s“À.u¤¬ë³?`}Ô„p²¹?¨°º‹')¿p²ë~·KP?                                Ìğ¯×ç	÷?ƒÆShÀ4µU+À8êİ“Æ”¿Æwwæ«ĞŸ?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ[ş>
+HuÅÌu ‹3Cß ÓBØÚ¥@h@^ïY]@ ºŞŠè–¿ `HV_ ¿ €‘¥ºb*¿                                ö)äë¼åú?«?F\&}¿W¢@î#£?Ò¼=?S¿ ğlã•Ø?                                hî)Ct3À
+ª…½úr°¿4©úHğÆ¿jıúö5x? «6ïZu?                                _vÛÑÍÙÀ^4sÁ§À?V«5[Ö¿büÖ­ Z?ø\ÌÁ„T¿                                ã¡ÔA?À}ú¹ÃçqŞ?)şR1¹•ğ?tLoºÔá’¿Ü§"ÓÅ˜¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆfaC<öğ©«ÆhWä1…á¢üáÆÂdb@²‘N² @ r‰“ ¢w¿ Pœ¹Ñ¿ à„VÙÏ?¿                                L¯n¨y+ı?L¸ ?¥¸.–²¿¸n]uÅà`¿€Ña *İ4¿                                ‹ñW4À¸ÒC˜™ªĞ?°¤(· è?ÚÃViÉn}? JzÉ–?                                N—ÍCWÍÀ¦`»&Ò¿3‹¡?pbÚ?åmWUq?ü¾‘÷>m¿                                Ñ—;‘QŠú?Š8
+²@ëä¿¸
+åS›ÀX¡a_c£¿~É`Ä¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÏY¡jIÂÙé²´•àJ#Äk@şX@;EË¬C@ ¨? ‹÷”? :·¢3^9?  	ƒs?                                Ö` 3ú?p@ÛoŠ“?ˆ6|Â•·~¿ü›<`B3¿€°àw3?                                ´ƒrÛ§3Ànwá§ß¿Ğ?t
+Ù¼w¥Ã?ô—GmXe¿ gÌÕüÏ]¿                                Ë64[hÀô¡l°eï§¿\KàA‹¹¿u|r†P?Ø/sÌã~p¿                                @Ü •È@„oJiRÖ¿,öÿÿ†ñ¿Åê{.¯}?ˆB‡ˆ¯St?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ‘ß‹™ÒÉO¯¸ ˆğ?±óy‚J:âI@d[hØºI@ vşõç¡‰¿ ÀlªWÁ¿  ãÏ{¿                                v
+vs+×ø?ôD:ÿ"ç®?2QvÕã+“¿“4WîC¿€ıh!Ø»X¿                                Õzğ×3ÀêÎ¼şªÍ¿Ny£«â?|”Ñ-hf? vÕ„›G?                                ªÂz’À<ÿÃ›³TÇ¿úì——&¸®?F"=ïu?Èµ81‘?                                ¹é§!c@MåóşÖ @äx.½®
+Àã¹Óí¿Ğ¥ØƒŒ™o?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆºÖ1
+œ¯©E|MeÍTˆ&Å¶ <@òıU@ À 5†Ò-~¿ h?“ê¿   Åt=	?                                ö‹,e{@7Í˜LÃ¶¿Š¬ëh‡¿˜›İP†«$¿  XÉÒ×>                                ,ØÎ9Àù¥ÙAıD£?ÚEÔ9û¿`û1Ğ1? ˆwStF¿                                Å/¤‚JÀ’9,†nq’¿¤çÙ£aÄ ?ŒÑöFÔG? ÷ÖÇÎÌ¿                                1«:Š'¯ô¿,rêî´’¿¥_®?İ¹?ˆ˜¨Ø0¿€Í¯$X?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÖ¡ùÏùä€êC÷æÔIšÜbç‚@İW
+Ö§èÀ òÈÀS]¿ ÌËµôã>  YìDÜ>                                ëP7z@×æP«N±±¿ ‰]b¡<F¿€7Š±s¿  àC´rã>                                #:Ä±Ş9À´iõMäÍj?°\õØÃŸ¿˜Ìæ¾Ó>¿ àƒv#¿                                „g]å®ÑÀaNÌCz˜?‡*ëäzØ¿ †\Ã~¿ó¾ ì?æä)¿                                `J•·Vö¿½ú 3§§¿
+;‹® ?<WÑ qŠP? ,?:B;?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆŞX) ,!ÚØ.óÜAsıhûcX´„@0¼)U”À€<À=L”¿ â¢…&¿  €‚µä¾                                Í2…×±@,¨…­®%«¿ô¦k›&…¿X$£.)¿ `à¼ş¾                                @„„Î4h9À…^s— ^—? Hi4wÀ˜¿Àæé£-? €;5jò¾                                Ê#\@ĞXÀçe™^ ?şÀ±	Ô ?ÜyÌŸë”?? 9Á?                                3.ş×Rò¿Å­ŠˆJ¦¿æİÓp­?¸4¿ÍF¿ VíM¬0?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆM)Ë6>¾aó$f}ñ<ÙLí†@$w²ˆK/À ªY‚.†¿ Š‰´í²¿  ô9«8?                                ke¨é@Ñ¢gıÏ¢¿ 9`ı¸f¿ ÁQã$¿  ˆˆÌ}?                                K‰”z“9Àq2©´ª?Ğéœ>«¿@Gõ³Í½3¿ Ü=–B¿                                ›¢Ø]ZnÀcA)Ò¦?«o3]Rˆ¿ØäF|=*?Àw´?¿                                Ö$È–1 ğ¿OáŸÔŒ¸¿÷èK9´?¨tÜ¤E40? †µïV?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆcpv»GRA—EpÙØA'ÈØÿCˆ@Û¥y7(¦À@´bŒÈ¤¿@%=£»A¿  œ.FG÷¾                                NŒä@h…[k7‘¿²sŠM½‘¿ vÃ-R+¿ PÕ‚1h?                                ×vß³9À:å"LËk? …”Î ©?Ğ³ê;ÆˆI?  CL•%?                                V–L± À›8«Î
+¨?°ğƒgŞ›?,»ñr?$¿ %Ç–{ü)¿                                "à-œqõ¿ÔÇ­Íw>‚¿|ĞY ³¿@Ï{ÑUûL¿  r%âS.¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ©÷ñ¯ğucôL]¥»ÊXT?í¹‹©Úÿ‰@D²T<-À <e\¯bx? ğbì¼6Ñ>  ç„¿                                xuR—Á@ã%ÈU?‘^gh‡¿P[¢›3? €XÁİ>                                	èfÑN®9À:'²ÄL³•¿ ì¶¦3Ën?øYÂnøA$? Ğ¶¡Ÿ;?                                Œê½i½‚ÀcßC²²?)$>vP…?FµÕÛ¿ Q¿ Áû+æ›¿                                <aFc‹÷¿´7³-‘AÃ?M¹jÌ”¼¿V~¾ÜD²M¿€C¶8Q¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ•¨¹8”Æ;¾¡;·ÄF'Ø°³‹@VKæ·»ÀÀ4giî}›¿ m9ÿ1¿  ªp
+˜ø¾                                ÒˆÚ\y@-R¥ËEƒ? ß~n\¶U¿P¹Óp¿  9#î†÷>                                &ûÍ'¶Z:ÀÂD7ˆA&‚? àË µˆ? Œµ¶^R
+? € Åi-?                                Î%ê™ÀxÀ«d®?‘.ç	Ä¿`9Táão&¿€:F "¿                                :Adr_æ¿€H–ß‡¤?†0&€¿ |¤Y,Ó¾ Ú¼—.<¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ««¤@¶´Y‡Å:çRkümü|ò\@Ø3"lËtÀ ¼ÒjWb? x‚IÏ¤ö>  N>¾¿                                “¯ÌÊMl@}ñğUp}¨?˜jkw?À,`3P3$¿  B"¾¾                                â3_–:ÀìÇÚZò®?€=.[ÿa¿ !ç{ ¿ h’ôˆÜ??                                Áà ngÀ÷Ã;â¬l¿3w š’ˆ¿Ğ0ñ¿\(? ”Ä'¿                                ß<·Pæä¿ğƒLV¯±¿ş,òwR²?ĞˆÎ}7_
+? ”+3şíK¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆïÄå‚_~1˜Sq“ı8L=û@‹$o¡2À é… şA¥¿€””¥4ğC¿  dÃiGù¾                                1Å²MØ¸@î4ˆ„¯?¼*ÊşŒ¿ 3`R¼f¿ Dâ¤Fœ(?                                .d½$Í”:ÀPºE[_t?˜f|‰©× ?Ğ8g@EîE¿ Ğß¾ÇÑ5¿                                ‘{¡ƒ¶À"Ô©iè¤?¼åå4ù‘¢?°WGr1¿ éFÏŒTJ¿                                Æ%êCIŠó¿É”„”ZÍ‚¿šÌÂ2zŒ­¿PÍ ¯/`?€ò.3òRV?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆc#x…±Iè)›°¬VPB+%m¶rî@ÖûÇ½À@_ÅvZ? äR¢&¿  ° _”õ>                                ~¦š\¾@ÑŠİ¸|¿¿ ³œ‡ U¿€\¹§2?  À£~Pü¾                                ÉÎƒıø:9Àà…æ8«w¬¿h‡’[Gm•?€eœ¤+B*? XŸ,Æ~<¿                                ™euîw´Àr.ÓÚ{¿ªBëÀbâ?°±Ş£2¿ ¡½8ú­?                                c_\i+ñ¿*ä`j(¥?€¢ÌØ×s§¿P“$LÚ·D¿ .uJÕÔR?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ	=ˆ[ŒÏ—§¾p¯,şTyòÍšŒÆƒ@NŸF•	´À@3½ä&½˜¿ œŠ4m(¿   œ%İ>                                ÷tUJı@“6WÚ7¸¿0~š`;w?H:«¸P€#? °dôB6?                                ¬e¹ìJ9Àê9³}² ? 
+M2a´I? õù¹Ø›A¿ ‡éì·"¿                                xB¢À_85Ù‘Š?‚ëÁ«Š–¿å±]¤GÍD¿À3·fÖÈ"¿                                §„š€ëJó¿|c˜ehóº¿˜lØ%Æš¿€´ÑğoE? ´C8º$3?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ†Šïuèô¹$|ÈøxT}l˜…@˜†¡MEÀ€<*Ÿ©‚¿ ,°{€¿  àùbÎ¾                                ^Ù;g@Ü¾´ªùz²¿˜%åÕot¿ `òšl¸¾ ÷šÍj?                                ¡Îí^”9Àİà@w?@¬­B
+x?Fèk,¨K? - J,2?                                B¢˜«UÀÆ~ÌåX°?ğä)í¿•?€%ÑIW	?À·I'Gš4¿                                õRİˆõÄğ¿ö¢"õÂ¿ñfrş‚¡?˜–ÅÁÏ\¿€ê”5[P¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆOÉ(`Í}Yâ/¸ÔÛœçCÏ-c‡@HXNÎëÀ ¿Ô|f¿ ²¬³F7¿  œG3ñå¾                                rç5@ĞÁ@…à)îÂï¡¿˜ƒhÙpì†¿ ì­}‘¿ @nî|Aí¾                                
+\¿Ş¡9ÀŒp"ÇŞ¿Ğ‰%zˆğ™?p·®ìŠF?  æÚÅî?                                »½UôKÀØˆÈëC°?¶B¡pî"˜?àöZğô¾ ñ–=Ï ¿                                ²¬úºó¿FPÅº¶?Ä1‚‘©š¿ğƒï¾“I¿ ¸ªúù¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ]æø…OI/!­¢T0BL èúöŞ_%‰@Ûùùs	gÀ€9Òã¦¿ J/šñ¿ €rÆ>¿                                ä2ÕOçë@fTC-òI?Ğ¡Q`¿À¯û¾ ? ê˜,åØ&¿                                öõzÌİ¡9À‰Ébœ¿ø	,õ¡?àb›€--? è$±ˆÜD?                                Ç0[“Àğl¥#é4®?¨X%—w{Q¿ğs:ğ@¿ ë1ãB?                                ±öAQø¿Q˜“Ûİ|º?ş #Pù…À¿ŸJ’D	æR¿€AvPUT¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ¡,_Œ›ş!@ÈB H‘ÜŠ@¢RiÄ€À€+‚ Î—¿ Ş%ãƒ(¿   5øÊ¹¾                                gş5J@xgèå(Áš?ÀRíe®+N?ÀŸRv? €VÒ¼ô¾                                ¶hôëÕ:ÀØ¡…G+Õ¶? dc¤Í¦¿˜½ì¼Ø$Q¿ à:ŞˆŞ?                                UÌ#`TÀ]2—	´?ÃŠ9êJ}?€-·ùõ¾ L:(Cm?                                ¯z(ÈúÀñ¿lºô¼¿ 3¤§z?€h]†İ2¿ ˜|äğ7¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ½9¬Nğ,VÃe¢XUîPÙ"úàˆŒ@ÃT†¨À  ƒ3å? @EGH“ö> ÀÓü<>+¿                                |X c"@UÀİïÂ©? n˜|’¿Ğ=ëLÌt/? xZ`@ñ-¿                                „–m:Àƒÿ b—?UO&#Ğ±?D8"&Y¿ è`Ä‡ûa?                                 ˆ³4&¼À&H½Á|ª?ƒå£FÌú?üÈ``¨İ5¿à	
+›@?                                
+ß}Ùÿä¿ğÇÄ™üà¥?Ö‰İ?E`Ä¿kWƒjsOk? ³„È-m¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ¹‹$ •(¬….˜¸– ÚäD.Îj)û%@ö0i,oÀ —mµÉ|Œ? èØ FÍ¿  Öq“?                                ZÄ(Ú/@‰Y^âP»?ğ}í¼­s¿ Ãöù? ğš´šˆ?                                ‚‹Ğyt:ÀrSÿôV§?€ñŞt^…¿ @Şcÿ
+? 4wqrvF¿                                ¨¦]’CÀı6N›°?®å@uWàŒ?ÀxÎÔF#¿€ÈÌ 3¿                                yÚ~Éá·ğ¿<êMó¯_¥¿´Øn¶is™¿0­(’Îå0? ™qÖÔV?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆO)÷ÁQKÎı”C™ïÁ ºÕôÂ‘³~@à7³{å? n„¤Uª¿ ½kg‘P?  £ÁG5¿                                +ÿçŞp‘@¶>2Â¾¿ò­MÁ'c¼?@fP“}W? òğb-WY?                                9õ·N˜cb@âÔLÚqoî?„'ïä?*¨2”ê¡ƒ¿ şŸ§Ã3ˆ?                                ³+ê2Ğ>@Ìn	™Õı¿æÚt¦ÿö¿AY ªã¤m¿^ØK28˜¿                                2%KÔl…@Ÿ*öšÖÀªŸElïÅì¿C•#Ö˜.™¿üÃĞ
+Ø±¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ ¯AiÚ•ÿlX10åL‡w…¶m2~@ÀQftâ?  P8¿ <È¥º0?  ø	¤—¿                                ñÌÊ‹æ‚‘@øªgNkŞ¿®şÌV¯´¿°|‡ã:si? µ¾¿€`Y¿                                ­l/ô"zb@Éù@¢é¿ÌÖm!ªÑ¿,
+Ô‹%‚¿  Rƒ•= ?                                G?ª"Œ8A@Ä
+úzjã¿§È0Cé¡ä?v‚Á‚>‘ ¿À+¢,àc?                                \/»Lõ	&@cšR¶xw @Èr±}Ñ¿ıütÉÅñº?ÀUr™;ód¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ–yñ‘\›{cÒ¸äÒgìÒç:û·~@À ƒ¥
+Ø? 7øCQ0¨¿ €€5? €>˜àY9¿                                ‡sM•‘@Fã1÷oÆ¿Ìİ=¢î™Ğ?Ğ\=_‚?À»6$Ï6‡?                                $ğî ¦b@=«ò¡ñ?ìûxá?L–Fw~’¿ğOÒ\á™ ?                                ¢½R·€mA@Å†N=Yø¿pÏ7¤ÀSÑzÍª¿¶npk²¿                                ÀÅœnQ@šËôHÀ"'\w¯ú¿‹É_Å¦º?6—?µŸ;Í¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆH8Åc\Ç8ÇƒŠ±ÆÍHë»P¼$
+~@@B²NÅùÒ? fQôñ¨¿ pÚ«2?  à¤•':¿                                —]ó¸(ª‘@í¯u Â¿€íÉnÓˆw¿ ªKìêˆP¿ .êrúi¿                                AWãßÔĞb@BŞrurìî?F(j0YñÒ? Œ.be? =‚Éä?                                ¡+Uù?@@ò%zè¿«·=?Ëğõ¿½kß»Vé˜?„¨Ğp’?                                ½~¥M @ëØÓ:´ÀÔğÎQë¿íù(ĞfÛ ¿hV“¡¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ1ßZÑ¹µ>
+DQÈ*u¢÷7çS~@ ‘fø©É? NR‘6û ¿ €åDl?  tÚV7?                                ÆÒ{¦X¼‘@‡1=¾$®¿“ÆqÏÆ¿ÈL¸`?@½rRˆ¡g¿                                ¡Ğ(‚5¡b@w«ƒ¢»?à€½ÌáÒÈ?'ğ;? ·[ |™¿                                Éû©AÃÍ<@e9âU1#ÀÄÀÖX÷?j¹Ñî•†¿Cƒ¼>n?                                ß£[W­@mÆĞ…øÀ˜ü òå?\ç"á¦°¿X÷ø‡À›Æ?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ.K`v1l¢Wt×æ[´|È3Ò‘õ¶~@€ürÊ¬Ä? zàc¥? €»§ Ü9¿   Çˆğ¾                                8¶iMÌ‘@‚#+Q¤Â¿ S_ó½g?À·F—ÅÏW?€U“#\?                                =[ÕÖŞb@+åŞÒŠá¿à¤J3v­¿À¥0²¿o?€åÆÖKt?                                ¸ÈhÖWA@‹)BeøÄà¿†xàŸtã¿ßæœ;u]g¿|
+ndÙ²…¿                                ˆ2à¼*Û$@ÈöğIÖ?¹Œ¥å—È×¿&ˆî3†¹­¿Îßj„Ä+¤¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ¥yJ“	¿ÈæÆ{)4k½g¯~@ o‹x¨x±? Â‹yxì¡¿kLÃ–I?  ío^$¿                                (g£Ÿ$ß‘@DcøÜîâ¿_pK±lÕ»?¸º¿f«™a¿ úŞf¾âb?                                ä÷S*Ùb@i•væm©ä¿X¸ÿ	üş±?Ë@.:JŒ? ĞØØb€ƒ?                                Ù–¥.8A@Ò	îÑFë?šôí3|áÀãTn¯ã¡?`I÷‚Ÿ:¿                                goû`Ç%@}ct¿	õ?¹"£D‘~ù¿Ú«‘XOÁ¿bpØQ¨¨¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ‚jnF½T#/Ég}Sˆ³Cáb§ds~@ i·ï”h¿¿ {jKO­ª¿ ğÀ²z&:?   ôÀï>                                (t(J”ò‘@Öñr³`Ù¿ ÉZVzt¿?Ä‚"PšíI¿ ˜ë½=â¿                                ˆÔ	 …c@¯ÌÉ@ó°ñ?è*ç£*,ç?áv¿ QupáU?                                R»/TA/@@úÏC@Ì¨›¿I¡ªëoÃ?&f²9“o¿WvÒà=g?                                ,]·ãx@¥@amÀj†²£À¢«?-ÿû»…¿øîM Ä‰¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ•&LdÌ“)Ï›7½®êÙgæõ	~@€ñãhdüÌ¿ ÈÂÉÅ»w? `™0)kã>   –µ;Ü¾                                FDĞ(’@¼p0â¿Øøª–Õ»©¿‘B7{C? M‰ViìW?                                ùwÿ\2c@È­ë xØ¿`¿e¦dÚ¿d'­KX? ¶¡Nm¿                                #ºEp®J>@F[sÙdòú?¥Fû4úÙá¿•ª±Vf?Î|Ãø€¿                                ş€VÜ=@µLs—õá@x>@ËSÈ¿ª÷ïo ˆ?Æs#¢ù‚£?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆšoñRg<¥¼\òl¡²õmw9 -"~@€"ˆ·¹
+İ¿  xÕ¦¿ 4²s#>#¿  Ôv£¿                                mCøü’@¥æÿ¨mÒ¿ÛÊ­?@ğ~bT¿ Ş`m;ÓE¿                                âá.c@äÂ¶¿ò?¶&ÇIîŒĞ?”)ù]¨ßs? æ9Vpg?                                «H@@äĞ_OâÀÀşñĞÆaË¿Pÿœo6p?XIĞlEl?                                >j¡®Á@‹°Çñ“À6)S½ŸÙ¿7Zê÷œ%¦¿Tj'l^Q˜¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ:T-é P­•ÃÎ§OÒ^	µ$~@àÆ¹E¨â¿ 9t¨Ó£¿ ¬tñ^RI?  £¦ÕY?                                wCL´z.’@e(`÷‰Õ¿'B¨åæ¿œŠ‡‰.€?€tlF+kv?                                ¦ø†.ûcc@Ê`k‹]ô?êMÊ$NFÔ¿9?r.Õ‰p¿`À„jZ©¿                                gIø°9@IK¯ê!À·İ·Í@à¡ÿ'h®¿€«üXÉ??                                ‰”H³IÔ¿®ÇiGŠı¿$ê»ª‚‰@bË`YD¦¿°_›®}kÔ?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ,|3Øœ¦±üc’x&ß,õP	b~@ ß»ÖPYí? Sš¢‰°? 3NGËS¿  ìÑ²á0?                                ×–€—gy‘@-ËÂØà¿efQİï´Æ¿ 
+gÀ½_¿ âŸ*ÓZ¿                                /W•‘fb@ï„³;¤ ÀRè™ñTæ¿Ùµzìš? '©¶Gƒ¿                                Àó¸@@@©/ä­›ö?á—ßØğ?»öN ¬«?`ózPïn?                                (=Ä™¸ $@ÏÀÜc(@Ø	†@×?Ú€—Ä¹¸¿t^1µ0©?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆC ªÌí{Løhö–õqÔà=˜œ~@ Ş¯Ïìç? dC.eß¤? ˆàÇÉ
+L¿ €±YOB?                                Å€mv»Œ‘@¨Ç=[á;Ó¿ÁNëâ=;Å¿€ã–îk\S¿€6Nm4§¿                                `ÙOÇwb@•ó0€Óğ¿h’[XÌÈ¿(Á™í¢?`kHVÁz¢¿                                ASŸ==@–á¢ñ¿¡hû)@T€é„´o¿êÏ5ª?                                ëÁF1ÌS @M‚Æ:Õ?ÍF="²ó?Ùq½ß¶Í¿zãk¢ĞÒÎ?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ¥ÁŞ4É™êdf;s!@¹~@ âÏ‡† á? t½\Š‚? ÎÎáE¿ @+™B?                                [§Ú‘@âØøİĞ¿ŒGNßŞ¶¿¢Cväg? ~pßıB?                                µÛ/«Î‘b@Ëƒ€p·ÏË¿0Pÿäó·?ÜğîñĞ ?€íPs÷£¿                                E%A@LuÀcüx\ĞTé?"½Iæj¿ %_Ñ”¿                                üÖV@©š%@‘‡rLfÀşm—<?O¦¿ÜÊÎWƒÌ¿Û.ŞïÚÇĞ?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆîâPp9‰ê İ”@’ë¡nxÀ~@€S?ËÑ? ¤à3Bm ¿ Øez´R0? À€ßI¿                                >–õ{°‘@/vûÌGß?›¥X=à?‰|ÜwâÄw¿€¼†€/Êb?                                Ü	.ê¤b@ñ¬‚ì@ÖRãë"ğ?@ı{yYL? \u¨ìz¥?                                AŒá­b@@Ò¿†ÅTÀ4éÖRWfÀë¿Ê#!	”?,:ä“µÛ‘¿                                !%ZÚd\@Ğz«ñ&À7£² U—ñ¿ˆâ_u¡¿¿SVÛZåÑ¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ!³”Gi!mĞ|0Š,¡¤§ ®ı~@ 
+E˜9İÎ? ˆÁgò¥ƒ¿ ô#úXH? Àan!…P?                                g›qT‚Ä‘@©(šLšjñ¿‚ÛIå™ãã¿ÇnÂO~s?`m±¤×õ“?                                ãVìb@gHªZ¸?Æp„Œœ›Ñ¿H%oWz¿@“8¹…¦?                                î¦ù¼>@¦û lüx@•ÖI+‡@¦€9.Šn¿$¸¡vA¾¿                                KHƒŒ@«—³¶Dö?CÛã¨Š@uAS”†?Â‹<G€âİ¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ3'§ÿ_~)¿'ó¾Œ¡Öâk§SĞ~@ ŞÕ÷X? Õ¥#¥³¿ °	Év|"?  PÇ‡â;¿                                A„ÔÕ‘@~äKVqÓ¿»GV¯Ü?IÀ8!‡ûr? ËÙ)¸øL?                                6µÍ¤ß b@ÔlåLYû?ªÓ÷"P”ø?@ì3%w>”? —îªZB’?                                =…Ã‹Ğ@@·?KCÆéÆ¿PšÊïËÀÓë¢™|¿l&éè?                                EVév!@¹ˆ|,?$ÀÄ|~²üÀR€€/ÃË¿ø®´<_¹¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ˜óháÁ»ÑûókRR‚é©¨ÌÕsGK~@€úUš#–Î¿€¿ ‹³²¿ Àb«¤F? €—rÅb0¿                                €Æ·Ü­è‘@N¤ğDÜ´¹¿Ã) ;YPá?¾¡­VÜÎ‡¿ 3:G¿                                İS>@Ób@2:Y™œ@2%şš¤ó?8fñC¸ ¿€ğ]İCkw?                                VB¢˜¡FA@é¢;œ°ÀSĞ¿’ëÀèjgm•²?ˆ£Nµ>x¿                                0°cÿ³@à•Š4¡$À‘+Bã‘[À-.ik$AÊ?0=ç$á¯•¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ`e[28è§{c|a–íãÅ?Â£~@ çÓÌHÅ¿ & ‡õ?  ày.µ¿  ŒQB]¿                                ±–7’äù‘@™Ôõ„HMä¿ü^vK¾‘¿@&…ˆ R[¿À0"/>…l?                                ŸàJ`Àb@†bÉñÊó¿ğ/ô¡Z¸?Lsôí a€?€€]O‡?                                ãÀåî?C@€›w<8 @øëº(ñ¿ ºØ„un?ø¶œšÖ“¿                                 ÁXô}5/@ßË‹téâ?ÇqäĞŞÙ¿@V-QOƒ¿®`¼´¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ4 Ñ±­>tª6ã](¥eh™~@0şà.4&à¿ )W§<ª?  ú?  Nµğ)-?                                ¤›	o’@R.>Ş¿)}-Û?uSÛóáRe?€¹mÄU?                                AkNV c@6MŒïç0ı?­ş¡ç@é?pF&h³Œ? NÒôX?                                &ú3Ÿ[C@Ùó¯µÎ?ã^L¡Ÿê¿	^Å Ñ˜Š¿`t*¹Ğ¿                                ¼šíHı»@†š9ä{À=Éò]üîß¿/o)­¿Ì]kŞR ¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆw~Á™ü|‚_ÏÀóİutñ\'?Â"~@òlMâå¿ êQ¹–æœ? `­#õò ¿  ¨9Ğü>                                S‹Ş4’@„šˆ´kë¿¿¼Pr8È?à:˜˜pê=¿Àì×ŸÓd?                                Ç8²¨c@¢Å3ÅéiÒ¿b@õQÂ¿ˆõ¬t?@aæ¿ùƒ¿                                Ú‚l%Ç8B@íëğhU^ü?¯õµ²é õ¿êŞk®D*|?$èqõËŠ¿                                Æ<¯°"@YXuş.@İUÏfå¿fd£1#›–¿Ô¹iê¢¹¸?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ™lEhz}XåíTŠèeüı A7A~@XØRÂ|Üà? ¸íË¹–P¿ –´¨ç,¿  Ï_3	¿                                x0§ƒ;ˆ@“{6×¿â?W™pf•Ş®¿À’e¾Ø)4¿ –Æ^ˆ^/¿                                ld*ÛªO@8ÕÍ´—ğ©? ["½™\v? ~¸“ï|u? Ô¦µtpX¿                                Ç+£Æ¦@Úë_röqİ¿pRª Í?/ÍêüŞ\? ˜wÆ´5?                                &Ù:3à?õí~ÍÏ›¿G»à†ô±?Êë^6Æ‰¿@"nût?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆI×[¶^•Ì¤ö*1¯«{üuóRB~@¡ùo€!Ù? ¼¿Èp¿ ½nÁp
+¿  ä×A¿                                ÙJ}/î‡@7pĞOøØ?Ğ"VÀ»d¿ ÆAåZû> Àq´>“ø>                                5ÓÓRL}O@¯å*Ü2Ö°¿ÀBps“‘?‚ïÒrP? Lá12àR?                                =Öå_å@Ìxg„Ï?•IáYÜÓ¤?ìåÆ.æ5? ÷¼|:“?                                ºÔß€/ü¡?0¯L‹Ò?”?Qç—$—?êÂÕ‰‹a¿Àè(x8#h¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ;Ğ»¹zá`âæT‚áÏIí?~@ Ş÷ëÌ?  ù'8¿)? |Ü‰‘? €Ë}­ï-¿                                ÇÉöŠÜË‡@~ ó)	Õ?Àşä˜l¿pvfá/i!¿ à‘.4 ¿                                H:Şs¡EO@³b÷UÆÈ?`f5 ò»ª¿¼ª‹Å²'f¿ aìÒìl?                                ?´èå@;´˜0Ö?ä ¯ŸÔ«¿hÂŒ‚©t%? 3 WÒkF¿                                vÀQª;/Í?Ò·+ªÓ¿ ŸReÂ—d¿eşb¼Åv?à –%zş€¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆFıZéáE	?/Úu!m)İâşpøl6~@ –LÇ7C³? æËD4x? ÈÌGí¹Ş¾  pbUİ÷>                                –#0ïZ§‡@sø4³µUÕ?Èªº¿yv? ò }®ê¾ ˜¡ë}?                                Å:¤)ç&O@C&ç/uÆ?ğM—b›€¬¿_b?Ü‡1? èŒr<5¿                                'Éi¢cÏ@Ãj¸/®¾?‚¼ùÏ?ˆŠ/ù%H.?€w®$(*¿                                Üü*ôÕÈ¿€;B Sá¿Ğ¦,Ó”Àp?J[‘¬¶\¿ Ì×ÒŸùH?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÙ‘©õ£háiÒ&«Düü…ëDˆ4~@ „Xüú®¶¿ 00˜Tc? <‡xzüñ>  EÅ­ó?                                àwœ+ƒ‡@('¾­J@Ö?0ñÅÈŞ¿`bxÕ&¿ ÈX±ƒ?                                5X(Z}N@+ÈœJO­Ø?°ù„«¿úÈòpB¿ lpûeP¿                                ‹SÃ½­@…cŠÖd«¿”ÇQÙ­”? RºÆcêú>€Ûå¥¨=¿                                ÂcÂ.ğğ?ü&°…_ä¿ <%Î[f¿(îãX?¿@xQáDc?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ›ßHJ»s™0“xc“!­zAˆK|l91~@ ‰½ğL/Í¿ Î¥Å†ç…? Ğ!x­ì?  ¾4l,?                                ñ{ş¶9a‡@zÍí£&Ù?V"“µ¿À,,L:2¿ â²¶úC¿                                µF¹ë´N@Ÿ‰W¨à?Ğ¨ÛóÃÂ¿0*ÍlšFb¿€C‰Ïa¡r¿                                ,?¦UZ@+ÄzÌİ¿‰º•DËœ?â—=ÙV?x|C^}c?                                }­Uvüxë¿é%-Ó:ı¿øi #­’¿ùk²Á£7u?€I9ç%ø‡?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆËñøÍ±µlHB¸íµ9™QñÍf¦&~@0¯ÍÛÔ¿ ÊBÄ{õ}¿ .’¸x¿ €–“•0!¿                                ‡BdÜ”=‡@7³Ë³¶Ó?$y|©èÍ–¿€†™gTû3¿ Œ®õN,?                                $ë@JfN@¡tÁ7J`Ë?àÄâm³§¿ÀEóp“E¿ ôıïñ3S?                                ´F¤õ@I“ß¼İeÂ?T R€Çx¿ĞPÜA?`İ«(Ö¿Q¿                                ğåsuT	Ğ?lØ0Ø¿  Â)»?d?@µsş$¿ '}Ûş^¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆû¬Ğ”í¤ƒC½Îñ‘¦UÄ”&êœ#~@€‡j…JÜ¿ €§bÄ…¿ àˆ˜r¿ €”¬ú%?                                8†<®‡@´ÒºWÑ?=ÇÜ±O¦¿@!î—VO? £š9ñA?                                |\f¥f*N@xH×Påx? .ãV;Â‹¿Dæ‰ïZŞL? Ø×@iÍb¿                                Ìvì‹ W@¹ƒ’a6YÁ?t?4­ÓÁ?–Ìop-5`¿€h˜Kq?¿                                à3©>$¤?Œ°M§	™¿ÊĞ«À!©?@ÒS©J`¿@‘R òt?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆgÂb
+|Ï.~ú™½›Æù¬±â$~@³%…ì»â¿ °	·-Qc¿ #1:%¿ €õï‹ƒ,?                                I€sDö†@÷yıÑÇÔ?À¤
+4pff?(ó©’<S¿ bbH—Ù7¿                                 b¥‹:N@å.$k€ÚØ?8¸¿&y³¿@\ÂóÓ9$? ğ}2×±f¿                                ¸ˆ¿<>:@"Yç±WÄ¿Ò¯dåÂ¿úÏa? Ÿg&ßV?                                HºKØdøÅ¿ŞÇ÷UÂò¿şïBË2¶¿„¨a)q¿ ÉS_o.u?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆl£	P&nµRµî]™Ø(ZXòÆ>@~@ O'.Õé?@iaá ¥? €ğ&|î¾  Öïˆ-¿                                1Â* ˆ@ª/—R›à?˜<hhà„Ÿ?èãIZ4@¿ vÆI"5?                                Ğ{¾¶çO@Rlë° Ü?XC_Ôº¿Ø²ã–c q¿ ÚQ³å„Z?                                ´TI@Oa	ÿÅ?½iáìÀ¿(½ÕÉÊëH? e:_¦¢S¿                                @¼¸<ÉÉ¿›eíMîdî¿¼3¤%Éœ¿ÿšÚ3g`ˆ?`¶Õû«Vr¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÅ Q÷Ş˜°âÊ)°º
+d}ªQóB~@(wíøn%â?€"îU¶ë? ¨´\F.¿ €F·¸ ¿                                bb}Ş‡@ÂÕ©ôÖ?¤aë½ğ¿ˆ½†lÀS@¿ ô»$	<¿                                AúÌMO@c¼(ü[{¿€ªÕR .—?ŒÄ’L¦lv? ÓæˆW?                                85ş?@°Fí`Bâ?·`FAÌ?›‰Ã×ˆp?Ğ_£¡T?                                2{t|Å?j[«¸\ñâ?üöz•€cº?´è~cÃ„¿ÀC(Oq”d¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ€·°˜í<IoúÎ…â#¨: v=~@£âvWÓ?€Xì ¨Ÿ?@j˜òRë2? €@÷Ô+?                                s²£¾¸‡@\•Úuæ{á?Â€˜g7¿àô%iUaJ¿ ~ñ­#!(¿                                ßÃ×a46O@iCÀn‰İ?PkcW9q¹¿0+Ñv¿€èqùhrr¿                                'ĞˆŠ$‚@&c˜Båá¿¹ê~‹Ø#À¿Æ‡tZ—"e?´pÇ\”V?                                À–ıG¶¿¿Òà´Ëõ¿øØ~—ËH´¿£¼{?Ğ€$Oõ~‰?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ	vöÏ^Ã«¹±~jàhj-Œ×p¸/~@ ÁıM”l®? Ğšùò° ? îl…‚Ó7?  &9æ?                                bg:=@•‡@U›c¾¿9Ø?„Ú¨ËÖb¥¿`Rölv@¿ Zc:)?                                *˜¼æá‡O@Ê9£›=Rã?‚kDSË¿ÀQK÷f¿ ^×ª)­R¿                                X±tf@!!0fÁÅ³¿¸ô¡¿*ì¦?ŸNQØß•G? Åq&¯ÈL¿                                Ùads«ò¿ƒ¨…'ÀˆJœR®4…?ôB°¹¸Y? qÑIh?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆê˜@…ö:&Qp×¬»òxBÎ’(~@`Tr8xÇ¿ ²> ? Œô„Ï¿  Ù'¸­¿                                ~Î«z¤p‡@&ğ¾)ÁÒ?Üaİ¿ ¨4; ãü> „xõhY$¿                                W¤šVÏ/O@3Ùlâ?1·\~aÉ¿(İú#X‰[? ¸İÜ7Â3?                                èkß5`›@ïc¤±OÍ?—˜EIoÃ?Ræ×5w¢R? 0¨m¸#¿                                Ş¿‚¾»¤ñ¿@L¸`ˆÿ¿ØÅ¶ãE¬?wWtyµäy¿ D–¸/>¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÕRÿmD·«„«¿ÉQÇ•İeÏ†Æ¹Ï'~@PZñÓùÛ¿ ¹µ5Ô®š? ¨Â°¦?  ê)§¿                                /ıän¢N‡@+P­·ÉÒ?ıÆìÏF·¿ ÷w RİJ¿ rQ]¾äB?                                ,zFâµN@E÷I4Ìë?lÂÙ¡†QÍ¿0«U±*ÑS¿ @c24D¿                                3áè8H@°*ï‹XÔ?bÕ‚Å?ÖaL†P?púEøÄh¿                                <ÿ¦ŠV’à¿+†ÙMFÀš@}’ê¦?XhO†Rh¿@ó2aXp?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ5Q9ë/‘_LŸ.óm¢ŸT8o%~@ø¾Ÿ\Gêä¿€B›-·©? Nå,s!A¿  ´Œã ¿                                6ìƒş*‡@N
+¦Ä!˜Í?fñı3Ô€?°û"¢{W[? /oÑü×T¿                                È`½ÿÌN@b®dë?‚øÒÏ–Ğ¿s³1ıài? PwÕ9?                                ¥Æª@ÁÃ¶RçİĞ?l4"}LÎ?mIoÍ|aq¿P†ƒı¬a?                                ½qš³8ü¿2¤Çt¥ÄÀNfSÁ,Ã·?Ù/†§m¿ N|ã Ş_¿                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ ÛÛpsÑ³+‰Ô’??E.ÁÓ%~@è´MmùŒé¿ éÿ¨"‡? à¤J!Íı¾ €%S'°;?                                §èë‡@a‡4°M×?JÛˆõ¹¿ N$ÕcO?€ ãÍŒIV?                                ª¯+GN@ JÿØá¿ø.‰ac©?ÃÀº†a¿ ¾ƒq}u¿                                FÒ,‚³@0}†´îÚÑ¿•ÚıÓy>Ò?°çıhl¿  ¿€cg¿                                ·Ñ~[ô¾À 
+ätšá?GÇ g¬±?ô‡å„s? Èp8‡?                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆâTx7ßÜñ-C`­Å«õ¶£®À"QF:à›Æ¿,kÖ¼8?                                                Xì·ê×Æ¾¿C”ÂZaÑ??-b‰ÿ”ñ ¾                                                •®_Î^F?Ç­6UIÇ¾D;ú‡](>                                                SH^âõ²¾œVÈ*]Á3>U\Ã–”½                                                ØÇ%š6>ZE{Û'Íƒ½;M‡Ÿä<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆõ‹_Ç‚÷ÚQ—Ä›fa_ÚÆÓëÒ¼ÿÀY@w•á‚2.å¿ÎŞ;	æàO?                                                ‘g&º|ş¿X¤’'ï»?­Vn7V«ä¾                                                mÓ°ÛcÚ?vÓ/®v‡¿ş¢.¨e>                                                €t¾V"è¾Ô\:l>Û*ßø"RĞ½                                                â«ìfÀ7>™Âùœ»½\ë‹i	 =                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆö¶¨n«| Xbã²'<®Ô(‚ô\¾9Àœğ¶Ğ£±¿TÎ+şF6?                                                Ûc§õÙ¿îa5èäÒ`?½S‹B! Æ¾                                                ÿXƒ·£1P?Û!…æ†RÕ¾­ä P~-<>                                                9—uê0±¾
+7*“¬Ï6>äââo½                                                İĞšŠû=Üiæš{‚½ -¥Ïè<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆø¦Æºƒœ–¥oÔ¥Ò‹{i©ã<ÀØ‘îg^ ¿"®CZ=A5?                                                éjŞB ¿í "-ê$??Gâ‡¢œ¾                                                3æÌo–Â ¿O>æÙ©>ò(oa¾                                                m¸Á›«±•>a¥	UÍ= ¾ï	<wÁAˆ=                                                È…ÿ¥ç½!ØÂ °q=7]2JAeÚ¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ{b¯‡r%4"f¾Y¢>4ô€›yÚGÀá^R¾a™¾?•7”À?                                                Ú•¿¹PÿÍ?Ä·ÍU]Y¿Ãy^•#Å>                                                )á•šˆ}V¿ZÒĞÍâ>fÕNæ¸YO¾                                                (ÇœÌÊZÃ>Dd$P¾»‚‚xèº=                                                ‘’Sü:¾¢boÉõİ =ÉQ_Z½                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆš¨³” €¶¥’İş¤¹ä?&÷„úƒÈ@Àsî^X±?–Œ±È|®/?                                                FÀ¿Æ‚½¿L?¼ù`L?E—1™(¼¾                                                0Û›¸Qh@?öß¤×Ğ¾q›!À…?>                                                ƒ²¨3´)ª¾z>£!§9>»I 5)©½                                                mÁÇiÒú=3¡NGŠ½øĞelUÁù<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÇÒL-àÉ>g›!Ë¹eÒª¥…^úÑr9À’ó:rš*©?·ıÒÜ¥5?                                                ~Æèó	–¹¿™İİ|M?õÂ†—:öÀ¾                                                úÜzfSD?oº.BÔ×¾.¢ã(Ô¥K>                                                –`Ó¥õª²¾>ÇœdÒªE>X"tùà!¹½                                                û4zí>_Ó¸;»Z—½Åïşü¢=                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ+Ï€iÇj0<ÈÕ(s„§úXQ¥Ÿh 9Àq¦*bu¼?d“ğÙ=x.?                                                LQgS§¿9´íÍfA?—V—|º¾                                                ˜.-WA%?”ŞKŒï7À¾³ÏN,9>                                                »F÷2ƒ3¾ş9æÛï«&>æ)0ê™¡½                                                Õlì%)Û=¨êîK u½„3W&ànğ<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆX>§´–…E’y
+É1D40À0dÆÓ¿µ?=ìs–;?                                                ˜ˆä:Â(·¿É¸Êñö¤W?Úõò&©áØ¾                                                yQhYÏ:?-‘:e÷Û¾ed†ÊÙQ]>                                                ğW “\¤¾eçÌÇ]E>(GódÆ½                                                “äŒˆùó=M¼¥èßˆ”½ÛÓS{ˆ=                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ®©i³IíÉu~Ï9gª”‚W«7K*ÀØP3 XêÆ?j³JşfÂ?                                                jõ?¿åƒ?¾¤¢P²4¿]õÃöÀ>                                                “*«¼¿šxêd'¿>ò¾J¾                                                øÜ™­å>„®ÔLW¶*¾³[ªIj¶=                                                DŸR‰Ğ½&2xìa¿{=«ƒô7YP½                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆTSîå·$lg§—L`
+R“ª÷Õn5aÀ5ğ"Ü|šÈ?MrEb¢=!¿                                                ›c†ş´L?SI£ÊÉ™0¿úf-ó‘Ó>                                                Ö>ú¿è¾+EÑ çÖ±>p!¯İQU¾                                                ­w)V>NE}f¾‡HŒğÎš¿=                                                |r®óñ¤½2²>¢i=M!ïé·á½                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆğgHÂ‡ãCo-ü­Š
+Dë/xîeÀ¶/š%ìğÅ¿8új/x:?                                                DŸk"á¿0çªªÕèb?zÌ=TÅ¾                                                Ö¸®Ö`?Õ}®¡â¾ Jşw¨D>                                                {üCrAÈ¾n? Z¤J>uw<áƒ­½                                                kk	bñ>ĞÔÓÖh™½Ä4nÁ'ü<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ)¿(ëK#¢d‡ô!IwqÃ¹*—.ÀØP¬ëÀ¿ÇND·R{9?                                                ›û„ËÒ¿ıs³26V?û¨x#Ì™»¾                                                GÉÄh}5C?
+JføÒïÇ¾ `¿Z.>                                                ãi	ın¡¾R²í´&>LVG Œ½                                                (`d‘¿é=&EÊ—ß‚p½oLè"h7Õ<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÚ7ºUÏôëĞÊf}ËUm&\y‹1ÀÙJÒ©Èº¿ÎQm©¶;:?                                                w‡½Q2Î¿ÿô)4peT?€äê¼¾                                                Ş&%énN?¦L$bÔ¾¦»bxöÏ;>                                                |µ_ƒ—¶¾k³Md>>íÛìŸ¢j¤½                                                øğ>Ë†>=éöC½tiæöÔçó<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ5ÿ"X‹b!ëV Ç«C¦ÙÃr:À‘e ã–¡¿*ŒKgÒ6?                                                ±Ì3\§?æIŠJí2¿fç5&vœ>                                                Œ¥@Yƒé9¿ünÈÄœQÄ>°“›ö§Š/¾                                                /N`¨>Éz½ó:3¾é‚á¡=                                                \É¬t¾@ú½C´HÎÉx„=®RW2İï¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÔh À†Ä›°	gö¬n*!ß‚Ô‰ÍKÀğ¯â´Ù§É?Óâ¾ôéç¾                                                Xz•ç'?O¤ç\õ¿ÿ"5¿´~>                                                ºÓ¨†¿‘qHÈ#>êŒøÒq}¾                                                ôÕy–¡p>ô~ÍQAƒù½,Y)“ÌØb=                                                IüLÚ¸’=ØıMëÑ.1½¶ÙVŸ§<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆa	¬Iî,’mMƒàNhàEj­æªQ<ÀíÕGhq©?5&np¾3?                                                x¹æ2ñnÑ¿=Cyä¬b?öÚü÷ÿ9Ô¾                                                ½á8.R?ÜÂ:İX°ã¾h2lô\U>                                                ”'­§f»¾é‡šÆÅM>‹õ:S *À½                                                ÷o?`=>_f‰õNš½ØÖ×·c=                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆmn¯a€iş‚ZæìÂş¹~‚İ6AÀÓ¢}(»Æ?èFïÑÌŸ?                                                V¸êÏ±?Ñ¢ŒÀ¤H¿„ï+"@RÀ>                                                —À¤-1¿Û™q4óÆ>!Záq˜>¾                                                (ï§ ‘¡–>*}ä÷L.¾x#«RmB¤=                                                6£hã½¸ÍqĞz=„Pmñ¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ>ôZÕ•B>é[â‹½iòÔW£Ìlê“9À†ş^ ÌÔÅ?21²=o?                                                ¢–{­üº¿–AÑÅòV?ªR:‡Ô¾                                                pÂĞ†??ZÂq¶øÛ¾ê‘LÉµÏW>                                                >˜ø
+˜y§¾ŒÈ˜~¯D>L_éc3Â½                                                ÊÎ[y®ö=ör²8”½ÜE¤	H =                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆXŞ³ã™âĞá²CæÀ	4=î_3Àiš¸œ“Ë?­”*X›"¿                                                ™¸ÁÂ·‰¿;…5BA)?K?x¯¾                                                ÚİxHçÏ?=8/ş®¾rfÒ<,4>                                                t¤õöŠêr¾ÚÏCêY>â&=lµ ½                                                $çÄ=t§†tŒêj½¿x¬]ºÅñ<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆôÅß›¿ş¶eE #×c›Th‚–œ ÀH—ˆ‚Å?ËÙiğä?                                                |h(äÑÉ…¿qBÕ˜äp4?oË·àÈ¾                                                bı…çkÛ?¥şçÊm¸¾çï%wîM>                                                {óÎn¾‰r„öYG#>sÆ#úŒ³·½                                                <^`‘à¾==¨]î0Ws½ÒšŠxÑ=                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆo0Ç<Ö¥ƒ"eŸ¢ı––†z¿HğÈV@½œ¥påÄ¿OÌ‡­¼î¾                                                ’ôŒk¡:º¿	É ø‹:?Ã]ÊÅOÇ˜¾                                                òôäXrY@?UOĞE™£¿¾ĞØ’°Ÿ>                                                kYÔúà®¾)Şãuš¥,>XDÙJO‹½                                                Õ|ş9>
+\{zl€½h–nHß<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆõ‹
+Ög,(6¯Œ‚TÛu/6fY@#Ìu¯¾Ã¿­)$eÿú¾                                                ˜€…	®¦¿Ì_lÂ~&?³H³ÍVˆ‚¾                                                ,ûE³³|5?xğĞç¤²¾tõ>                                                ƒ¥|ÌÂ}¢¾ô†JÓR>v¯n¹xz½                                                €´<0ñ=¹±ğƒTÛl½œ¬şĞXKÈ<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÜPCN¸Ş6¡æç@ëÁ‘ñÆÖï¨dN@ÆŠ=sĞK¿œøZp­¹"¿                                                C2`V=¡‰?ÕŒÓÈ,¤ú¾é­|Á`>                                                îú§=ÿ(?0¬¤¾uûÿÏ+„ş=                                                !µƒ`R3£¾™„’ö>‘ş’6JRw½                                                —ÉJ~äù= ÆGÄÑ)t½DÜ’YÏ<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆö%Æä›³´±şh÷§©abÌö†W@Ë‰¢Ò‹³¿ˆe¾¾ı¿                                                P«Œ!Í¿Î©1tXaE?¸;cUp¾                                                €Ò^ÇòS?¾ñ´³Ì¾zëE›y}$>                                                I±M˜]À¾MsK%–j7>‘nİ¾½                                                Ø)×İ0>f¼]¬0‹†½ÅV=ä à<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆb4“JEùHV›„kˆÎ´‘z.>@vg
+d½?Ùk'‚…*¿                                                º85YÜ
+É?™<Kw_4@¿Ş—Œ°–>                                                ¡‘tÚÏ·X¿XAÚ§^4Ğ>s9ˆ”d%¾                                                È<G¡Ã> ©ïİÍ9¾¦oŞNiù=                                                ëÔçV¾ ¿¼ÑW%ˆ=OY¢RôÒß¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆëôœ´êŒ›ZNpë±ÇMd®½J]@*0`MTğµ¿UTùA=¿                                                €ZN¦¸‘ì?s%¢›¥a¿†Şœéö¶>                                                ñ[ÀíÉôg¿”&ñ:íİ>-&ô¹}Á2¾                                                Ø¹‚”!Ğ>iY/µçDD¾Şq’“y™=                                                ÿ¯Ã¿! ¾ùg±ZK”=ÿà(äˆé¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆœ~bÜŞÕiŒœ³ê„şï®¾N@Z-å¡¹°?ƒ…6Ùù1$¿                                                 Ê–9IË¿pUßx@?Ï=Oh{÷‘¾                                                O›eÎİ ?õ¦.²”¾P«²æGiç=                                                ÜÉ·#åG“>ÿZmsLè¾ÙØli+Y=                                                p@L®¡÷ó½áw¤yg=yÄKğ×º¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆH&\	CšS>–û4óY§0=üÁö—zt@Kº…Ë‹à¿Ò†JEİ$?                                                ˆ³=ŠËò¿M‘Xs)d?Øe¼J¶¾                                                st;¨œl?ÜD ĞÉß¾tª¤Eñš1>                                                ÿÂsL–Ò¾òƒq“ D>S õâ–½                                                f¤D¹ !>géÚg‚““½ì¾P5G¼å<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ|ë®ú:f‹¸+ÆÎ5J€‡sÚaÀ¾~‚C°ß?lÅ†óËš7¿                                                ’İ'Dlúæ?ûp„àÿW¿H
+İ-šy©>                                                C£jDËAl¿Oá|¼ªPİ>/³ z«….¾                                                ]Ë_FªWÔ>«†óÚŸE¾”ûq×•=                                                şÿª[n"¾Üa^“=?â9øâÑã¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆüŞKÊ\²Rş­`±$Èšÿj¯ÃÒPL`@Ì÷"Ï Ò¿ƒ­÷®g?                                                ˆ†Åk¶?›Z´­ß1¿şÇ*T¶§>                                                ã"oA8¿Ö<p'Nµ>üX"Œ4#¾                                                zê÷¢>,6ÌØ!¾4ü‡ßùî~=                                                h³Á?m.ó½	Å4;iOq=y6L¸'@Ï¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ®åÀu°‹ŒeMn´ê¸B"â! Û¾H@º3Z«8ªš?.¼}“g&¿                                                -ö¿L¸š\¿6ÅÂ¢5ï>µ%Ê?3>                                                0­0B†?_ö¼}F]€¾!Ã¹S³Ö=                                                «FÁOòW>L‘ÆÃÊÒ½¹ÉÛ„Xë/=                                                €²FfOÏ½hËeIdI=&0Ë±Ş¤¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ7 ãô.€¿[%š’ÌKğÇ#ı]@jÛ(Î§¸Ã¿Ñ¨«ßÿú¾                                                æÒÑò—iµ¿m|Ÿ^¶è1?‰§8ş«çŠ¾                                                Bñ]1êm*?W”CÒ¸¥¾dÁÁú>                                                ®ëÚŠé’¾wÃºR¾+>†ıÍtÓçg½                                                ]}úYÆ—ç=°àÈÇÎ‚b½X»ãë¼<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆÊ„æAWphïÏ}ÃÌ¶~¤â1O@ÚÓ,ñ¦–?êPAĞ‡#¿                                                ¯‹ö‘Àa…¿Ö!;ø?ƒ³UÒKR¾                                                ì'7eAO:¿#b\Êtª±>•É‰?§T¾                                                ¦¡[çÀİ§>¯èÖÿ< ¾5v( ó%v=                                                «v¨
+Zö½R¥(„çˆn=`¹F³sèÄ¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆfh+ú›¦5HLëöJ÷Æ’wæøL@# °|ë”©?àÖ^Lƒl$¿                                                <P¼ñ{à?‰aoeU¿ˆdßœ«>                                                Ş0¬İ^b¿°6KÖç¦×>éfÈRÆ—.¾                                                ÓÒ¡À UÍ>ëJ°CëB¾lLøhój˜=                                                ğçüC®å¾2™ˆZkî“=Æ‹ºé¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆBj:Œ%ªc
+ÀgeqzÁ*A ¡¯PÀ|ÙçKàÖ?Ä°&_–5¿                                                òHôà„Ô?ƒ·h X5I¿ê«Â[]óŸ>                                                …dc?88WŞ'w¾Œ%VA½                                                aŒ ¨¾¥yœğí>§¶p½to½                                                .™>¸À÷=Š¤%ÏTÚj½‚Í¹Æ5"¾<                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ¸@ñÒ6ä¡PQo´˜F(³4´>Ns@?á üKğŞ¿6rçãL`$?                                                ÅG[×•áå?Ÿ‹NLX¿Lƒ1tÉª>                                                ·qÎñl«q¿s¦ÙOÓã>Ï$M¼ÆJ6¾                                                oOB¾ƒİ>¸ŞüŸP¾éAnòoº¢=                                                ÁkÈÉ.¾¥MÅş÷ =&PØš!ó¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0              ˆ      ˆ      ˆ»!ı¯ÊØÇ)Êo¬1Æ–ñ½èçei@j–Âì
+ˆÌ¿­íb`‰ä>                                                v2C;ã?š¹`%T¿ÓV(k€¥>                                                øyƒ£Q¿npÿwAÂ>prlfÇ¾                                                §ßo—	¤>†	¤Y¾GØâÛIåh=                                                æ~6DÙ½BÇ£<›¿N=Z†(ÿu¢¼                                                                                                                                                                                                                                                                                                                                                ÓBLK 0               È       È       È¯<™Ú¿¼€®ÍºiÑªDÏE”«îuÀ>#)ı‡ÀÂ¿£>œcĞÀZ>                `Ñ{ğœ§ï?œ_ !Ø`>Î„ôÿ®>                ›”9Å°µP>/ÉJc;¾¼h>ÁG¾                                                                                                ÓBLK 0               È       È       È*s%’™“D±ïÈ£#!DR®8ğsÀ|„Àäœ§ï¿~n¶_g>                é+¾ÚˆÀÂ¿çÓFp>Ã¡	Œ¿äL>                 ®]…¾_¾82—˜c…!¾q
+¡Š/¸¾                                                                                                ÓBLK 0               È       È       Èí¼ü½áS6oSçH€÷¶·ö€ ı%‰>2÷¿¿´ÖÁÄà
+t?                \ĞÈÂH¿íƒĞ,Òw?Ğ‡›«sªü>                `Í5L7(¿”æFC‡2æ> °İw£Éb>                                                                                                ÓBLK 0               È       È       È´báºù+!Ó¶2	²•¨TkkÕ¾(Süµ–ö>Q¨:³ÁG¿                8Ú;>ó=?0Z¬İs¿î2¨sİsñ¾                	VŸë:eT¿İçı5cì¾ ÌEz6`¾                                                                                                ÓBLK 0               È       È       ÈÛ(Îã99ÛA ÓU…üyVúwÀG]ö+Â¿‡)˜œ‰Úv¾                t^Úy­ï?ö‡=&P%>ràË«ôg>                P¿S—Mˆ¾±.âİÂ)8>Ì¦#€Í_X>                                                                                                ÓBLK 0               È       È       È“ÄµÍ½ „be°1âXT¯ÈtLšôsÀ˜p.­ï¿ùıW#`M¾                ¡w¯+Â¿ê#ª¦ul¾Í[Šü ¾                /©©Ûg>İòü¦RàS>Ö
+SäëG>                                                                                                ÓBLK 0               È       È       È® Tª_Z€Œ<¾M©|FÂËéĞµ+‰>ÄjG’7Ä¿¶’_Ôt?                ÖPLBT¿İ}¸V~w?nÏm±ü>                'hñ–|'¿Ç(’5*Mæ>  ÙÒñÒb>                                                                                                ÓBLK 0               È       È       ÈÁ5f¦5î ‹}J]Zhƒë
+_±¾Z·_ëícö>ß€é>¦öF¿                C
+ªO¾#?ÌŠ3: Ás¿f!Lñ¾                ;›SGökT¿€,'[Fì¾ ô£Öœ`¾                                                                                                #ASDF BLOCK INDEX
+%YAML 1.1
+---
+- 81989
+- 82691
+- 83393
+- 84095
+- 84797
+- 85499
+- 86201
+- 86903
+- 87605
+- 88307
+- 89009
+- 89711
+- 90413
+- 91115
+- 91817
+- 92519
+- 93221
+- 93923
+- 94625
+- 95327
+- 96029
+- 96731
+- 97433
+- 98135
+- 98837
+- 99539
+- 100241
+- 100943
+- 101645
+- 102347
+- 103049
+- 103751
+- 104453
+- 105155
+- 105857
+- 106559
+- 107261
+- 107963
+- 108665
+- 109367
+- 110069
+- 110771
+- 111473
+- 112175
+- 112877
+- 113579
+- 114281
+- 114983
+- 115685
+- 116387
+- 117089
+- 117791
+- 118493
+- 119195
+- 119897
+- 120599
+- 121301
+- 122003
+- 122705
+- 123407
+- 124109
+- 124811
+- 125513
+- 126215
+- 126917
+- 127619
+- 128321
+- 129023
+- 129725
+- 130427
+- 131129
+- 131831
+- 132533
+- 133235
+- 133937
+- 134639
+- 135341
+- 136043
+- 136745
+- 137447
+- 138149
+- 138851
+- 139553
+- 140255
+- 140957
+- 141659
+- 142361
+- 143063
+- 143765
+- 144467
+- 145169
+- 145871
+- 146573
+- 147275
+- 147977
+- 148679
+- 149381
+- 150083
+- 150785
+- 151487
+- 152189
+- 152891
+- 153593
+- 154295
+- 154997
+- 155699
+- 156401
+- 157103
+- 157805
+- 158507
+- 159209
+- 159911
+- 160613
+- 161315
+- 162017
+- 162271
+- 162525
+- 162779
+- 163033
+- 163287
+- 163541
+- 163795
+...
