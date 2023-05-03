@@ -321,7 +321,7 @@ def jwst_sunangle(hdr, verbose=True):
     sun_dec=np.arcsin(z/r)*180./np.pi
     sun_ra=np.arctan2(y,x)*180./np.pi
     if (sun_ra < 0):
-        sun_ra = jwst_ra+360.
+        sun_ra = sun_ra+360.
 
     # Apparent position of Sun from JWST tested against JPL Horizons
     # computation to within 0.1 arcsec or so
