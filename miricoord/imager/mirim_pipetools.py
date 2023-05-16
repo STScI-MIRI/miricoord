@@ -28,6 +28,7 @@ REVISION HISTORY:
 06-Feb-2019  Set default to CDP-7 (D. Law)
 26-May-2022  Add FLT-1 (D. Law)
 16-Nov-2022  Add FLT-2 (D. Law)
+16-May-2023  Add FLT-3 (D. Law)
 """
 
 import os as os
@@ -63,6 +64,8 @@ def set_toolversion(version):
         import miricoord.imager.toolversions.mirim_pipetools_flt1 as tv
     elif (version == 'flt2'):
         import miricoord.imager.toolversions.mirim_pipetools_flt2 as tv
+    elif (version == 'flt3'):
+        import miricoord.imager.toolversions.mirim_pipetools_flt3 as tv
     else:
         print('Invalid tool version specified!')
         
