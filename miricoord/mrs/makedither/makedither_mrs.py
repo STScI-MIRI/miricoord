@@ -592,6 +592,7 @@ def make_jdox(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir='./'):
     qaplot_ext4all(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
     qaplot_ext2ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
     qaplot_ext4ch3(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
+    qaplot_bg(v2_all,v3_all,dx_all,dy_all,allsiaf,vertxt,outdir)
 
 #############################
 
@@ -1230,6 +1231,95 @@ def qaplot_ext4ch3(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
     plt.ylabel('$\Delta$ Decl. (arcsec)')
     plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
     plt.text(5,5,'Ch3, 4-PT, extended source')
+    plt.legend()
+
+    plt.savefig(filename)
+    #plt.show()
+    plt.close()
+
+#############################
+
+# Plot showing field coverage of a 4-pt Background dither
+
+def qaplot_bg(v2,v3,dx,dy,allsiaf,vertxt,outdir=''):
+    # Set the default output data directory if it was not provided
+    if (outdir == ''):
+        data_dir=os.path.expandvars('$MIRICOORD_DATA_DIR')
+        outdir=os.path.join(data_dir,'dithers/temp/')
+    # Set the output filename
+    filename=os.path.join(outdir,'dithers_bg.pdf')
+
+    now=datetime.datetime.now()
+    nowstring=now.ctime()
+    nowstring=nowstring[4:8]+nowstring[20:24]
+    
+    # Field locations
+    siaf1A=allsiaf[0]
+    siaf1B=allsiaf[1]
+    siaf1C=allsiaf[2]
+    siaf2A=allsiaf[3]
+    siaf2B=allsiaf[4]
+    siaf2C=allsiaf[5]
+    siaf3A=allsiaf[6]
+    siaf3B=allsiaf[7]
+    siaf3C=allsiaf[8]
+    siaf4A=allsiaf[9]
+    siaf4B=allsiaf[10]
+    siaf4C=allsiaf[11]
+
+    # Recenter everything to be based around zero
+    v2ref,v3ref=siaf3A['inscr_v2ref'],siaf3A['inscr_v3ref']
+    v2corn_1A=siaf1A['inscr_v2_corners']-v2ref
+    v3corn_1A=siaf1A['inscr_v3_corners']-v3ref
+    v2corn_2A=siaf2A['inscr_v2_corners']-v2ref
+    v3corn_2A=siaf2A['inscr_v3_corners']-v3ref
+    v2corn_3A=siaf3A['inscr_v2_corners']-v2ref
+    v3corn_3A=siaf3A['inscr_v3_corners']-v3ref 
+    v2corn_4A=siaf4A['inscr_v2_corners']-v2ref
+    v3corn_4A=siaf4A['inscr_v3_corners']-v3ref
+
+    # Plot thickness
+    mpl.rcParams['axes.linewidth'] = 1.5
+
+    plt.figure(figsize=(5,5),dpi=150)
+    ax = plt.gca()
+    plt.tick_params(axis='both',direction='in',which='both',top=True,right=True,width=2.)
+    plt.minorticks_on()
+    plt.xlim(15,-15)
+    plt.ylim(-15,15)
+
+    plt.plot(v2corn_1A+dx[52],v3corn_1A-dy[52],color='b',linewidth=1.2,label='Ch1')
+    plt.plot(v2corn_1A+dx[53],v3corn_1A-dy[53],color='b',linewidth=1.2)
+    plt.plot(v2corn_1A+dx[54],v3corn_1A-dy[54],color='b',linewidth=1.2)
+    plt.plot(v2corn_1A+dx[55],v3corn_1A-dy[55],color='b',linewidth=1.2)
+
+    plt.plot(v2corn_2A+dx[52],v3corn_2A-dy[52],color='g',linewidth=1.2,label='Ch2')
+    plt.plot(v2corn_2A+dx[53],v3corn_2A-dy[53],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[54],v3corn_2A-dy[54],color='g',linewidth=1.2)
+    plt.plot(v2corn_2A+dx[55],v3corn_2A-dy[55],color='g',linewidth=1.2)
+    
+    plt.plot(v2corn_3A+dx[52],v3corn_3A-dy[52],color='gold',linewidth=1.2,label='Ch3')
+    plt.plot(v2corn_3A+dx[53],v3corn_3A-dy[53],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[54],v3corn_3A-dy[54],color='gold',linewidth=1.2)
+    plt.plot(v2corn_3A+dx[55],v3corn_3A-dy[55],color='gold',linewidth=1.2)
+           
+    plt.plot(v2corn_4A+dx[52],v3corn_4A-dy[52],color='r',linewidth=1.2,label='Ch4')
+    plt.plot(v2corn_4A+dx[53],v3corn_4A-dy[53],color='r',linewidth=1.2)
+    plt.plot(v2corn_4A+dx[54],v3corn_4A-dy[54],color='r',linewidth=1.2)
+    plt.plot(v2corn_4A+dx[55],v3corn_4A-dy[55],color='r',linewidth=1.2)
+        
+    #plt.plot(0,0,'x',linewidth=1.5,color='black')
+    #circle1 = mpl.patches.Circle((0., 0.), maxfwhm(1),linewidth=1,edgecolor='b', facecolor=(0, 0, 0, .0125))
+    #ax.add_artist(circle1)
+    #circle1 = mpl.patches.Circle((0., 0.), maxfwhm(4),linewidth=1,edgecolor='r', facecolor=(0, 0, 0, .0125))
+    #ax.add_artist(circle1)
+                                 
+    #plt.plot(v2[52:56]-v2ref,v3[52:56]-v3ref,'+',color='blue',linewidth=1.5)
+    
+    plt.xlabel('$\Delta$ R.A. (arcsec)')
+    plt.ylabel('$\Delta$ Decl. (arcsec)')
+    plt.title('MRS Dithers: Flight '+vertxt+' ('+nowstring+')')
+    plt.text(14,12,'Background')
     plt.legend()
 
     plt.savefig(filename)
