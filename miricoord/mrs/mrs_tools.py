@@ -26,6 +26,7 @@ REVISION HISTORY:
 25-Aug-2022  Add FLT-4 (D. Law)
 13-Mar-2023  Add FLT-5 (D. Law)
 31-May-2023  Add FLT-6 (D. Law)
+30-Aug-2023  Add FLT-7 (D. Law)
 """
 
 import os as os
@@ -42,7 +43,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is flt5
+# Set the tools version.  Default is flt7
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -54,7 +55,9 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_tools_flt6 as tv
+        import miricoord.mrs.toolversions.mrs_tools_flt7 as tv
+    elif (version == 'flt7'):
+        import miricoord.mrs.toolversions.mrs_tools_flt7 as tv
     elif (version == 'flt6'):
         import miricoord.mrs.toolversions.mrs_tools_flt6 as tv
     elif (version == 'flt5'):
