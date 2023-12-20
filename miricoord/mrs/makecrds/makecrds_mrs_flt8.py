@@ -98,8 +98,8 @@ def create_flt8_all(outdir, **kwargs):
     # Cross-dichroic grating wheel configurations
     xbands='12AB','12AC','12BA','12BC','12CA','12CB','34AB','34AC','34BA','34BC','34CA','34CB'
     nxbands=len(xbands)
-    #for i in range(nxbands):
-    #    create_flt8_setxfiles(xbands[i],outdir,**kwargs)
+    for i in range(nxbands):
+        create_flt8_setxfiles(xbands[i],outdir,**kwargs)
         
 #############################
 
