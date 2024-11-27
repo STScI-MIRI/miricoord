@@ -223,7 +223,7 @@ def waveimage(channel,loc='cen', **kwargs):
 # the value of their alpha.  Specifying loc='cen','lo', or 'hi'
 # gives values at center, or low/high values for pixel
 
-def alphaimage(channel,loc='cen'):
+def alphaimage(channel,loc='cen', **kwargs):
     # Determine whether the CDP toolversion has been set.  If not, set to default.
     try:
         sys.getrefcount(tv)
@@ -261,7 +261,7 @@ def alphaimage(channel,loc='cen'):
     usex=usex.reshape(-1)
     
     # Convert to base alpha,beta,lambda at pixel center
-    values=xytoabl(usex,basey,channel)
+    values=xytoabl(usex,basey,channel, **kwargs)
     basealpha,basebeta=values['alpha'],values['beta']
     baselambda,slicenum=values['lam'],values['slicenum']
 
@@ -284,7 +284,7 @@ def alphaimage(channel,loc='cen'):
 # Create an image in a given channel where all pixels have
 # the value of their beta.
 
-def betaimage(channel):
+def betaimage(channel, **kwargs):
     # Determine whether the CDP toolversion has been set.  If not, set to default.
     try:
         sys.getrefcount(tv)
@@ -299,7 +299,7 @@ def betaimage(channel):
     basey=basey.reshape(-1)
     
     # Convert to base alpha,beta,lambda at pixel center
-    values=xytoabl(basex,basey,channel)
+    values=xytoabl(basex,basey,channel, **kwargs)
     basealpha,basebeta=values['alpha'],values['beta']
     baselambda,slicenum=values['lam'],values['slicenum']
 
