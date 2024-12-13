@@ -37,7 +37,6 @@ import os as os
 import math
 import sys
 import numpy as np
-from numpy import matlib as mb
 from astropy.io import fits
 import pdb
 
@@ -135,8 +134,8 @@ def pixsize(channel):
 
     xrow=np.mgrid[xmin:xmax]
     yrow=np.mgrid[ymin:ymax]
-    xall=mb.repmat(xrow,yrow.size,1)*1.
-    yall=mb.repmat(yrow,xrow.size,1)*1.
+    xall=np.tile(xrow,(yrow.size,1)*1.)
+    yall=np.tile(yrow,(xrow.size,1)*1.)
     yall=np.transpose(yall)
     # Recast as 1d arrays
     xall=xall.reshape(-1)
@@ -176,8 +175,8 @@ def alphafov(channel):
 
     xrow=np.mgrid[xmin:xmax]
     yrow=np.mgrid[ymin:ymax]
-    xall=mb.repmat(xrow,yrow.size,1)*1.
-    yall=mb.repmat(yrow,xrow.size,1)*1.
+    xall=np.tile(xrow,(yrow.size,1))*1.
+    yall=np.tile(yrow,(xrow.size,1))*1.
     yall=np.transpose(yall)
     # Recast as 1d arrays
     xall=xall.reshape(-1)

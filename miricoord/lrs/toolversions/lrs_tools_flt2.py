@@ -30,7 +30,6 @@ import os as os
 import math
 import sys
 import numpy as np
-from numpy import matlib as mb
 from astropy.modeling import models
 from astropy.io import fits
 from scipy.interpolate import UnivariateSpline
@@ -121,8 +120,8 @@ def xytov2v3lam(xin,yin,stype):
     v2refrow,v3refrow=mt.xytov2v3(xrow+xsub0,yrow+ysub0,'F770W')
 
     # Now repeat the v2,v3, matrix from the central row so that it is copied to all of the other valid rows too
-    v2_full = mb.repmat(v2refrow, int(bb[1][1]) + 1 - int(bb[1][0]), 1)
-    v3_full = mb.repmat(v3refrow, int(bb[1][1]) + 1 - int(bb[1][0]), 1)
+    v2_full = np.tile(v2refrow, (int(bb[1][1]) + 1 - int(bb[1][0]), 1))
+    v3_full = np.tile(v3refrow, (int(bb[1][1]) + 1 - int(bb[1][0]), 1))
     # v2_full and v3_full now have shape (e.g. for slitless) 391x72
 
     # Now take these matrices and put them into tabular models that can be interpolated to find v2,v3 for arbitrary
