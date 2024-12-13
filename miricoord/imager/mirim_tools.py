@@ -33,7 +33,6 @@ import sys
 import math
 import numpy as np
 from numpy.testing import assert_allclose
-from numpy import matlib as mb
 from astropy.io import fits
 import pdb
 
@@ -254,8 +253,8 @@ def roundtrip():
     # Make a grid of all pixel values
     xrow=np.mgrid[4:1028]
     yrow=np.mgrid[0:1024]
-    xall=mb.repmat(xrow,yrow.size,1)*1.
-    yall=mb.repmat(yrow,xrow.size,1)*1.
+    xall=np.tile(xrow,(yrow.size,1))*1.
+    yall=np.tile(yrow,(xrow.size,1))*1.
     yall=np.transpose(yall)
     # Recast as 1d arrays
     xall=xall.reshape(-1)
