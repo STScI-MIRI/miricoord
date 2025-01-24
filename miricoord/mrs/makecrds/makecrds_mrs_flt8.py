@@ -55,6 +55,7 @@ REVISION HISTORY:
 31-May-2023  FLT-6 update to 1A+1B wave solution ONLY (D. Law)
 30-Aug-2023  FLT-7 update to 4B distortion solution ONLY (D. Law)
 06-Dec-2023  FLT-8 update to 3C/4A/4B/4C wave solution (D. Law)
+24-Jan-2025  Keep FLT-8 name, but make regions negative instead of 0 in trim region (D. Law)
 """
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
@@ -94,12 +95,12 @@ def create_flt8_all(outdir, **kwargs):
     for i in range(nbands):
         create_flt8_setfiles(detbands[i],outdir,**kwargs)
 
-    print('Creating cross-dichroic reference files')
+    #print('Creating cross-dichroic reference files')
     # Cross-dichroic grating wheel configurations
-    xbands='12AB','12AC','12BA','12BC','12CA','12CB','34AB','34AC','34BA','34BC','34CA','34CB'
-    nxbands=len(xbands)
-    for i in range(nxbands):
-        create_flt8_setxfiles(xbands[i],outdir,**kwargs)
+    #xbands='12AB','12AC','12BA','12BC','12CA','12CB','34AB','34AC','34BA','34BC','34CA','34CB'
+    #nxbands=len(xbands)
+    #for i in range(nxbands):
+    #    create_flt8_setxfiles(xbands[i],outdir,**kwargs)
         
 #############################
 
@@ -452,14 +453,15 @@ def create_reffile_header(model, detector, band, channel, author, useafter,
     model.meta.instrument.band = band
     model.meta.exposure.type = "MIR_MRS"
 
-    entry = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT5 updates spatial distortion (many programs) and wavelength calibration (based on programs 1246/1247 observations of Jupiter/Saturn)", 'time': datetime.datetime.utcnow()})
-    entry = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT6 updates wavelength calibration of 1A/1B slightly relative to FLT5)", 'time': datetime.datetime.utcnow()})
-    entry = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT7 updates 4B distortion solution.)", 'time': datetime.datetime.utcnow()})
-    entry = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT8 updates 3C/4A/4B/4C wavelength solution.)", 'time': datetime.datetime.utcnow()})
+    entry1 = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT5 updates spatial distortion (many programs) and wavelength calibration (based on programs 1246/1247 observations of Jupiter/Saturn)", 'time': datetime.datetime.utcnow()})
+    entry2 = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT6 updates wavelength calibration of 1A/1B slightly relative to FLT5)", 'time': datetime.datetime.utcnow()})
+    entry3 = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT7 updates 4B distortion solution.)", 'time': datetime.datetime.utcnow()})
+    entry4 = HistoryEntry({'description': "MRS wavelength and spatial distortion.  FLT8 updates 3C/4A/4B/4C wavelength solution.)", 'time': datetime.datetime.utcnow()})
+    entry5 = HistoryEntry({'description': "Trivial update to formatting of regions information for trimmed wavelengths.)", 'time': datetime.datetime.utcnow()})
     software = Software({'name': 'miricoord', 'author': 'D.Law', 
                          'homepage': 'https://github.com/STScI-MIRI/miricoord', 'version': "master"})
-    entry['software'] = software
-    model.history = [entry]
+    entry5['software'] = software
+    model.history = [entry1,entry2,entry3,entry4,entry5]
 
     return model
 
@@ -728,9 +730,10 @@ def test_flt8_onereference(detband,refs):
  
 #############################
 
-# Function to zero-out slice map in regions where slices doesn't
+# Function to hack slice map in regions where slices doesn't
 # have full spatial coverage (i.e., to avoid 'tearing' in spec2
 # cubes at wavelengths where not all slices map to the sky).
+# We shall do so by setting to negative numbers.
 
 def clean_tears(slices,channel,band):
     if ((channel == '12') & (band == 'SHORT')):
@@ -760,6 +763,8 @@ def clean_tears(slices,channel,band):
         temp1 = slices[ii,:,:]
         temp2 = newslices[ii,:,:]
         temp2[indx] = temp1[indx]
+        indx=np.where(((wimg < wmin) | (wimg > wmax)) & (wimg > 0))
+        temp2[indx] = -temp1[indx]
 
     for ii in range(0,nz):
         wimg=mrst.waveimage(detband2,mapplane=ii)
@@ -768,5 +773,7 @@ def clean_tears(slices,channel,band):
         temp1 = slices[ii,:,:]
         temp2 = newslices[ii,:,:]
         temp2[indx] = temp1[indx]
+        indx=np.where(((wimg < wmin) | (wimg > wmax)) & (wimg > 0))
+        temp2[indx] = -temp1[indx]
     
     return newslices
