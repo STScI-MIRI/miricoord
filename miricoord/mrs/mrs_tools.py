@@ -28,6 +28,7 @@ REVISION HISTORY:
 31-May-2023  Add FLT-6 (D. Law)
 30-Aug-2023  Add FLT-7 (D. Law)
 06-Dec-2023  Add FLT-8 (D. Law)
+09-Jun-2025  Add FLT-9 (D. Law)
 """
 
 import os as os
@@ -57,6 +58,8 @@ def set_toolversion(version):
     # Import appropriate version
     if (version == 'default'):
         import miricoord.mrs.toolversions.mrs_tools_flt8 as tv
+    elif (version == 'flt9'):
+        import miricoord.mrs.toolversions.mrs_tools_flt9 as tv
     elif (version == 'flt8'):
         import miricoord.mrs.toolversions.mrs_tools_flt8 as tv
     elif (version == 'flt7'):

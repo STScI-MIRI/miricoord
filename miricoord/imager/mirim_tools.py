@@ -26,6 +26,7 @@ REVISION HISTORY:
 26-May-2022  Add FLT-1 (D. Law)
 17-Oct-2022  Add FLT-2 (D. Law)
 16-May-2023  Add FLT-3 (D. Law)
+05-Jun-2025  Add FLT-9 (D. Law)
 """
 
 import os as os
@@ -50,7 +51,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.imager.toolversions.mirim_tools_flt2 as tv
+        import miricoord.imager.toolversions.mirim_tools_flt3 as tv
     elif (version == 'cdp7b'):
         import miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
     elif (version == 'cdp7'):
@@ -61,6 +62,8 @@ def set_toolversion(version):
         import miricoord.imager.toolversions.mirim_tools_flt2 as tv
     elif (version == 'flt3'):
         import miricoord.imager.toolversions.mirim_tools_flt3 as tv
+    elif (version == 'flt9'):
+        import miricoord.imager.toolversions.mirim_tools_flt9 as tv
     else:
         print('Invalid tool version specified!')
         
