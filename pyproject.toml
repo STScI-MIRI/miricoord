@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "miricoord"
+version = "1.3.0"
+description = "MIRI coordinate transforms"
+authors = [
+  {name = "David R. Law", email = "dlaw@stsci.edu"},
+]
+readme = "README.md"
+licence = "BSD-3-Clause"
+license-files = ["LICENSE.md"]
+
+dependencies = [
+  'jwst',
+  'pysiaf',
+  'jupyter',
+  'matplotlib',
+],
+
+
+[project.urls]
+Repository = "https://github.com/STScI-MIRI/miricoord.git"
+
+
+[tool.setuptools.packages.find]
+# leave unspecified to trigger automatic discovery
+
