@@ -11,7 +11,7 @@ authors = [
   {name = "David R. Law", email = "dlaw@stsci.edu"},
 ]
 readme = "README.md"
-licence = "BSD-3-Clause"
+license = "BSD-3-Clause"
 license-files = ["LICENSE.md"]
 
 dependencies = [
@@ -19,13 +19,44 @@ dependencies = [
   'pysiaf',
   'jupyter',
   'matplotlib',
-],
+]
 
 
 [project.urls]
 Repository = "https://github.com/STScI-MIRI/miricoord.git"
 
 
-[tool.setuptools.packages.find]
-# leave unspecified to trigger automatic discovery
+[tool.setuptools]
+include-package-data = true
 
+
+[tool.setuptools.packages.find]
+# leave blank to enable automatic package discovery
+
+
+[tool.setuptools.package-data]
+"data.crds.cdp6" = [ "*" ]
+"data.crds.cdp7" = [ "*" ]
+"data.crds.cdp7b3" = [ "*" ]
+"data.crds.cdp8" = [ "*" ]
+"data.crds.flt1" = [ "*" ]
+"data.crds.flt2" = [ "*" ]
+"data.crds.flt3" = [ "*" ]
+"data.crds.flt4" = [ "*" ]
+"data.crds.flt5" = [ "*" ]
+"data.crds.flt6" = [ "*" ]
+"data.crds.flt7" = [ "*" ]
+
+"data.dithers" = [ "*" ]
+
+"data.fits.cdp6" = [ "*" ]
+"data.fits.cdp7" = [ "*" ]
+"data.fits.cdp7beta3" = [ "*" ]
+"data.fits.cdp8b" = [ "*" ]
+"data.fits.flt1" = [ "*" ]
+"data.fits.flt2" = [ "*" ]
+"data.fits.flt3" = [ "*" ]
+"data.fits.flt4" = [ "*" ]
+"data.fits.flt5" = [ "*" ]
+"data.fits.flt6" = [ "*" ]
+"data.fits.flt7" = [ "*" ]
