@@ -74,11 +74,11 @@ def create_siaf_all():
         values=create_siaf_oneband(channel[i])
 
         # Make QA plots
-        plotfile=os.path.join(outdir,'siaf_'+channel[i]+'ab.ps')
+        plotfile=os.path.join(outdir,'siaf_'+channel[i]+'ab.pdf')
         makeabplot(values,channel[i],filename=plotfile)
-        plotfile=os.path.join(outdir,'siaf_'+channel[i]+'v2v3.ps')
+        plotfile=os.path.join(outdir,'siaf_'+channel[i]+'v2v3.pdf')
         makev2v3plot(values,channel[i],filename=plotfile)
-        plotfile=os.path.join(outdir,'siaf_'+channel[i]+'v2v3_common.ps')
+        plotfile=os.path.join(outdir,'siaf_'+channel[i]+'v2v3_common.pdf')
         makev2v3plot(values,channel[i],filename=plotfile,xlim=[-8.29*60.,-8.49*60.],ylim=[-5.43*60.,-5.23*60.])
 
         # Write information to a text file

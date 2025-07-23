@@ -39,7 +39,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is FLT-2
+# Set the tools version.  Default is FLT-9
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -51,7 +51,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.imager.toolversions.mirim_tools_flt3 as tv
+        import miricoord.imager.toolversions.mirim_tools_flt9 as tv
     elif (version == 'cdp7b'):
         import miricoord.imager.toolversions.mirim_tools_cdp7beta3 as tv
     elif (version == 'cdp7'):

@@ -1,0 +1,53 @@
+#ASDF 1.0.0
+#ASDF_STANDARD 1.6.0
+%YAML 1.1
+%TAG ! tag:stsci.edu:asdf/
+--- !core/asdf-1.1.0
+asdf_library: !core/software-1.0.0 {author: The ASDF Developers, homepage: 'http://github.com/asdf-format/asdf',
+  name: asdf, version: 4.1.0}
+history:
+  entries:
+  - !core/history_entry-1.0.0
+    description: FLT-9 updates overall MIRI boresight based on the latest FGS solutions.
+    software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
+      name: miricoord, version: master}
+    time: 2025-07-23 20:30:35.412452
+  extensions:
+  - !core/extension_metadata-1.0.0
+    extension_class: asdf.extension._manifest.ManifestExtension
+    extension_uri: asdf://asdf-format.org/core/extensions/core-1.6.0
+    manifest_software: !core/software-1.0.0 {name: asdf_standard, version: 1.1.1}
+    software: !core/software-1.0.0 {name: asdf, version: 4.1.0}
+filters:
+- {column_offset: 0.554970557452205, filter: F560W, pupil: N/A, row_offset: 1.4172281032294827}
+- {column_offset: -0.0, filter: F770W, pupil: N/A, row_offset: -0.0}
+- {column_offset: 0.329, filter: F1000W, pupil: N/A, row_offset: 0.855}
+- {column_offset: -0.0, filter: F1130W, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F1280W, pupil: N/A, row_offset: -0.0}
+- {column_offset: 0.08808294653695123, filter: F1500W, pupil: N/A, row_offset: 0.7026117757770026}
+- {column_offset: -0.0, filter: F1800W, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F2100W, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F2550WR, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F2550W, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F1065C, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F1140C, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F1550C, pupil: N/A, row_offset: -0.0}
+- {column_offset: -0.0, filter: F2300C, pupil: N/A, row_offset: -0.0}
+- {column_offset: 0.25904088927825986, filter: FND, pupil: N/A, row_offset: 1.0810837582944424}
+meta:
+  author: Alistair Glasse, Mattia Libralato, David R. Law
+  date: '2025-07-23T20:30:35.424'
+  description: FLT9 delivery
+  exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|,
+    type: MIR_IMAGE}
+  filename: jwst_miri_filteroffset_mask1550_flt9.asdf
+  input_units: pixels
+  instrument: {band: N/A, channel: N/A, detector: MIRIMAGE, name: MIRI}
+  model_type: FilteroffsetModel
+  pedigree: INFLIGHT 2022-05-01 2022-05-01
+  reftype: filteroffset
+  subarray: {name: MASK1550}
+  telescope: JWST
+  title: MIRI imager filter offset - FLT9
+  useafter: '2022-05-01T00:00:00'
+...

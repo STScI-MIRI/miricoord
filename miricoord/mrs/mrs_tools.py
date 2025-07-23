@@ -45,7 +45,7 @@ import pdb
 
 #############################
 
-# Set the tools version.  Default is flt8
+# Set the tools version.  Default is flt9
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -57,7 +57,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_tools_flt8 as tv
+        import miricoord.mrs.toolversions.mrs_tools_flt9 as tv
     elif (version == 'flt9'):
         import miricoord.mrs.toolversions.mrs_tools_flt9 as tv
     elif (version == 'flt8'):

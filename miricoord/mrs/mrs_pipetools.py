@@ -37,7 +37,7 @@ from numpy.testing import assert_allclose
 
 #############################
 
-# Set the tools version.  Default is FLT-8
+# Set the tools version.  Default is FLT-9
 def set_toolversion(version):
     # If the toolversion global was already set, delete it
     try:
@@ -49,7 +49,7 @@ def set_toolversion(version):
     global tv
     # Import appropriate version
     if (version == 'default'):
-        import miricoord.mrs.toolversions.mrs_pipetools_flt8 as tv
+        import miricoord.mrs.toolversions.mrs_pipetools_flt9 as tv
     elif (version == 'cdp6'):
         import miricoord.mrs.toolversions.mrs_pipetools_cdp6 as tv
     elif (version == 'cdp8b'):
@@ -70,6 +70,8 @@ def set_toolversion(version):
         import miricoord.mrs.toolversions.mrs_pipetools_flt7 as tv
     elif (version == 'flt8'):
         import miricoord.mrs.toolversions.mrs_pipetools_flt8 as tv
+    elif (version == 'flt9'):
+        import miricoord.mrs.toolversions.mrs_pipetools_flt9 as tv
     else:
         print('Invalid tool version specified!')
 
