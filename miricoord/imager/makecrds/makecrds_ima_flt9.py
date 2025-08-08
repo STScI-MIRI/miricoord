@@ -286,7 +286,7 @@ def create_reffile_header(model):
     model.meta.exposure.type = "MIR_IMAGE"
     model.meta.author = "Alistair Glasse, Mattia Libralato, David R. Law"
     model.meta.pedigree = "INFLIGHT 2022-05-01 2022-05-01"
-    model.meta.useafter = "2022-05-01T00:00:00"
+    model.meta.useafter = "2022-04-01T00:00:00"
     model.meta.reftype = "filteroffset"
 
     if (model.meta.model_type == 'DistortionModel'):
