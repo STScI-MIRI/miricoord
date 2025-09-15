@@ -11,7 +11,7 @@ history:
     description: FLT-9 updates overall MIRI boresight based on the latest FGS solutions.
     software: !core/software-1.0.0 {author: D.Law, homepage: 'https://github.com/STScI-MIRI/miricoord',
       name: miricoord, version: master}
-    time: 2025-07-23 20:30:35.283721
+    time: 2025-09-15 15:02:03.272708
   extensions:
   - !core/extension_metadata-1.0.0
     extension_class: asdf.extension._manifest.ManifestExtension
@@ -29,9 +29,9 @@ history:
     software: !core/software-1.0.0 {name: asdf-astropy, version: 0.8.0}
 meta:
   author: Alistair Glasse, Mattia Libralato, David R. Law
-  date: '2025-07-23T20:30:35.282'
+  date: '2025-09-15T15:02:03.271'
   description: FLT9 delivery
-  exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|MIR_TACONFIRM|,
+  exposure: {p_exptype: MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|MIR_TACONFIRM|MIR_WFSS|,
     type: MIR_IMAGE}
   input_units: !unit/unit-1.0.0 pixel
   instrument: {band: N/A, channel: N/A, detector: MIRIMAGE, name: MIRI}
@@ -41,7 +41,7 @@ meta:
   reftype: distortion
   telescope: JWST
   title: MIRI imager distortion - FLT9
-  useafter: '2022-05-01T00:00:00'
+  useafter: '2022-04-01T00:00:00'
 model: !transform/compose-1.3.0
   forward:
   - !transform/compose-1.3.0
@@ -321,18 +321,18 @@ model: !transform/compose-1.3.0
 %m„ê»≤@ﬁ˘6$ÄAÇ‚«òY|¿6^Ì2‰‚ÔøÔîTr–èµ?        ”BLK 0                                ·4‘rÏ≥¯ÃHÁ K¯ºÎ‚@=d®y@ÔîTr–èµ?6^Ì2‰‚Ô?        ”BLK 0                                P’KBpµ£Dô'˛Y¨ÖKFHz¿6^Ì2‰‚ÔøÓîTr–èµ?        #ASDF BLOCK INDEX
 %YAML 1.1
 ---
-- 10652
-- 10722
-- 10792
-- 10862
-- 10932
-- 11002
-- 11072
-- 11326
-- 11580
-- 11834
-- 12088
-- 12174
-- 12260
-- 12346
+- 10661
+- 10731
+- 10801
+- 10871
+- 10941
+- 11011
+- 11081
+- 11335
+- 11589
+- 11843
+- 12097
+- 12183
+- 12269
+- 12355
 ...
