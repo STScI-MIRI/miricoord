@@ -100,7 +100,7 @@ def polynomial_from_coeffs_matrix(coefficients, name=None):
 
     return model
 
-def make_filter_offset(distfile, outname, subarray):
+def make_filter_offset(distfile, outname, subarray, thefilter):
     """
     Create an asdf reference file with the filter offsets for the MIRI imager and coronagraphs.
 
@@ -117,6 +117,8 @@ def make_filter_offset(distfile, outname, subarray):
     subarray: str
         Which subarray to generate the file for (coron files are different than imager)
         Use pipeline-style names (e.g., FULL) rather than SIAF-style names (MIRIM_FULL)
+    thefilter: str
+        Which filter to generate the file for (coron files can be special)
 
     Returns
     -------
@@ -129,23 +131,67 @@ def make_filter_offset(distfile, outname, subarray):
                                         'jwst_miri_filter_offset_xxxx.asdf')
     """
 
+    model = FilteroffsetModel()
+    # Add general metadata
+    model = create_reffile_header(model)
+    
     # Coronagraphic subarrays require their own boresight offsets
     if (subarray == 'MASK1065'):
         extname = 'BoresightCORON1065'
         subvalues = "MASK1065"
+        psubvalues = ""
+        extype = "MIR_IMAGE"
+        pextype = "MIR_IMAGE|MIR_TACQ|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|"
     elif (subarray == 'MASK1140'):
         extname = 'BoresightCORON1140'
         subvalues = "MASK1140"
+        psubvalues = ""
+        extype = "MIR_IMAGE"
+        pextype = "MIR_IMAGE|MIR_TACQ|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|"
     elif (subarray == 'MASK1550'):
         extname = 'BoresightCORON1550'
         subvalues = "MASK1550"
+        psubvalues = ""
+        extype = "MIR_IMAGE"
+        pextype = "MIR_IMAGE|MIR_TACQ|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|"
     elif (subarray == 'MASKLYOT'):
         extname = 'BoresightCORONLYOT'
         subvalues = "MASKLYOT"
+        psubvalues = ""
+        extype = "MIR_IMAGE"
+        pextype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_CORONCAL|MIR_TACONFIRM|"
     else:
         extname = 'Boresight offsets'
+        subvalues = "N/A"
+        psubvalues = ""
+        extype = "MIR_IMAGE"
+        pextype = "MIR_IMAGE|MIR_TACQ|MIR_TACONFIRM|MIR_WFSS|"
+
+    # Coronagraphic full-array observations also require their own boresight offsets
+    if (thefilter == 'F1065C'):
+        extname = 'BoresightCORON1065'
         subvalues = "FULL"
-        psubvalues = "FULL|BRIGHTSKY|SUB256|SUB128|SUB64|SLITLESSPRISM|"
+        psubvalues = ""
+        extype = "MIR_4QPM"
+        pextype = "MIR_4QPM|MIR_CORONCAL|"
+    elif (thefilter == 'F1140C'):
+        extname = 'BoresightCORON1140'
+        subvalues = "FULL"
+        psubvalues = ""
+        extype = "MIR_4QPM"
+        pextype = "MIR_4QPM|MIR_CORONCAL|"
+    elif (thefilter == 'F1550C'):
+        extname = 'BoresightCORON1550'
+        subvalues = "FULL"
+        psubvalues = ""
+        extype = "MIR_4QPM"
+        pextype = "MIR_4QPM|MIR_CORONCAL|"
+    elif (thefilter == 'F2300C'):
+        extname = 'BoresightCORONLYOT'
+        subvalues = "FULL"
+        psubvalues = ""
+        extype = "MIR_LYOT"
+        pextype = "MIR_LYOT|MIR_CORONCAL|"
         
     with fits.open(distfile) as f:
         data = f[extname].data
@@ -154,16 +200,17 @@ def make_filter_offset(distfile, outname, subarray):
     for i in data:
         d.append({'filter':i[0],'pupil': 'N/A','column_offset': -i[1], 'row_offset': -i[2]} )
 
-    model = FilteroffsetModel()
-    # Add general metadata
-    model = create_reffile_header(model)
+    
     # Add file-specific metadata
     model.meta.title = "MIRI imager filter offset - FLT9"
     model.meta.description = "FLT9 delivery"
     model.meta.input_units = "pixels"
     model.meta.subarray.name = subvalues
-    if (subvalues == "FULL"):
+    if (psubvalues != ""):
         model.meta.subarray.p_subarray = psubvalues
+    model.meta.instrument.filter = thefilter
+    model.meta.exposure.type = extype
+    model.meta.exposure.p_exptype = pextype
 
     for item in data:
         model.filters = d
@@ -291,18 +338,15 @@ def create_reffile_header(model):
 
     if (model.meta.model_type == 'DistortionModel'):
         model.meta.exposure.p_exptype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_LRS-FIXEDSLIT|MIR_LRS-SLITLESS|MIR_TACONFIRM|MIR_WFSS|"
-        
-    if (model.meta.model_type == 'FilteroffsetModel'):
-        model.meta.exposure.p_exptype = "MIR_IMAGE|MIR_TACQ|MIR_LYOT|MIR_4QPM|MIR_CORONCAL|MIR_TACONFIRM|"
-    
-    entry = HistoryEntry({'description': "First in-flight distortion created from MIR-007 (APT 1024) and adjusted to boresight of MIR-013 (APT 1029, Obs 1-3)", 'time': datetime.datetime.utcnow()})
-    entry = HistoryEntry({'description': "FLT-2 adds coronagraph-specific boresight reference files.", 'time': datetime.datetime.utcnow()})
-    entry = HistoryEntry({'description': "FLT-9 updates overall MIRI boresight based on the latest FGS solutions.", 'time': datetime.datetime.utcnow()})
-    
+
+    model.add_history_entry('First in-flight distortion created from MIR-007 (APT 1024) and adjusted to boresight of MIR-013 (APT 1029, Obs 1-3)')
+    model.add_history_entry('FLT-2 adds coronagraph-specific boresight reference files.')
+    model.add_history_entry('FLT-9 updates overall MIRI boresight based on the latest FGS solutions.')
+    model.add_history_entry('Update selections to support WFSS and full-frame coronagraphy.')
+
     software = Software({'name': 'miricoord', 'author': 'D.Law', 
                          'homepage': 'https://github.com/STScI-MIRI/miricoord', 'version': "master"})
-    entry['software'] = software
-    model.history = [entry]
+    model.add_history_entry('', software=software)
 
     return model
 
@@ -335,7 +379,7 @@ def make_references(filename, ref):
         raise
     
     try:
-        make_filter_offset(filename, ref['FILTEROFFSET'], subarray='FULL')
+        make_filter_offset(filename, ref['FILTEROFFSET'], subarray='FULL', thefilter='N/A')
     except:
         print("Filter offset file was not created.")
         raise
