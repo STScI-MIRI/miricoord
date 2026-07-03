@@ -13,5 +13,35 @@ authors = [
     { name = "David R. Law", email = "dlaw@stsci.edu" }
 ]
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.package-data]
-"miricoord_data" = ["data/*"]
+"miricoord" = ["data/crds/cdp6/*",
+               "data/crds/cdp7/*",
+               "data/crds/cdp7b3/*",
+               "data/crds/cdp8b/*",
+               "data/crds/flt1/*",
+               "data/crds/flt2/*",
+               "data/crds/flt3/*",
+               "data/crds/flt4/*",
+	       "data/crds/flt5/*",
+	       "data/crds/flt6/*",
+	       "data/crds/flt7/*",
+               "data/crds/flt8/*",
+               "data/crds/flt9/*",
+               "data/dithers/*",
+               "data/fits/cdp6/*",
+               "data/fits/cdp7/*",
+               "data/fits/cdp7beta3/*",
+               "data/fits/cdp8b/*",
+               "data/fits/flt1/*",
+               "data/fits/flt2/*",
+               "data/fits/flt3/*",
+               "data/fits/flt4/*",
+               "data/fits/flt5/*",
+               "data/fits/flt6/*",
+               "data/fits/flt7/*",
+               "data/fits/flt8/*",
+               "data/fits/flt9/*",
+]

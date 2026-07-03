@@ -33,6 +33,7 @@ from asdf import AsdfFile
 from jwst import datamodels
 from jwst.assign_wcs import miri
 import pdb
+import importlib
 
 #############################
 
@@ -47,23 +48,11 @@ def get_fitsreffile():
     base_dist='data/crds/flt9/jwst_miri_imager_distortion_flt9.asdf'
     base_off='data/crds/flt9/jwst_miri_filteroffset_full_flt9.asdf'
     
-    # Try looking for the file in the expected location
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir = importlib.resources.files('miricoord')
     distfile=os.path.join(rootdir,base_dist)
     offfile=os.path.join(rootdir,base_off)
     refs = {"distortion": distfile, "filteroffset": offfile}
-    if os.path.exists(distfile):
-        return refs
-    
-    # If that didn't work, look in the system path
-    rootdir=sys.prefix
-    distfile=os.path.join(rootdir,base_dist)
-    offfile=os.path.join(rootdir,base_off)
-    refs = {"distortion": distfile, "filteroffset": offfile}
-    if os.path.exists(distfile):
-        return refs
 
-    # If that didn't work either, just return what we've got
     return refs
 
 #############################
