@@ -36,6 +36,7 @@ from astropy.modeling import models
 from asdf import AsdfFile
 from jwst import datamodels
 from jwst.assign_wcs import miri
+import importlib
 
 #############################
 
@@ -77,23 +78,11 @@ def get_fitsreffile(channel):
     else:
        print('Failure!')
 
-    # Try looking for the files in the expected location
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir = importlib.resources.files('miricoord')
     rootdir=os.path.join(rootdir,'data/crds/flt8/')
     refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
           'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
-    if os.path.exists(os.path.join(rootdir,distfile)):
-        return refs
-
-    # If that didn't work, look in the system path
-    rootdir=sys.prefix
-    rootdir=os.path.join(rootdir,'data/crds/flt8/')
-    refs={'distortion': os.path.join(rootdir,distfile), 'regions':os.path.join(rootdir,regfile),
-          'specwcs':os.path.join(rootdir,specfile), 'wavelengthrange':os.path.join(rootdir,wavefile)}
-    if os.path.exists(os.path.join(rootdir,distfile)):
-        return refs    
-
-    # If that didn't work either, just return what we've got
+    
     return refs
 
 #############################

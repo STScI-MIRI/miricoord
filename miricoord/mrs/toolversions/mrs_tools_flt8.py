@@ -39,6 +39,7 @@ import sys
 import numpy as np
 from astropy.io import fits
 import pdb
+import importlib
 
 #############################
 
@@ -75,22 +76,10 @@ def get_fitsreffile(channel):
     elif (channel == '4C'):
         file='MIRI_FM_MIRIFULONG_34LONG_DISTORTION_flt8.fits'
 
-    # Try looking for the file in the expected location
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir = importlib.resources.files('miricoord')
     rootdir=os.path.join(rootdir,'data/fits/flt8/')
     reffile=os.path.join(rootdir,file)
 
-    if os.path.exists(reffile):
-        return reffile
-    
-    # If that didn't work, look in the system path
-    rootdir=sys.prefix
-    rootdir=os.path.join(rootdir,'data/fits/flt8/')
-    reffile=os.path.join(rootdir,file)
-    if os.path.exists(reffile):
-        return reffile    
-
-    # If that didn't work either, just return what we've got
     return reffile
 
 #############################

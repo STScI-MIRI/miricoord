@@ -35,6 +35,7 @@ import numpy as np
 from astropy.io import fits
 import pdb
 import sys
+import importlib
 
 #############################
 
@@ -48,19 +49,9 @@ def version():
 def get_fitsreffile():
     basefile='data/fits/flt9/MIRI_FM_MIRIMAGE_DISTORTION_SS.09.00.fits'
 
-    # Try looking for the file in the expected location
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir = importlib.resources.files('miricoord')
     reffile=os.path.join(rootdir,basefile)
-    if os.path.exists(reffile):
-        return reffile
-    
-    # If that didn't work, look in the system path
-    rootdir=sys.prefix
-    reffile=os.path.join(rootdir,basefile)
-    if os.path.exists(reffile):
-        return reffile    
 
-    # If that didn't work either, just return what we've got
     return reffile
 
 #############################

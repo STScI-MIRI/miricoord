@@ -34,6 +34,7 @@ from astropy.modeling import models
 from astropy.io import fits
 from scipy.interpolate import UnivariateSpline
 import pdb
+import importlib
 
 # Import the corresponding FLT-1 Imager distortion code
 import miricoord.imager.toolversions.mirim_tools_flt1 as mt
@@ -55,19 +56,9 @@ def get_fitsreffile(stype):
     else:
         print('Invalid file type: specify either slit or slitless')
 
-    # Try looking for the file in the expected location
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir = importlib.resources.files('miricoord')
     reffile=os.path.join(rootdir,basefile)
-    if os.path.exists(reffile):
-        return reffile
-    
-    # If that didn't work, look in the system path
-    rootdir=sys.prefix
-    reffile=os.path.join(rootdir,basefile)
-    if os.path.exists(reffile):
-        return reffile    
 
-    # If that didn't work either, just return what we've got
     return reffile
 
 #############################

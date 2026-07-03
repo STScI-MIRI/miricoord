@@ -35,6 +35,7 @@ from asdf import AsdfFile
 from jwst import datamodels
 from jwst.assign_wcs import miri
 import pdb
+import importlib
 
 #############################
 
@@ -55,23 +56,11 @@ def get_fitsreffile(stype):
     else:
         print('Invalid file type: specify either slit or slitless')
     
-    # Try looking for the file in the expected location
-    rootdir=os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    rootdir = importlib.resources.files('miricoord')
     distfile=os.path.join(rootdir,base_dist)
     specfile=os.path.join(rootdir,base_spec)
     refs = {"distortion": distfile, "specwcs": specfile}
-    if os.path.exists(distfile):
-        return refs
-    
-    # If that didn't work, look in the system path
-    rootdir=sys.prefix
-    distfile=os.path.join(rootdir,base_dist)
-    specfile=os.path.join(rootdir,base_spec)
-    refs = {"distortion": distfile, "specwcs": specfile}
-    if os.path.exists(distfile):
-        return refs
 
-    # If that didn't work either, just return what we've got
     return refs
 
 #############################

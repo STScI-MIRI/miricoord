@@ -11,23 +11,17 @@ Includes scripts for generating pipeline CRDS distortion reference files from FI
   - /lrs/: Tools for the MIRI low resolution spectrometer
   - /mrs/: Tools for the MIRI medium resolution IFU spectrometer
   - /tel/: Tools implementing the JWST attitude matrix transformations (v2/v3 to RA/DEC at a given roll angle)
-- Reference data (FITS and CRDS) lives in the data/ directory
+- Reference data (FITS and CRDS) lives in the miricoord/data/ directory
 
 ## Installation:
 
 Python:
 
-Python code is developed for a python 3.7 environment.  Clone this git repository to your local machine, and then install for your active conda environment by using:
+Python code is developed for a python 3.13 environment.  Clone this git repository to your local machine, and then install for your active conda environment by using:
 
-python setup.py install
+pip install -e .
 
-or
-
-python setup.py develop
-
-Using the 'install' option will copy the code over into your python library for the environment, while the 'develop' option
-will use the cloned code directory as the source.  The 'develop' method is thus potentially easier to maintain if you might
-be updating or contributing to miricoord frequently.
+MIGRATION NOTICE: On 7/3/26 the installation method was migrated from setup.py to pyproject.toml.  This changed the location of the data directory and the method required for finding the data.  Code for the most recent 2-3 distortion versions have been updated to find the relevant data files, but previous versions have not yet been updated.
 
 Note that some functions rely upon having the pysiaf (https://github.com/spacetelescope/pysiaf) and JWST pipeline (https://github.com/spacetelescope/jwst) modules installed as well.
 
