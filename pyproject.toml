@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name='miricoord'
+version='2.0.0'
+description='MIRI coordinate transforms'
+readme="README.md"
+dependencies = ['jwst','pysiaf','jupyter','matplotlib']
+
+authors = [
+    { name = "David R. Law", email = "dlaw@stsci.edu" }
+]
+
+[tool.setuptools.package-data]
+"miricoord_data" = ["data/*"]
